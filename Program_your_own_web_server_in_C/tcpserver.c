@@ -6,7 +6,7 @@
 /*   By: tvan-cit <tvan-cit@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/17 14:57:08 by tvan-cit      #+#    #+#                 */
-/*   Updated: 2021/05/17 16:12:53 by tvan-cit      ########   odam.nl         */
+/*   Updated: 2021/05/18 10:13:18 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 	if ((bind(listenfd, (SA *) &servaddr, sizeof(servaddr))) < 0)
 		err_n_die("bind error.");
 
-	if (listen(listenfd, 10)) < 0)
+	if (listen(listenfd, 10) < 0)
 		err_n_die("listen error.");
 	
 	for ( ; ; )
