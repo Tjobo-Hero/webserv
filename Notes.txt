@@ -6,7 +6,7 @@
 #    By: timvancitters <timvancitters@student.co      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/05/18 10:55:42 by timvancitte   #+#    #+#                  #
-#    Updated: 2021/05/18 11:06:21 by timvancitte   ########   odam.nl          #
+#    Updated: 2021/05/18 11:11:35 by timvancitte   ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ Server failed to fullfill an apparant valid Request
 401 - Unauthorized
 404 - Not found
 500 - Internal server Error
+
 
 
 
