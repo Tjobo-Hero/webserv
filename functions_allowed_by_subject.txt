@@ -1,0 +1,272 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    functions_allowed_by_subject.txt                   :+:    :+:             #
+#                                                      +:+                     #
+#    By: timvancitters <timvancitters@student.co      +#+                      #
+#                                                    +#+                       #
+#    Created: 2021/05/18 15:24:18 by timvancitte   #+#    #+#                  #
+#    Updated: 2021/05/19 14:06:47 by timvancitte   ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
+
+FUNCTION MANUAL
+
+#### EXTERNAL FUNCTIONS ####
+
+* malloc *
+void *malloc(size_t size);
+
+“malloc” or “memory allocation” method in C is used to dynamically allocate
+a single large block of memory with the specified size. It returns a 
+pointer of type void which can be cast into a pointer of any form. 
+It initializes each block with default garbage value.
+
+* free *
+void free(void *ptr);
+
+The free() function shall cause the space pointed to 
+by ptr to be deallocated; that is, made available for 
+further allocation. If ptr is a null pointer, no action 
+shall occur. Otherwise, if the argument does not match a 
+pointer earlier returned by the calloc(), malloc(), [ADV] 
+[Option Start] posix_memalign(), [Option End] realloc(), 
+or [XSI] [Option Start] strdup() [Option End] function, or 
+if the space has been deallocated by a call to free() or realloc(), 
+the behavior is undefined.
+
+* write *
+ssize_t write(int fildes, const void *buf, size_t nbyte);
+
+The write() function shall attempt to write nbyte bytes from the buffer 
+pointed to by buf to the file associated with the open file descriptor, fildes.
+
+* open *
+int open(const char *path, int oflag, ... );
+
+The open() function shall establish the connection 
+between a file and a file descriptor. It shall create 
+an open file description that refers to a file and a file 
+descriptor that refers to that open file description. 
+The file descriptor is used by other I/O functions to refer to that file. 
+The path argument points to a pathname naming the file.
+
+* read *
+ssize_t read(int fildes, void *buf, size_t nbyte);
+
+The read() function reads data previously written to a file. 
+If any portion of a regular file prior to the end-of-file has 
+not been written, read() shall return bytes with value 0.
+
+* close *
+int close(int fildes);
+
+The close() function shall deallocate the file descriptor 
+indicated by fildes. To deallocate means to make the file 
+descriptor available for return by subsequent calls to open() 
+or other functions that allocate file descriptors. 
+All outstanding record locks owned by the process on the file 
+associated with the file descriptor shall be removed (that is, unlocked).
+
+* mkdir *
+int mkdir(const char *path, mode_t mode);
+
+The mkdir() function shall create a new directory with name path. 
+The file permission bits of the new directory shall be initialized from mode. 
+These file permission bits of the mode argument shall be modified by the process' 
+file creation mask.
+
+* rmdir *
+int rmdir( const char* path );
+
+The rmdir() function removes (deletes) the specified directory. 
+The directory must not contain any files or directories.
+
+--- Return values ---
+Return 0 == success
+Return -1 == An error occurred (errno is set).
+
+
+* unlink *
+int unlink(const char *path);
+
+The unlink() function shall remove a link to a file. 
+If path names a symbolic link, unlink() shall remove the 
+symbolic link named by path and shall not affect any file 
+or directory named by the contents of the symbolic link. 
+Otherwise, unlink() shall remove the link named by the pathname 
+pointed to by path and shall decrement the link count of the file 
+referenced by the link.
+
+--- Return values ---
+Upon successful completion, these functions shall return 0. 
+Otherwise, these functions shall return -1 and set errno to 
+indicate the error. If -1 is returned, the named file shall 
+not be changed.
+
+* fork *
+int fork();
+
+Fork system call is used for creating a new process, which is 
+called child process, which runs concurrently with the process 
+that makes the fork() call (parent process). After a new child 
+process is created, both processes will execute the next instruction 
+following the fork() system call. A child process uses the same 
+pc(program counter), same CPU registers, same open files which 
+use in the parent process.
+
+--- Return values ---
+Negative Value == creation of a child process was unsuccessful.
+Zero == Returned to the newly created child process.
+Positive value == Returned to parent or caller. 
+The value contains process ID of newly created child process.
+
+* wait *
+pid_t wait(int *stat_loc);
+
+A call to wait() blocks the calling process until 
+one of its child processes exits or a signal is received. 
+After child process terminates, parent continues its 
+execution after wait system call instruction. 
+Child process may terminate due to any of these:
+
+* wait_pid *
+pid_t waitpid(pid_t pid, int *status, int options);
+
+The waitpid() function shall be equivalent to wait() 
+if the pid argument is (pid_t)-1 and the options argument 
+is 0. Otherwise, its behavior shall be modified by the 
+values of the pid and options arguments.
+
+< -1: Wait for any child process whose process group ID is equal to the absolute value of pid.
+-1: Wait for any child process.
+0: Wait for any child process whose process group ID is equal to that of the calling process.
+> 0: Wait for the child whose process ID is equal to the value of pid.
+
+* wait3 & wait4 *
+pid_t wait3(int *status, int options, struct rusage *rusage);
+pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
+
+The wait3() and wait4() system calls are similar to waitpid(2), but additionally 
+return resource usage information about the child in the structure pointed to by rusage.
+
+In other words, wait3() waits of any child, while wait4() can be used to select a 
+specific child, or children, on which to wait. See wait(2) for further details.
+
+* signal *
+void (*signal(int sig, void (*func)(int)))(int);
+
+The signal() function chooses one of three ways in 
+which receipt of the signal number sig is to be subsequently handled. 
+If the value of func is SIG_DFL, default handling for that signal shall occur. 
+If the value of func is SIG_IGN, the signal shall be ignored. Otherwise, 
+the application shall ensure that func points to a function to be called 
+when that signal occurs. An invocation of such a function because of 
+a signal, or (recursively) of any further functions called by that 
+invocation (other than functions in the standard library), 
+is called a "signal handler".
+
+* kill *
+int kill(pid_t pid, int sig);
+
+The kill() function shall send a signal to a process or a group 
+of processes specified by pid. The signal to be sent is specified 
+by sig and is either one from the list given in <signal.h> or 0. 
+If sig is 0 (the null signal), error checking is performed but no 
+signal is actually sent. The null signal can be used to check the validity of pid.
+
+--- Return values ---
+Upon successful completion, 0 shall be returned. 
+Otherwise, -1 shall be returned and errno set to indicate the error.
+
+* exit *
+void exit(int status);
+
+In the C Programming Language, the exit function calls all functions 
+registered with atexit and terminates the program. File buffers are flushed, 
+streams are closed, and temporary files are deleted.
+
+* htons *
+uint16_t htons(uint16_t hostshort);
+
+The htons() function converts the unsigned 
+short integer hostshort from host byte order 
+to network byte order.
+Convert values between host and network byte order.
+
+* htonl *
+uint32_t htonl(uint32_t hostlong);
+
+The htonl() function converts the unsigned integer 
+hostlong from host byte order to network byte order.
+Convert values between host and network byte order.
+
+* ntohl *
+uint32_t ntohl(uint32_t netlong);
+
+The ntohl() function converts the unsigned integer 
+netlong from network byte order to host byte order.
+Convert values between host and network byte order.
+
+* ntohs *
+uint16_t ntohs(uint16_t netshort);
+
+The ntohs() function converts the unsigned short integer 
+netshort from network byte order to host byte order.
+Convert values between host and network byte order.
+
+* getcwd *
+char *getcwd(char *buf, size_t size);
+
+The getcwd() function shall place an absolute pathname 
+of the current working directory in the array pointed 
+to by buf, and return buf. The pathname copied to the 
+array shall contain no components that are symbolic links. 
+The size argument is the size in bytes of the character 
+array pointed to by the buf argument. If buf is a null pointer, 
+the behavior of getcwd() is unspecified.
+
+--- Return values ---
+Upon successful completion, getcwd() shall return the buf argument. 
+Otherwise, getcwd() shall return a null pointer and set errno to 
+indicate the error. The contents of the array pointed to by buf are then undefined.
+
+* chdir * 
+int chdir(const char *path);
+
+The chdir() function shall cause the directory named by the 
+pathname pointed to by the path argument to become the current 
+working directory; that is, the starting point for path searches 
+for pathnames not beginning with '/'.
+
+--- Return values ---
+Upon successful completion, 0 shall be returned. 
+Otherwise, -1 shall be returned, the current working 
+directory shall remain unchanged, and errno shall be set to indicate the error.
+
+* stat *
+int stat(const char *restrict path, struct stat *restrict buf);
+
+The stat() function shall obtain information about the named file 
+and write it to the area pointed to by the buf argument. 
+The path argument points to a pathname naming a file. 
+Read, write, or execute permission of the named file is not required. 
+An implementation that provides additional or alternate file access 
+control mechanisms may, under implementation-defined conditions, 
+cause stat() to fail. In particular, the system may deny the existence of the file specified by path.
+
+--- Return values ---
+Upon successful completion, 0 shall be returned. 
+Otherwise, -1 shall be returned and errno set to indicate the error.
+
+* lstat *
+int lstat(const char *restrict path, struct stat *restrict buf);
+
+The lstat() function shall be equivalent to stat(), 
+except when path refers to a symbolic link. In that case lstat() 
+shall return information about the link, while stat() shall 
+return information about the file the link references.
+
+--- Return values ---
+Upon successful completion, lstat() shall return 0. 
+Otherwise, it shall return -1 and set errno to indicate the error.
