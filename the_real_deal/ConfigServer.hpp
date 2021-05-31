@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   Manager.cpp                                        :+:    :+:            */
+/*   ConfigServer.hpp                                   :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/05/31 10:30:47 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/05/31 14:06:16 by timvancitte   ########   odam.nl         */
+/*   Created: 2021/05/31 15:08:22 by timvancitte   #+#    #+#                 */
+/*   Updated: 2021/05/31 15:22:52 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Manager.hpp"
+#ifndef CONFIGSERVER_HPP
+# define CONFIGSERVER_HPP
 
-Manager::Manager(void)
-{
-	return;
-}
+#include "Webserver.hpp"
 
-Manager::~Manager(void)
+class ConfigServer
 {
-	return;
-}
-void	Manager::config(std::string config_file)
-{
-	_config.parse(config_file.c_str());
-	return;
-}
+	public:
+
+		ConfigServer(void);
+		ConfigServer(const ConfigServer &src);
+		~ConfigServer(void);
+
+		ConfigServer&		operator=(const ConfigServer &obj);
+		int					ServerParser(size_t &i, std::vector<std::string> &elements);
+		
+		private:
+
+			std::
+		
+};
+
+#endif

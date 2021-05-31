@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 13:03:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/05/31 10:43:40 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/05/31 14:06:26 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,17 @@ int main (int argc, char **argv)
 	// int fd_open_file;
 
 	Manager manager;
+	
 	if (argc == 2)
 	{
 		try 
 		{
 			manager.config(argv[1]);
+			//
+			//
+			//
+			//
+			//
 		}
 		catch (std::exception &e)
 		{
