@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 10:37:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/05/31 10:42:26 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/05/31 12:03:26 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@
 // All the includes for CPP
 #include <string>
 #include <iostream>
+
+// All the includes for C
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdio.h>
 
 // Container includes
 #include <map>
@@ -29,5 +34,7 @@
 
 // Config
 # define DEFAULT_CONFIG	"./config_files/default.config"
+
+// # define READER_BUFFER_SIZE 1024 // optimal read buffer size
 
 #endif
