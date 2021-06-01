@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 11:36:19 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/05/31 15:19:17 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/01 11:40:17 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int		Config::parse(const char *config_file)
 				return 1;
 			}
 			++i;
-			if (!server.ServerParser(i, elements))
+			if (!server.serverParser(i, elements))
 			{
 				throw ErrorInServerParsing();
 				return 1;
