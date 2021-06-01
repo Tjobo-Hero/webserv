@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 11:35:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/05/31 14:52:38 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/01 12:28:39 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,9 @@ configVector		ConfigReader::readfile(const char *config_file)
 	for (int i = 0; i < READ_BUF_SIZE + 1; i++)
 		buffer[i] = '\0';
 	if ((fd = open(config_file, O_RDONLY)) < 0)
+	{
 		throw ConfigReader::NotAValidFileException();
+	}
 	for (ret = READ_BUF_SIZE; ret > 0; ret = read(fd, buffer, READ_BUF_SIZE))
 	{
 		buffer[ret] = '\0';
@@ -90,6 +92,7 @@ configVector		ConfigReader::readfile(const char *config_file)
 	if (ret < 0)
 	{
 		throw ConfigReader::ReadingFailedException();
+		return file;
 	}
 	// Put the buffer in a vector of strings 
 	// std::cout << file_string << std::endl;

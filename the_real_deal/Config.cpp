@@ -6,12 +6,48 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 11:36:19 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/01 11:40:17 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/01 12:14:53 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Config.hpp"
 #include "ConfigServer.hpp"
+
+Config::Config(std::string defaultServer)
+{
+	try
+	{
+		ConfigServer::_initDefaultServer(defaultServer.c_str());
+		
+	}
+	catch(ConfigReader::NotAValidFileException& e)
+	{
+		std::cerr << "Error: Failed to open default.config file\n";
+		std::cerr << "Check path" << std::endl;
+	}
+	
+}
+
+Config::Config(Config const &src)
+{
+	if (this != &src)
+		*this = src;
+	return;
+		
+}
+
+Config	&Config::operator=(Config const &src) {
+	if (this != &src)
+		this->_servers = src._servers;
+	return (*this);
+}
+
+
+Config::~Config(void)
+{
+	return;
+}
+
 
 int		Config::parse(const char *config_file)
 {

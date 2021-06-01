@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.cpp                                           :+:    :+:            */
+/*   Webserver.cpp                                      :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 13:03:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/05/31 14:06:26 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/01 12:31:05 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int main (int argc, char **argv)
 {
 	// int fd_open_file;
 
+	
 	Manager manager;
 	
 	if (argc == 2)

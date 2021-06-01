@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 15:08:22 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/01 11:34:03 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/01 16:02:17 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "Webserver.hpp"
 #include "Configreader.hpp"
+#include "ConfigUtils.hpp"
 
 # define parseMap std::map<std::string, void (ConfigServer::*)(configVector)> // ?
 
@@ -27,7 +28,7 @@ typedef struct	s_listen {
 class ConfigServer
 {
 	private:
-		int				parseLocation(unsigned int &i, std::vector<std::string> &file); // ?
+		int				parseLocation(size_t &i, std::vector<std::string> &file); // ?
 		
 		// SET MEMBER FUNCTIONS
 		void								setListen(std::vector<std::string> element);
@@ -58,7 +59,7 @@ class ConfigServer
 		bool								_aliasSet;
 		static ConfigServer					_defaultServer;
 		static parseMap						serverParsingMap; // wat????
-		// static parseMap						locationParsingMap;
+		static parseMap						locationParsingMap;
 		static parseMap						_initServerMap(); // WHAT ???
 		static parseMap						_initLocationMap(); // ?
 
