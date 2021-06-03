@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 13:03:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/01 12:31:05 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/03 10:50:46 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
-#include "Manager.hpp"
+#include "ClusterManager.hpp"
 #include "Webserver.hpp"
 
 int main (int argc, char **argv)
@@ -23,13 +23,13 @@ int main (int argc, char **argv)
 	// int fd_open_file;
 
 	
-	Manager manager;
+	ClusterManager clusterManager;
 	
 	if (argc == 2)
 	{
 		try 
 		{
-			manager.config(argv[1]);
+			clusterManager.configServer(argv[1]);
 			//
 			//
 			//

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 10:18:57 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/01 12:24:03 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/03 16:28:36 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CONFIG_HPP
 
 #include "Webserver.hpp"
-#include "Configreader.hpp"
+#include "ConfigFileReader.hpp"
 #include "ConfigServer.hpp"
 
 // typedef std::vector<std::string>	configVector;
@@ -35,13 +35,12 @@ class Config
 
 	Config&		operator=(Config const &obj);
 
-	int	parse(const char *filename);
+	int	parseConfigFile(const char *filename);
 	std::vector<ConfigServer>	getServer() const;
 	std::vector<t_listen>		getListen() const;
 	
 	// friend	std::ostream				&operator<<(std::ostream &out, const Config &config);
 
-		
 	class MissingBrackedAfterDirective : public std::exception {
 		virtual const char*	what() const throw();
 	};
@@ -51,4 +50,5 @@ class Config
 
 	// std::ostream	&operator<<(std::ostream &out, const Config &config);
 };
+
 #endif
