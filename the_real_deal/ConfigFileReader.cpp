@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 11:35:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/03 10:31:26 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/04 14:47:58 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,6 @@ configFileVector		ConfigFileReader::splitConfigFile(std::string configFileString
 		if ((start = configFileString.find_first_not_of(charset, end)) == std::string::npos)
 			break;
 	}
-	// std::vector<std::string>::const_iterator it = elements.begin();
-	// int i = 0;
-	// for(; it != elements.end(); it++)
-	// {
-	// 	std::cout << "index " << i << " : ";
-	// 	std::cout << *it << std::endl;
-	// 	i++;
-	// }
 	return configFileElements;
 }
 
