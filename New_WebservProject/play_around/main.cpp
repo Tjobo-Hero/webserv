@@ -6,27 +6,42 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 15:17:33 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 15:17:58 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 17:22:32 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 #include <string>
+#include <vector>
 
+#define BLANKS "\t\v "
 int main ()
 {
-  std::string str="We think in generalities, but we live in details.";
-                                           // (quoting Alfred N. Whitehead)
+	std::vector<std::string> test(5);
+	test[0] = "/robijn{";
+	
+	size_t bracket = test[0].find_first_of("{", 0);
+	size_t delimiter = test[0].find_first_of(BLANKS, 0);
 
-  std::string str2 = str.substr (3,5);     // "think"
+	std::cout << "bracket: " << bracket << std::endl;
+	std::cout << "delimiter: " << delimiter << std::endl;
+	size_t end = delimiter > bracket;
 
-  std::size_t pos = str.find("live");      // position of "live" in str
+	if (delimiter == std::string::npos) // only one path was found before '{ : images {'
+		end = bracket;
+  	else if (test[0].find_first_not_of(BLANKS, delimiter) == bracket)
+		end = delimiter;
+	if (!end)
+		return -1;
 
-  std::string str3 = str.substr (pos);     // get from "live" to the end
-
-  std::cout << str2 << ' ' << str3 << '\n';
-
-  std::cout << str << std::endl;
-
-  return 0;
+	std::cout << "end: "<< end << std::endl; 
+	return 0;
 }
+
+	// size_t end = delimiter > bracketPosition; // returns 0 if not true and 1 if true
+	// if (delimiter > bracketPosition) // only one path was found before '{ : images {'
+	// 	end = bracketPosition;
+	// else if (fields[RIGHT].find_first_not_of(BLANKS, delimiter) == bracketPosition)
+	// 	end = delimiter;
+	// if (!end)
+	// 	return INVALID;
