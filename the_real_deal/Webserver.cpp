@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/27 13:03:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/04 09:26:41 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 09:02:37 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@
 
 int main (int argc, char **argv)
 {
-	// int fd_open_file;
-
-	
 	ClusterManager clusterManager;
 	
 	if (argc == 2)

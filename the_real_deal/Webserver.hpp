@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 10:37:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/01 12:01:55 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 13:01:12 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,7 @@
 # define DEFAULT_CONFIG	"./config_files/default.config"
 
 // # define READER_BUFFER_SIZE 1024 // optimal read buffer size
+
+#include "Server.hpp"
 
 #endif

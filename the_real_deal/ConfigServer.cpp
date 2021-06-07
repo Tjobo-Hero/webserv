@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 15:08:26 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/03 15:36:26 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 09:21:07 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,10 +311,10 @@ void			ConfigServer::setListen(std::vector<std::string> parameter)
 	}
 	if ((separator = parameter[0].find(":")) == std::string::npos)
 	{
-		if (isDigitString(parameter[0]) == true)
+		if (ft::isDigitString(parameter[0]) == true)
 		{
 			listen.host = 0;
-			listen.port = ft_atoi(parameter[0].c_str());
+			listen.port = ft::atoi(parameter[0].c_str());
 			for (std::vector<t_listen>::const_iterator it = _listen.begin(); it != _listen.end(); ++it)
 			{
 				if (it->port == listen.port)
@@ -331,12 +331,12 @@ void			ConfigServer::setListen(std::vector<std::string> parameter)
 	}
 	else
 	{
-		listen.host = strToIp(parameter[0].substr(0, separator));
+		listen.host = ft::strToIp(parameter[0].substr(0, separator));
 		separator++;
 		std::string portStr = parameter[0].substr(separator);
-		if (isDigitString(portStr))
+		if (ft::isDigitString(portStr))
 		{
-			listen.port = ft_atoi(portStr.c_str());
+			listen.port = ft::atoi(portStr.c_str());
 			this->_listen.push_back(listen);
 			return;
 		}
@@ -365,13 +365,13 @@ void		ConfigServer::setServerName(std::vector<std::string> parameter) {
 }
 
 void		ConfigServer::setClientBodyBufferSize(std::vector<std::string> parameter) {
-	if (parameter.size() != 1 || !isDigitString(parameter[0]))
+	if (parameter.size() != 1 || !ft::isDigitString(parameter[0]))
 	{
 		std::cerr << "Error: setCleintBodyBufferSize" << std::endl;
 		throw ConfigServer::ExceptionInvalidArguments();
 	}
 	
-	this->_clientBodyBufferSize = ft_atoi(parameter[0].c_str());
+	this->_clientBodyBufferSize = ft::atoi(parameter[0].c_str());
 }
 void		ConfigServer::setIndex(std::vector<std::string> parameter)
 {
@@ -452,8 +452,8 @@ void	ConfigServer::setErrorPage(std::vector<std::string> parameter)
 	
 	for (size_t i = 0; i < len; ++i)
 	{
-		if (isDigitString(parameter[i]))
-			error_codes.push_back(ft_atoi(parameter[i].c_str()));
+		if (ft::isDigitString(parameter[i]))
+			error_codes.push_back(ft::atoi(parameter[i].c_str()));
 		else if (error_codes.empty())
 		{
 			std::cerr << "Error: setErrorPage empty" << std::endl;

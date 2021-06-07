@@ -6,11 +6,16 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/01 14:18:26 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/01 14:41:20 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 09:35:31 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigUtils.hpp"
+
+namespace ft 
+{
+	
+
 bool	isDigitString(const std::string &str)
 {
 	if (str.find_first_not_of("0123456789") == std::string::npos)
@@ -19,7 +24,7 @@ bool	isDigitString(const std::string &str)
 		return false;
 }
 
-static long int	ft_convert(const char *str, int i,
+static long int	convert(const char *str, int i,
 unsigned long int result, int sign)
 {
 	while (str[i] >= '0' && str[i] <= '9')
@@ -35,7 +40,7 @@ unsigned long int result, int sign)
 	return (result);
 }
 
-int				ft_atoi(const char *str)
+int				atoi(const char *str)
 {
 	unsigned long int	result;
 	int					i;
@@ -58,7 +63,7 @@ int				ft_atoi(const char *str)
 		if (str[i] == '+')
 			return (0);
 	}
-	result = ft_convert(str, i, result, sign);
+	result = convert(str, i, result, sign);
 	return ((int)result * sign);
 }
 
@@ -72,7 +77,7 @@ unsigned int	strToIp(std::string strIp) {
 	for (unsigned int i = 3 ; i != std::numeric_limits<uint32_t>::max(); i--) {
 		sep = strIp.find_first_of('.', sep);
 		std::string str = strIp.substr(start, sep);
-		n = ft_atoi(str.c_str());
+		n = atoi(str.c_str());
 		m[i] = static_cast<unsigned char>(n);
 		sep++;
 		start = sep;
@@ -80,3 +85,5 @@ unsigned int	strToIp(std::string strIp) {
 	unsigned final = *(reinterpret_cast<unsigned int *>(m));
 	return final;
 }
+
+} // end of namespace FT

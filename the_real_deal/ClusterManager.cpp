@@ -6,13 +6,13 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 10:30:47 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/03 10:47:29 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 08:45:23 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ClusterManager.hpp"
 
-ClusterManager::ClusterManager(void) : _config(DEFAULT_CONFIG)
+ClusterManager::ClusterManager(void)
 {
 	return;
 }

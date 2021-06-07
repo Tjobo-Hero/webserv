@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 10:18:57 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/03 16:28:36 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 08:38:28 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Config
 	
 	public:
 
-	Config(std::string defaultServer = DEFAULT_CONFIG);
+	Config(void);
 	Config(Config const &src);
 	~Config(void); // virtual of nie?
 

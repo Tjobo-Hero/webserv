@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 11:35:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/03 12:21:12 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 10:12:33 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 # define READ_BUF_SIZE 1024
 
-typedef std::vector<std::string>	configFileVector;
 
 class ConfigFileReader
 {
@@ -28,8 +27,7 @@ class ConfigFileReader
 		~ConfigFileReader(void);
 
 		ConfigFileReader&		operator=(const ConfigFileReader &obj);
-		static configFileVector	readConfigFile(const char *config_file);
-		static configFileVector	splitConfigFile(std::string configFileString, std::string charset);
+		static std::string		readConfigFile(const char *config_file);
 	
 		class NotAValidFileException : public std::exception {
 			virtual const char*	what() const throw();

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 15:08:22 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/03 16:28:50 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 10:48:35 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ class ConfigServer
 		void										setAlias(std::vector<std::string> parameter);
 		
 		// MEMBER VARIABLES
-		std::vector<t_listen>						_listen; // checken wat dit doet
+		std::vector<t_listen> _listen; // checken wat dit doet
 		std::string									_root;
 		std::vector<std::string>					_serverName;
 		std::map<int, std::string>					_errorPage;
