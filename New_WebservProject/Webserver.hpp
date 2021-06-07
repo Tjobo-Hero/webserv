@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/05/31 10:37:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 13:02:42 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 15:33:06 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,15 @@
 // Config
 # define DEFAULT_CONFIG	"./config_files/default.config"
 
-// # define READER_BUFFER_SIZE 1024 // optimal read buffer size
+enum	e_status {
+	INVALID 	= -1,
+	SUCCESS 	= 0,
+	IN 			= 0,
+	ERROR 		= 1,
+	CONTINUE 	= 1,
+	OUT 		= 1
+};
 
-// #include "Server.hpp"
+// # define READER_BUFFER_SIZE 1024 // optimal read buffer size
 
 #endif

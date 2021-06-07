@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 10:47:14 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 13:02:56 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 13:12:12 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define SERVER_HPP
 
 #include "Webserver.hpp"
-#include "ConfigParser.hpp"
 #include "ServerBlock.hpp"
 #include "ServerConfiguration.hpp"
 

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 10:50:02 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 13:00:33 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 16:11:40 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 # define CONFIGPARSER_HPP
 
 #include "Webserver.hpp"
-#include "ConfigParser.hpp"
 #include "Server.hpp"
 #include "ServerConfiguration.hpp"
+#include "ConfigUtils.hpp"
 
 #define BLANKS "\t\v "
 
 enum e_context{
-	MAIN_CONTEXT,
-	SERVER_CONTEXT,
-	ROUTE_CONTEXT	
+	MAIN_BLOCK,
+	SERVER_BLOCK,
+	ROUTE_BLOCK	
 };
 
 
@@ -46,7 +46,7 @@ enum	e_fields{
 
 static size_t	const hashLen[] = {1, 4, 5};
 
-static const char *blocks[] = {"server", "location"};
+static const char *blockTypes[] = {"server", "location"};
 static const char *mainDirectives[] = {0};
 static const char *serverDirectives[] = {"listen", "server_name", "error_page", "client_max_body_size", 0};
 static const char *routeDirectives[] = {"index", "limit_except", "root", "autoindex", "upload_store",  "allow_method", "auth_basic", "auth_basic_user_file", "location_max_body_size", 0}; //add cgi later
@@ -69,7 +69,12 @@ class ConfigParser
 		ConfigParser&		operator=(ConfigParser const &obj);
 
 		static void			parseTheConfigFile(char const *configFilePath, Server::allServers &_allServers);
-		static int					openConfigFile(const char* configFilePath);
+		static int			openConfigFile(const char* configFilePath);
+		static void			sampleLine(std::string &line, fields &fields);
+		static int			parseTheBlock(int blockIndicator, fields &fields, configTokens tokens);
+		static int			addNewBlock(fields &fields, configTokens &tokens, int blockIndicator);
+		static int			addNewServerBlock(fields &fields, configTokens &tokens);
+		static int			addNewRouteBlock(fields &fields, configTokens &tokens);
 	
 	class NotAValidFileException : public std::exception {
 			virtual const char*	what() const throw();

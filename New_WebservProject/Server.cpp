@@ -6,11 +6,12 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 10:47:12 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 12:53:42 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/07 13:11:39 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "ConfigParser.hpp"
 
 Server::Server() {
 	return;
