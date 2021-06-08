@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 10:50:00 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/08 13:30:48 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/08 14:49:28 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,13 @@ void			ConfigParser::sampleLine(std::string &line, fields &fields)
 		fields[RIGHT] = std::string(line.begin() + line.find_first_not_of(BLANKS, end), line.end());
 }
 
+void			ConfigParser::formatIp(std::string &listen)
+{
+	size_t end = listen.find_first_of(":", 0);
+	if (end == std::string::npos) {
+		listen.insert(0, "0.0.0.0:");
+	}
+}
 void			ConfigParser::convertTokens(configTokens &tokens, Server::allServers &_allServers)
 {
 	ServerConfiguration configuration;
@@ -69,7 +76,31 @@ void			ConfigParser::convertTokens(configTokens &tokens, Server::allServers &_al
 	
 	while(!tokens.empty()) {
 		configuration = tokens.front();
-		
+		duplicate = false;
+		std::string &listen = configuration._directives["listen"];
+		std::string const &serverName = configuration._directives["server_name"];
+		duplicate = false;
+		formatIp(listen);
+		//TO DO add check for invalid ip:port
+		Server::serverBlocks &serverBlocks = _allServers[listen];
+		if (serverBlocks.size() > 0) {
+			for (Server::serverBlocks::const_iterator _server = serverBlocks.begin(); _server != serverBlocks.end(); ++_server)
+			{
+				ServerConfiguration::directives::const_iterator directive = _server->_configuration._directives.find("server_name");
+				if (directive == _server->_configuration._directives.end()) {
+					continue;	
+				}
+				if (serverName == directive->second) {
+					std::cerr << "duplicated server name: " << serverName <<" , ignoring.. " << std::endl;
+					duplicate = true;
+					break;
+				}
+			}
+		}
+		if (!duplicate) {
+			_allServers[listen].push_back(ServerBlock(configuration));
+		}
+		tokens.pop();
 	}
 }
 
@@ -108,7 +139,16 @@ void			ConfigParser::parseTheConfigFile(const char* configFilePath, Server::allS
 		//TODO Throw error 
 	}
 	convertTokens(tokens, _allServers);
+	printBlocks(_allServers);
+}
 
+void	ConfigParser::printBlocks(Server::allServers &_allServers)
+{
+	for(std::map<Server::ipPort, Server::serverBlocks>::iterator ipPort = _allServers.begin(); ipPort != _allServers.end(); ++ipPort)
+	{
+		Logger::log() << "\t\t---" << ipPort->first << "---" << std::endl;
+		
+	}
 }
 
 int		ConfigParser::addNewServerBlock(fields &fields, configTokens &tokens)
