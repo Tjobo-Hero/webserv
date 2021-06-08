@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 10:50:00 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 16:18:02 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/08 10:08:37 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,20 +101,38 @@ int		ConfigParser::addNewServerBlock(fields &fields, configTokens &tokens)
 // location /images {
 int		ConfigParser::addNewRouteBlock(fields &fields, configTokens &tokens)
 {
+	std::string locationPath;
+
 	size_t bracketPosition = fields[RIGHT].find_first_of("{", 0);
-	size_t delimiter = fields[RIGHT].find_first_of(BLANKS, 0);
-	// std::cout << "bracketpostion: " << bracketPosition << std::endl;
-	// std::cout << "delimiter: " << delimiter << std::endl;
-	std::string path;
-	if (bracketPosition == std::string::npos || !bracketPosition)
+	size_t forwardslashPosition = fields[RIGHT].find_first_of("/", 0);
+	size_t endoflocationPath = fields[RIGHT].find_first_of(BLANKS, forwardslashPosition);
+	size_t spaceBetweenBracketAndEndOfPath = fields[RIGHT].find_first_not_of(BLANKS, endoflocationPath);
+
+	if (bracketPosition == std::string::npos || forwardslashPosition == std::string::npos)
+	{
+		std::cout << "invalid path" << std::endl;
 		return INVALID;
-	size_t end = delimiter > bracketPosition;
-	
-	
-
-	
-	
-
+	}
+	else if (endoflocationPath == std::string::npos) // no space between path and bracket
+		locationPath = fields[RIGHT].substr(forwardslashPosition, bracketPosition - forwardslashPosition);
+	else if (spaceBetweenBracketAndEndOfPath != bracketPosition)
+	{
+		std::cout << "invalid path" << std::endl;
+		return INVALID;
+	}
+	else
+	{
+		size_t lengthOfPath = endoflocationPath - forwardslashPosition;
+		locationPath = fields[RIGHT].substr(forwardslashPosition, lengthOfPath);
+	}
+	ServerConfiguration &currentServer = tokens.back();
+	if (locationPath.back() != '/')
+		locationPath.append("/");
+	currentServer._allroutes[locationPath] = ServerConfiguration::directives();
+	currentServer._routeIndex.push_back(locationPath);
+	// TODO: add check to see if a route with the same path already exists
+	if (!fields[RIGHT].empty())
+		fields[LEFT].assign(fields[RIGHT].begin() + bracketPosition + 1, fields[RIGHT].end()); // TODO: checken of dit werkt want ik heb de functie hierboven herschreven
 	return ROUTE_BLOCK;
 }
 

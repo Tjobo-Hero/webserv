@@ -72,5 +72,6 @@
 		"stack": "cpp",
 		"thread": "cpp",
 		"queue": "cpp"
-	}
+	},
+	"C_Cpp.dimInactiveRegions": false
 }

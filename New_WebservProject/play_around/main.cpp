@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 15:17:33 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 17:22:32 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/08 10:06:40 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,65 @@
 #include <string>
 #include <vector>
 
+#define INVALID -1
+
 #define BLANKS "\t\v "
 int main ()
 {
 	std::vector<std::string> test(5);
-	test[0] = "/robijn{";
+	test[0] = " /robijn  {";
 	
-	size_t bracket = test[0].find_first_of("{", 0);
-	size_t delimiter = test[0].find_first_of(BLANKS, 0);
+	std::string locationPath;
 
-	std::cout << "bracket: " << bracket << std::endl;
-	std::cout << "delimiter: " << delimiter << std::endl;
-	size_t end = delimiter > bracket;
+	size_t bracketPosition = test[0].find_first_of("{", 0);
+	size_t forwardslashPosition = test[0].find_first_of("/", 0);
+	size_t endoflocationPath = test[0].find_first_of(BLANKS, forwardslashPosition);
+	size_t checkIfOnlyBlanksBetweenPathAndBracket = test[0].find_first_not_of(BLANKS, endoflocationPath);
 
-	if (delimiter == std::string::npos) // only one path was found before '{ : images {'
-		end = bracket;
-  	else if (test[0].find_first_not_of(BLANKS, delimiter) == bracket)
-		end = delimiter;
-	if (!end)
-		return -1;
+	if (bracketPosition == std::string::npos || forwardslashPosition == std::string::npos)
+		return INVALID;
+	else if (endoflocationPath == std::string::npos) // no space between path and bracket
+		locationPath = test[0].substr(forwardslashPosition, bracketPosition - forwardslashPosition);
+	else if (checkIfOnlyBlanksBetweenPathAndBracket != bracketPosition)
+		return INVALID;
+	else
+	{
+		size_t lengthOfLocationPath = endoflocationPath - forwardslashPosition;
+		locationPath = test[0].substr(forwardslashPosition, lengthOfLocationPath);
+	}
+	if (locationPath.back() != '/')
+	{
+		std::cout << "BACK PATH: " << locationPath.back() << std::endl;
+		locationPath.append("/");
+	}
 
-	std::cout << "end: "<< end << std::endl; 
+	
+	
+		
+	
+	
+	// if (forwardslashPosition == std::string::npos)
+	// {
+	// 	std::cout << "No forward slash" << std::endl;
+	// 	return INVALID;
+	// }
+	// else if (spaceBetweenBracketAndEndOfPath != bracketPosition && (endoflocationPath + 1) != '{')
+	// {
+	// 	std::cout << "Something after path is invalid" << std::endl;
+	// 	return INVALID;
+	// }
+	// else
+	// {
+	// 	locationPath = test[0].substr(forwardslashPosition, lengthOfPath);
+	// }
+	
+
+	std::cout << "SUCCES" << std::endl;
+	std::cout << locationPath << std::endl;
+	std::cout << test[0] << std::endl;
+	locationPath.assign(test[0].begin(), test[0].end());
+	std::cout << test[0] << std::endl;
+	
 	return 0;
 }
 
