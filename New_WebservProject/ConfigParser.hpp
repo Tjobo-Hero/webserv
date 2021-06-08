@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 10:50:02 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 16:11:40 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/08 11:47:05 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,10 @@ class ConfigParser
 		static int			addNewBlock(fields &fields, configTokens &tokens, int blockIndicator);
 		static int			addNewServerBlock(fields &fields, configTokens &tokens);
 		static int			addNewRouteBlock(fields &fields, configTokens &tokens);
-	
+		static int			addNewDirective(fields &fields, configTokens &tokens, int blockIndicator);
+		static int			addServerDirective(fields &fields, configTokens &tokens);
+		static int			addRouteDirective(fields &fields, configTokens &tokens);
+
 	class NotAValidFileException : public std::exception {
 			virtual const char*	what() const throw();
 		};

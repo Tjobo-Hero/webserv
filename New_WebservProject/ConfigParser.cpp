@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 10:50:00 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/08 10:08:37 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/08 11:56:27 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void			ConfigParser::parseTheConfigFile(const char* configFilePath, Server::allS
 		line.erase(std::find(line.begin(), line.end(), '#'), line.end()); // remove comments
 		if (!line.empty()) {
 			sampleLine(line, fields);
-			std::cout << "LEFT: [" << fields[LEFT] << "] RIGHT: [" << fields[RIGHT] << "]" << std::endl; 
+			// std::cout << "LEFT: [" << fields[LEFT] << "] RIGHT: [" << fields[RIGHT] << "]" << std::endl; 
 			if ((blockIndicator = parseTheBlock(blockIndicator, fields, tokens)) == INVALID){
 				std::cout << "Error at line: " << lineCount << std::endl;
 				//TODO put a valid Throw error
@@ -145,16 +145,77 @@ int		ConfigParser::addNewBlock(fields &fields, configTokens &tokens, int blockIn
 	else
 		return INVALID;
 }
+int		ConfigParser::addServerDirective(fields &fields, configTokens &tokens)
+{
+	size_t parameterEnd = fields[RIGHT].find_first_of(";", 0);
+	if (parameterEnd == std::string::npos) // no ";" at the end of parameter
+		return INVALID;
+	std::string const &directiveName = fields[LEFT];
+	if (directiveName == "error_page") {
+		tokens.back()._errorPages.push_back(fields[RIGHT].substr(0, parameterEnd)); // pushing to error pages vector
+	}
+	else {
+		tokens.back()._directives[fields[LEFT]] = fields[RIGHT].substr(0, parameterEnd); // pushing to directives map
+	}
+	if (!fields[RIGHT].empty()) // shift fields if we didn't reach End of File
+		fields[LEFT].assign(fields[RIGHT].begin() + parameterEnd + 1, fields[RIGHT].end());
+	return SUCCESS;
+}
+
+int		ConfigParser::addRouteDirective(fields &fields, configTokens &tokens)
+{
+	size_t parameterEnd = fields[RIGHT].find_first_of(";", 0);
+	if (parameterEnd == std::string::npos) // no ";" at the end of parameter
+		return INVALID;
+	ServerConfiguration &currentServer = tokens.back();
+	std::string &currentRoute = currentServer._routeIndex.back();
+	currentServer._allroutes[currentRoute][fields[LEFT]] = fields[RIGHT].substr(0, parameterEnd);
+	if (!fields[RIGHT].empty())
+		fields[LEFT].assign(fields[RIGHT].begin() + parameterEnd + 1, fields[RIGHT].end());
+	return SUCCESS;
+}
+
+int		ConfigParser::addNewDirective(fields &fields, configTokens &tokens, int blockIndicator)
+{
+	if (blockIndicator == SERVER_BLOCK)
+		return addServerDirective(fields, tokens);
+	else if (blockIndicator == ROUTE_BLOCK)
+		return addRouteDirective(fields, tokens);
+	else
+		return INVALID;
+}
 
 int		ConfigParser::parseTheBlock(int blockIndicator, fields &fields, configTokens tokens)
 {
 	int		updatedBlockIndicator = blockIndicator;
-	// const char	**directive;
+	const char	**directive;
 
 	if (fields[LEFT].empty())
 		return blockIndicator;
 	if (blockIndicator < ROUTE_BLOCK && fields[LEFT] == blockTypes[blockIndicator])
 		updatedBlockIndicator = addNewBlock(fields, tokens, blockIndicator);
+	else if (fields[LEFT][0] == '}')
+	{
+		updatedBlockIndicator -= 1; // change to parrent Block
+		fields[RIGHT].erase(fields[LEFT].begin()); // skip the closing bracket
+		if (fields[LEFT].empty()) { // shift fields if necessary
+			fields[LEFT] = fields[RIGHT];
+		}
+	}
+	else { // check if valid directive depening on Block
+		directive = std::find(allDirectivesString[blockIndicator], \
+		&allDirectivesString[blockIndicator][hashLen[blockIndicator] -1], \
+		fields[LEFT]);
+		if (!*directive || addNewDirective(fields, tokens, blockIndicator) == INVALID) {
+			return INVALID;
+		}
+	}
+	if (updatedBlockIndicator == INVALID || fields[LEFT].empty()) // reached end of file
+		return updatedBlockIndicator;
+	// did not reach end of file so we need to resample
+	// fields[LEFT] is the new line, updated in the add_directive
+	std::string swap = fields[LEFT];
+	sampleLine(swap, fields);
 	return parseTheBlock(updatedBlockIndicator, fields, tokens);
 }
 
