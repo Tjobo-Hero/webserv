@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   Webserver.cpp                                      :+:    :+:            */
+/*   main.cpp                                           :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/06/07 10:45:09 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 12:49:22 by timvancitte   ########   odam.nl         */
+/*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
+/*   Updated: 2021/06/09 12:57:52 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Webserver.hpp"
-#include "Server.hpp"
+// #include "Webserver.hpp"
+#include "ConfigReader.hpp"
 
 int main (int argc, char **argv)
 {
-	Server server;
-	
+	// ServerCluster serverCluster;
+	ConfigReader	configReader(argc, argv);
 	if (argc == 2)
 	{
 		try 
 		{
-			server.configFileParser(argv[1]);
+			configReader.openConfigFile();
+			
 			//
 			//
 			//
@@ -31,6 +32,7 @@ int main (int argc, char **argv)
 		catch (std::exception &e)
 		{
 			std::cerr << e.what() << std::endl;
+			return 1;
 		}
 	}
 	else
@@ -39,8 +41,5 @@ int main (int argc, char **argv)
 		std::cout << "Example: ./webserv yourfilename.config" << std::endl;
 		return 0;
 	}
-	// std::string arg(argv[1]);
-	// std::cout << "ARG:" << arg << std::endl;
-	// fd_open_file = open(arg.c_str(), O_RDONLY);
 	return 0;
 }

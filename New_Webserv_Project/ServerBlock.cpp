@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 11:18:20 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 12:56:14 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/09 10:48:37 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,12 @@ ServerBlock::~ServerBlock(){
 
 ServerBlock&	ServerBlock::operator=(ServerBlock const &obj)
 {
-	if (this != &obj)
-		std::cout << "asdf" << std::endl;
+	if (this != &obj) {
+		this->_host = obj._host;
+		this->_port = obj._port;
+		this->_socket = obj._socket;
+		this->_configuration = obj._configuration;
+		this->_sockaddr = obj._sockaddr;
+	}
 	return *this;
 }

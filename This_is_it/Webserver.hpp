@@ -5,8 +5,8 @@
 /*                                                     +:+                    */
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2021/05/31 10:37:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 15:33:06 by timvancitte   ########   odam.nl         */
+/*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
+/*   Updated: 2021/06/09 12:58:32 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 // All the includes for CPP
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <algorithm>
+
 
 // All the includes for C
 #include <unistd.h>
@@ -27,25 +30,16 @@
 #include <list>
 #include <vector>
 #include <set>
-#include <queue>
 
 // Server includes
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-// Config
-# define DEFAULT_CONFIG	"./config_files/default.config"
+// // Config
+// // # define DEFAULT_CONFIG	"./config_files/default.config"
 
-enum	e_status {
-	INVALID 	= -1,
-	SUCCESS 	= 0,
-	IN 			= 0,
-	ERROR 		= 1,
-	CONTINUE 	= 1,
-	OUT 		= 1
-};
+// // # define READER_BUFFER_SIZE 1024 // optimal read buffer size
 
-// # define READER_BUFFER_SIZE 1024 // optimal read buffer size
 
 #endif

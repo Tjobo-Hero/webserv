@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 10:50:00 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/08 14:49:28 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/09 11:30:30 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ ConfigParser::~ConfigParser(){
 ConfigParser&		ConfigParser::operator=(ConfigParser const &obj)
 {
 	if (this != &obj)
-		std::cout << "HOI" <<std::endl;
+		*this = obj;
 	return *this;
 }
 
@@ -122,34 +122,29 @@ void			ConfigParser::parseTheConfigFile(const char* configFilePath, Server::allS
 			sampleLine(line, fields);
 			// std::cout << "LEFT: [" << fields[LEFT] << "] RIGHT: [" << fields[RIGHT] << "]" << std::endl; 
 			if ((blockIndicator = parseTheBlock(blockIndicator, fields, tokens)) == INVALID){
-				std::cout << "Error at line: " << lineCount << std::endl;
-				//TODO put a valid Throw error
+				throw parseError(configFilePath, lineCount);
 			}
 			++lineCount;
 		}
 	}
-	if (close(configFileFD) == -1)
-	{
-		std::cout << "close file failed" << std::endl;
-		// TODO throw error
+	if (close(configFileFD) == -1) {
+		throw serverError("ConfigParser::parse", strerror(errno));
 	}
-	if (tokens.empty())
-	{
-		std::cout << "no tokens in file" << std::endl;
-		//TODO Throw error 
+	if (tokens.empty()) {
+		throw parseError(configFilePath, lineCount);
 	}
 	convertTokens(tokens, _allServers);
-	printBlocks(_allServers);
+	// printBlocks(_allServers);
 }
 
-void	ConfigParser::printBlocks(Server::allServers &_allServers)
-{
-	for(std::map<Server::ipPort, Server::serverBlocks>::iterator ipPort = _allServers.begin(); ipPort != _allServers.end(); ++ipPort)
-	{
-		Logger::log() << "\t\t---" << ipPort->first << "---" << std::endl;
+// void	ConfigParser::printBlocks(Server::allServers &_allServers)
+// {
+// 	for(std::map<Server::ipPort, Server::serverBlocks>::iterator ipPort = _allServers.begin(); ipPort != _allServers.end(); ++ipPort)
+// 	{
+// 		Logger::log() << "\t\t---" << ipPort->first << "---" << std::endl;
 		
-	}
-}
+// 	}
+// }
 
 int		ConfigParser::addNewServerBlock(fields &fields, configTokens &tokens)
 {
@@ -251,27 +246,30 @@ int		ConfigParser::parseTheBlock(int blockIndicator, fields &fields, configToken
 {
 	int		updatedBlockIndicator = blockIndicator;
 	const char	**directive;
-
+	
 	if (fields[LEFT].empty())
 		return blockIndicator;
 	if (blockIndicator < ROUTE_BLOCK && fields[LEFT] == blockTypes[blockIndicator])
+	{
 		updatedBlockIndicator = addNewBlock(fields, tokens, blockIndicator);
+	}
 	else if (fields[LEFT][0] == '}')
 	{
 		updatedBlockIndicator -= 1; // change to parrent Block
-		fields[RIGHT].erase(fields[LEFT].begin()); // skip the closing bracket
+		fields[LEFT].erase(fields[LEFT].begin()); // skip the closing bracket
 		if (fields[LEFT].empty()) { // shift fields if necessary
 			fields[LEFT] = fields[RIGHT];
 		}
 	}
 	else { // check if valid directive depening on Block
 		directive = std::find(allDirectivesString[blockIndicator], \
-		&allDirectivesString[blockIndicator][hashLen[blockIndicator] -1], \
+		&allDirectivesString[blockIndicator][hashLen[blockIndicator] - 1], \
 		fields[LEFT]);
 		if (!*directive || addNewDirective(fields, tokens, blockIndicator) == INVALID) {
 			return INVALID;
 		}
 	}
+	std::cout << "ASDF\n";
 	if (updatedBlockIndicator == INVALID || fields[LEFT].empty()) // reached end of file
 		return updatedBlockIndicator;
 	// did not reach end of file so we need to resample

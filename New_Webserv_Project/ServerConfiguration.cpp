@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 11:20:56 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/07 12:49:08 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/09 10:45:02 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ ServerConfiguration::~ServerConfiguration(){
 
 ServerConfiguration&		ServerConfiguration::operator=(ServerConfiguration const &obj) {
 	if (this != &obj)
-		std::cout << "BEL DE WOUTEN" << std::endl;
+	{
+		this->_directives = obj._directives;
+		this->_allroutes = obj._allroutes;
+		this->_errorPages = obj._errorPages;
+		this->_routeIndex = obj._routeIndex;	
+	}
 	return *this;
 }
