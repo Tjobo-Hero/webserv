@@ -6,51 +6,54 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/09 15:25:31 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/10 14:13:29 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Webserver.hpp"
+#include "Utils.hpp"
+
 
 namespace Utils
 {
 
-bool	isEmptyLine(std::string &line)
-{
-	for (size_t i = 0; line[i]; ++i) {
-		if (std::isspace(line[i]) == 0)
-			return false;
-	}
-	return true;
+bool	isEmptyLine(std::string &line) {
+	size_t start = line.find_first_not_of(WHITESPACE, 0);
+	return (start == std::string::npos) ? true : false;
+
 }
 
-std::string trimFrontOfString(std::string &line)
-{
-	std::string result;
+std::string findFirstWord(std::string &line) {
+	size_t		start;
+	size_t		end;
 
-	size_t i = 0;
-	while (std::isspace(line[i]) && line[i] != std::string::npos)
-		i++;
-	while (!std::isspace(line[i]) && line[i] != std::string::npos)
-	{
-		result += line[i];
-		i++
-	}
-	return (result);
+	start = line.find_first_not_of(WHITESPACE, 0);
+	end = line.find_first_of(WHITESPACE, start);
+	return line.substr(start, end);
+
 }
 
-std::string trimFrontAndBackOfString(std::string &line)
-{
-	size_t start = 0;
-	size_t end;
-
-	while (std::isspace(line[start]) && line[start] != std::string::npos)
-		start++;
-	end = line.length() - 1;
-	while (std::isspace(line[end]) && line[end] != std::string::npos)
-		end--;
-	return line.substr(start, end + 1);
+std::string removeLeadingSpaces(const std::string &line) {
+	size_t start;
 	
+	start = line.find_first_not_of(WHITESPACE, 0);
+	if (start == std::string::npos)
+		return "";
+	else
+		return line.substr(start);
+}
+
+std::string removeTrailingSpaces(const std::string &line) {
+	size_t end;
+	
+	end = line.find_last_not_of(WHITESPACE);
+	if (end == std::string::npos)
+		return "";
+	else
+		return line.substr(0, end + 1);
+}
+
+std::string removeLeadingAndTrailingSpaces(const std::string &line) {
+	return removeTrailingSpaces(removeLeadingSpaces(line));
 }
 
 } // end of namespace UTILS

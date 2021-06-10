@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:13:43 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/09 15:27:03 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/10 15:07:03 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@
 
 class parseError : public std::exception {
 		public:
-			parseError(const char *path, size_t lineCount) 
-				: _error(std::string(path) + ": syntax error line " + std::to_string(lineCount) + "\n") {
+			parseError(std::string line, size_t lineCount) 
+				: _error(std::string(line) + ": syntax error line " + std::to_string(lineCount) + "\n") {
 			}
-			parseError(const char *path, const char *message) 
-				: _error(std::string(path) + ": " + message) {
+			parseError(std::string line, const char *message) 
+				: _error("Error: line:" + std::string(line) + ": " + message) {
 			}
 			const char *what() const throw() {
 				return _error.c_str();

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/09 15:02:33 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/10 10:28:50 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,32 @@
 # define CONFIGPARSER_HPP
 
 #include "Webserver.hpp"
+#include "Error.hpp"
+#include "Utils.cpp"
 
 class ConfigParser
 {
 	private:
 
-		std::fstream	_configFile;
-	
+		std::fstream _configFile;
+		int	_argc;
+		char **_argv;
+		ConfigParser(void);
+
 	public:
 
+		ConfigParser(int argc, char **argv);
+		ConfigParser(ConfigParser const &src);
+		~ConfigParser(void);
+
+		ConfigParser&		operator=(ConfigParser const &obj);
+
+
 		void			parseTheConfigFile();
-		LocationBlock	getLocationBlock(std::string &startline, size_t &lineCount);
-		
+		// LocationBlock	getLocationBlock(std::string &startline, size_t &lineCount);
+		void				openConfigFile();
+		std::fstream&		getConfigFile();
+	
 };
 
 #endif
