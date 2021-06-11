@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 10:14:31 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 14:43:26 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "Error.hpp"
 #include "Utils.hpp"
 #include "Server.hpp"
+#include "Location.hpp"
 
 class ConfigParser
 {
@@ -25,6 +26,7 @@ class ConfigParser
 		std::fstream _configFile;
 		int	_argc;
 		char **_argv;
+		int _lineCount;
 		ConfigParser(void);
 
 	public:

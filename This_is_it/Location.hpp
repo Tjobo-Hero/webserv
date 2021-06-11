@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 12:39:48 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 14:31:44 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ class Location
 		const bool&		getAutoIndex() const;
 		const bool&		getOwnBodySize() const;
 		const bool&		getIsFileExtension() const;
-		const size_t	getMaxBodySize() const;
+		const size_t&	getMaxBodySize() const;
 		const std::string&	getMatch() const;
 		const std::string&	getRoot() const;
 		const std::string&	getErrorPage() const;

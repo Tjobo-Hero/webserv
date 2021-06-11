@@ -6,13 +6,13 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 11:11:27 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 14:57:35 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigParser.hpp"
 
-ConfigParser::ConfigParser(int argc, char **argv) : _argc(argc), _argv(argv) {
+ConfigParser::ConfigParser(int argc, char **argv) : _argc(argc), _argv(argv) _lineCount(0) {
 	return;
 }
 
@@ -48,14 +48,22 @@ void		ConfigParser::openConfigFile()
 	}
 }
 
+Location*	getLocation(std::string &startline)
+{
+	std::string line;
+	std::string match;
+
+	match = startline.substr(9, startline.length() - 11);
+	Location *newLocation = new Location(match);
+	
+}
 void		ConfigParser::parseTheConfigFile()
 {
 	std::string configLine;
-	size_t		lineCount = 0;
 
 	while (std::getline(this->_configFile, configLine))
 	{
-		++lineCount;
+		this->_lineCount++;
 		if (this->_configFile.eof())
 			break;
 		configLine.erase(std::find(configLine.begin(), configLine.end(), '#'), configLine.end()); // remove comments
@@ -66,16 +74,16 @@ void		ConfigParser::parseTheConfigFile()
 			continue;
 		if (configLine != "server {")
 		{
-			throw parseError(configLine, lineCount);
+			throw parseError(configLine, this->_lineCount);
 			return;
 		}
 		Server	*newServer = new Server;
 		while (std::getline(this->_configFile, configLine))
 		{
-			++lineCount;
+			this->_lineCount++;
 			if (this->_configFile.eof())
 			{
-				throw parseError(configLine, lineCount);
+				throw parseError(configLine, this->lineCount);
 				return;
 			}
 			configLine.erase(std::find(configLine.begin(), configLine.end(), '#'), configLine.end()); // remove comments
@@ -86,7 +94,7 @@ void		ConfigParser::parseTheConfigFile()
 			configLine = Utils::removeLeadingAndTrailingSpaces(configLine);
 			if (Utils::findFirstWord(configLine) == "location")
 			{
-				Location *newLocation = getLocation(configLine, this->_configFile, lineCount);
+				Location *newLocation = getLocation(configLine);
 				newServer->addLocation(newLocation);
 			}
 			

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/10 14:56:42 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 14:39:58 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 // Container includes
 # include <map>

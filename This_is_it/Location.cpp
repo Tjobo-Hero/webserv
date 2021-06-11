@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 12:43:39 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 14:38:07 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,8 @@ void		Location::setHTPasswordPath(const std::string &passwordpath)
 	configFile.close();
 }
 
+
+
 const bool&	Location::getOwnAutoIndex() const
 {
 	return this->_ownAutoIndex;
@@ -173,5 +175,36 @@ const size_t&	Location::getMaxBodySize() const {
 
 const std::string&	Location::getMatch() const {
 	return this->_match;
+}
 
+const std::string&	Location::getRoot() const {
+	return this->_root;
+}
+
+const std::string&	Location::getErrorPage() const {
+	return this->_errorPage;
+}
+
+const std::vector<std::string>&	Location::getIndices() const {
+	return this->_indices;
+}
+
+const std::vector<std::string>&	Location::getMehtods() const {
+	return this->_methods;
+}
+
+const std::string&	Location::getCGIPath() const {
+	return this->_cgiPath;
+}
+
+const std::string&	Location::getAuthBasic() const {
+	return this->_authBasic;
+}
+
+const std::string&	Location::getAuthUserFile() const {
+	return this->_authBasicUserFile;
+}
+
+const bool&		Location::getIsFileExtension() const {
+	return this->_isFileExtension;
 }
