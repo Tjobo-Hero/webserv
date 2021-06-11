@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/10 15:05:39 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 10:06:54 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ class Server
 		const std::vector<Location*>	&getLocations() const;
 
 		const long						&getSocketFD() const;
-		const struct sockaddr_in		&getSockAddr() const;
+		const struct sockaddr_in		&getSocketAddress() const;
 
 
 

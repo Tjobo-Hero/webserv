@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/10 13:58:51 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 11:11:27 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,11 @@ void		ConfigParser::openConfigFile()
 void		ConfigParser::parseTheConfigFile()
 {
 	std::string configLine;
-	size_t		lineCount = 1;
+	size_t		lineCount = 0;
 
 	while (std::getline(this->_configFile, configLine))
 	{
+		++lineCount;
 		if (this->_configFile.eof())
 			break;
 		configLine.erase(std::find(configLine.begin(), configLine.end(), '#'), configLine.end()); // remove comments
@@ -69,7 +70,27 @@ void		ConfigParser::parseTheConfigFile()
 			return;
 		}
 		Server	*newServer = new Server;
-		
+		while (std::getline(this->_configFile, configLine))
+		{
+			++lineCount;
+			if (this->_configFile.eof())
+			{
+				throw parseError(configLine, lineCount);
+				return;
+			}
+			configLine.erase(std::find(configLine.begin(), configLine.end(), '#'), configLine.end()); // remove comments
+			if (Utils::isEmptyLine(configLine))
+				continue;
+			if (configLine[0] == '#')
+				continue;
+			configLine = Utils::removeLeadingAndTrailingSpaces(configLine);
+			if (Utils::findFirstWord(configLine) == "location")
+			{
+				Location *newLocation = getLocation(configLine, this->_configFile, lineCount);
+				newServer->addLocation(newLocation);
+			}
+			
+		}
 		
 			
 		

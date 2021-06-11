@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/10 10:28:50 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 10:14:31 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 #include "Webserver.hpp"
 #include "Error.hpp"
-#include "Utils.cpp"
+#include "Utils.hpp"
+#include "Server.hpp"
 
 class ConfigParser
 {
@@ -39,7 +40,7 @@ class ConfigParser
 		// LocationBlock	getLocationBlock(std::string &startline, size_t &lineCount);
 		void				openConfigFile();
 		std::fstream&		getConfigFile();
-	
+
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/10 14:13:29 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 12:39:32 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,31 @@ std::string removeTrailingSpaces(const std::string &line) {
 
 std::string removeLeadingAndTrailingSpaces(const std::string &line) {
 	return removeTrailingSpaces(removeLeadingSpaces(line));
+}
+
+void		getKeyValue(std::string &line, std::string &user, std::string &password, const char* delimiter, const char* endOfLine)
+{
+	size_t userBegin = line.find_first_not_of(delimiter);
+	size_t userEnd = line.find_first_of(delimiter, userBegin);
+	
+	user = line.substr(userBegin, userEnd - userBegin);
+	user = removeLeadingAndTrailingSpaces(user);
+	if (user.empty())
+	{
+		user = "admin";
+		std::cout << "No user was added so user name is set default, username: [" << user << "]" << std::endl;
+	}
+	size_t passwordBegin = line.find_first_not_of(delimiter, userEnd);
+	size_t passwordEnd = line.find_first_of(endOfLine, passwordBegin);
+
+	password = line.substr(passwordBegin, passwordEnd - passwordBegin);
+	password = removeLeadingAndTrailingSpaces(password);
+	if (password.empty())
+	{
+		password = "admin";
+		std::cout << "No password was set for user: ["<< user << "]" << "defautl password is set." << std::endl;
+	}
+	std::cout << "User: [" << user << "]" << " password: [" << password << "] was added." << std::endl;
 }
 
 } // end of namespace UTILS

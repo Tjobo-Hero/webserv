@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 10:29:59 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/10 10:37:07 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 12:38:44 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,14 @@
 
 #include "Webserver.hpp"
 
+namespace Utils
+{
 bool		isEmptyLine(std::string &line);
-std::string trimFrontOfString(std::string &line);
-std::string trimFrontAndBackOfString(std::string &line);
+std::string findFirstWord(std::string &line);
+std::string removeLeadingSpaces(const std::string &line);
+std::string removeTrailingSpaces(const std::string &line);
+std::string removeLeadingAndTrailingSpaces(const std::string &line);
+void		getKeyValue(std::string &line, std::string &key, std::string &value, const char* delimiter);
 
+}
 #endif;
