@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/07 15:17:33 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/08 10:06:40 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/11 15:41:44 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 int main ()
 {
 	std::vector<std::string> test(5);
-	test[0] = " /robijn  {";
+	test[0] = "/robijn  {";
 	
 	std::string locationPath;
 
