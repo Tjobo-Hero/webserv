@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 10:37:26 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 14:05:16 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include "Webserver.hpp"
 #include "ParserUtils.hpp"
-#include "ConfigParser.hpp"
 
 class Location
 {
@@ -63,9 +62,9 @@ class Location
 		void	setAuthBasic(const std::string &authBasic);
 		void	setHTPasswordPath(const std::string &passwordpath);
 
-		const bool&		getOwnAutoIndex() const;
+		const bool&		hasOwnAutoIndex() const;
 		const bool&		getAutoIndex() const;
-		const bool&		getOwnBodySize() const;
+		const bool&		hasOwnBodySize() const;
 		const bool&		getIsFileExtension() const;
 		const size_t&	getMaxBodySize() const;
 		const std::string&	getMatch() const;
@@ -79,9 +78,8 @@ class Location
 		const std::vector<std::string>&	getIndices() const;
 		
 		const bool&			getAuthMatch(const std::string &username, const std::string &password);
-		const std::string&	getHTPasswordPath() const;
 		
-		void				findKey(std::string &key, std::string line);
+		void				findKey(std::string &key, std::string line, int lineCount);
 		bool				parameterCheck() const;
 
 };

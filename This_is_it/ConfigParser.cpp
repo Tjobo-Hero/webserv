@@ -6,13 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 12:21:33 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 14:49:11 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigParser.hpp"
 
-ConfigParser::ConfigParser(int argc, char **argv) : _argc(argc), _argv(argv) _lineCount(0) {
+ConfigParser::ConfigParser(int argc, char **argv) : _argc(argc), _argv(argv) {
+	this->_lineCount = 0;
 	return;
 }
 
@@ -40,10 +41,6 @@ std::fstream&	ConfigParser::getConfigFile()
 	return this->_configFile;
 }
 
-int			ConfigParser::getLineCount() {
-	return _lineCount;
-}
-
 void		ConfigParser::openConfigFile()
 {
 	this->_configFile.open(this->_argv[1]);
@@ -57,7 +54,7 @@ Location*	ConfigParser::getLocation(std::string &startline)
 	std::string configLine;
 	std::string locationPath;;
 
-	locationPath = Utils::checkLocationPath(startline);
+	locationPath = Utils::checkLocationPath(startline, this->_lineCount);
 	Location *newLocation = new Location(locationPath);
 	while (std::getline(this->_configFile, configLine))
 	{
@@ -65,36 +62,37 @@ Location*	ConfigParser::getLocation(std::string &startline)
 		if (this->_configFile.eof())
 		{
 			throw parseError("file is EOF", "what to do?");
-			return;
+			return NULL;
 		}
-		if (Utils::isEmptyLine(configLine));
+		if (Utils::isEmptyLine(configLine))
 			continue;
 		if (configLine[0] == '#')
 			continue;
 		configLine = Utils::removeLeadingAndTrailingSpaces(configLine);
 		if (configLine == "server {" || Utils::findFirstWord(configLine) == "location")
 		{
-			throw parseError(configLine, this->_lineCount);
-			return;
+			throw parseError("block not closed" + configLine, this->_lineCount);
+			return NULL;
 		}
 		if (configLine == "}")
 			break;
-		try {
+		try 
+		{
 			std::string key = Utils::findFirstWord(configLine);
-			newLocation->findKey(key, configLine);
+			newLocation->findKey(key, configLine, this->_lineCount);
 		}
 		catch(std::exception &e)
 		{
 			std::cerr << e.what() << std::endl;
-			return;
+			return NULL;
 		}
-		if (!newLocation->parameterCheck())
-		{
-			throw parseError(configLine, this->_lineCount);
-			return;
-		}
-		return (newLocation);
 	}
+	if (!newLocation->parameterCheck())
+	{
+		throw parseError("parameter check failed" + configLine, this->_lineCount);
+		return NULL;
+	}
+	return (newLocation);
 }
 
 void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
@@ -103,7 +101,7 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 
 	while (std::getline(this->_configFile, configLine))
 	{
-		this->_lineCount++;
+		++this->_lineCount;
 		if (this->_configFile.eof())
 			break;
 		configLine.erase(std::find(configLine.begin(), configLine.end(), '#'), configLine.end()); // remove comments
@@ -114,7 +112,7 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 			continue;
 		if (configLine != "server {")
 		{
-			throw parseError(configLine, this->_lineCount);
+			throw parseError("no sever block detected " + configLine, this->_lineCount);
 			return;
 		}
 		Server	*newServer = new Server;
@@ -123,7 +121,7 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 			this->_lineCount++;
 			if (this->_configFile.eof())
 			{
-				throw parseError(configLine, this->_lineCount);
+				throw parseError("end of file" + configLine, this->_lineCount);
 				return;
 			}
 			configLine.erase(std::find(configLine.begin(), configLine.end(), '#'), configLine.end()); // remove comments
@@ -144,7 +142,7 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 				try
 				{
 					std::string key = Utils::findFirstWord(configLine);
-					newServer->findKey(key, configLine);
+					newServer->findKey(key, configLine, this->_lineCount);
 				}
 				catch(const std::exception& e)
 				{
@@ -155,24 +153,26 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 			}
 			
 		}
-		std::vector<Location*> allLocations = newServer->getLocations();
-		std::vector<Location*>::iterator it = allLocations.begin();
-		for (; it != allLocations.end(); ++it)
-		{
-			if (!(*it)->getOwnAutoIndex())
-			{
-				if (newServer->getAutoIndex())
-					(*it)->setAutoIndex("on");
-				else
-					(*it)->setAutoIndex("off");
-			}
-			if (!(*it)->getOwnBodySize())
-			{
-				std::stringstream ss;
-				ss << newServer->getMaxBodySize();
-				(*it)->setMaxBodySize(ss.str());
-			}
-		}
+		// std::vector<Location*> allLocations = newServer->getLocations();
+		// // std::vector<Location*>::iterator it = allLocations.begin();
+		// for (std::vector<Location*>::iterator it = allLocations.begin(); it != allLocations.end(); ++it)
+		// {
+		// 	std::cout << (*it)->hasOwnAutoIndex() << std::endl;
+			
+		// 	if (!(*it)->hasOwnAutoIndex())
+		// 	{
+		// 		if (newServer->getAutoIndex())
+		// 			(*it)->setAutoIndex("on");
+		// 		else
+		// 			(*it)->setAutoIndex("off");
+		// 	}
+		// 	if (!(*it)->hasOwnBodySize())
+		// 	{
+		// 		std::stringstream ss;
+		// 		ss << newServer->getMaxBodySize();
+		// 		(*it)->setMaxBodySize(ss.str());
+		// 	}
+		// }
 		if (!newServer->parameterCheck())
 		{
 			throw parseError("Paramater check failed", this->_lineCount);

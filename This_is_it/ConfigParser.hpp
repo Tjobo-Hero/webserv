@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 12:06:09 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 13:51:58 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ class ConfigParser
 		std::fstream _configFile;
 		int	_argc;
 		char **_argv;
-		static int _lineCount;
+		int _lineCount;
 		ConfigParser(void);
 
 	public:
+		
 
 		ConfigParser(int argc, char **argv);
 		ConfigParser(ConfigParser const &src);

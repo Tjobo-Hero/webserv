@@ -6,13 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 11:52:24 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 14:44:45 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Location.hpp"
+#include "ConfigParser.hpp"
 
-Location::Location(std::string &match) : _autoIndex(false), _ownAutoIndex(false), _maxBodySize(1000000), _ownBodySize(false), _isFileExtension(false)
+Location::Location(std::string &match) : _autoIndex(false), _ownAutoIndex(false), _ownBodySize(false), _isFileExtension(false), _maxBodySize(1000000)
 {
 	this->_match = match;
 	if (match[0] == '*' && match[1] == '.')
@@ -65,9 +66,9 @@ void		Location::setAutoIndex(const std::string &autoIndex)
 		this->_autoIndex = true;
 		return;
 	}
-	// if (autoindex != "off")
-	// {;}
-	return;
+	if (autoIndex != "off")
+	{;}
+	// return;
 }
 
 void		Location::setMaxBodySize(const std::string &maxBodySize)
@@ -154,12 +155,12 @@ void		Location::setHTPasswordPath(const std::string &passwordpath)
 }
 
 
-const bool&	Location::getOwnAutoIndex() const
+const bool&	Location::hasOwnAutoIndex() const
 {
 	return this->_ownAutoIndex;
 }
 
-const bool&	Location::getOwnBodySize() const
+const bool&	Location::hasOwnBodySize() const
 {
 	return this->_ownBodySize;
 }
@@ -208,25 +209,34 @@ const bool&		Location::getIsFileExtension() const {
 	return this->_isFileExtension;
 }
 
-void				Location::findKey(std::string &key, std::string configLine) {
+void				Location::findKey(std::string &key, std::string configLine, int lineCount) {
 	std::map<std::string, setter>::iterator it;
 
 	std::string parameter;
 
 	if (*(configLine.rbegin()) != ';')
 	{
-		throw parseError("syntax error, line doesn't end with ';'", ConfigParser::getLineCount());
+		throw parseError("syntax error, line doesn't end with ';'", lineCount);
 		return;
 	}
 	it = this->_typeFunctionMap.find(key);
 	if (it == this->_typeFunctionMap.end())
 	{
-		throw parseError(configLine, ConfigParser::getLineCount());
+		throw parseError("key invalid, not found key:" + key, lineCount);
 		return;
 	}
-	configLine.resize(key.length() - 1); // remove ';'
-	parameter = configLine.substr(configLine.find_first_of(WHITESPACE, 0));
+	configLine.resize(configLine.size() - 1); // remove ';'
+	std::cout << "configLine1: " << configLine << std::endl;
+
+	// size_t endOfFirstWord = configLine.find_first_of(WHITESPACE, 0);
+	parameter = configLine.substr(configLine.find_first_of(WHITESPACE) + 1);
+	std::cout << "key: " << key << std::endl;
+	std::cout << "configLine2: " << configLine << std::endl;
+
+
+
 	(this->*(this->_typeFunctionMap.at(key)))(parameter);
+	std::cout << "parameter: " << parameter << std::endl;
 	return;
 }
 

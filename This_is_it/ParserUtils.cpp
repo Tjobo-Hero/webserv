@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 09:29:02 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 14:23:38 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,22 @@ void		getKeyValue(std::string &line, std::string &user, std::string &password, c
 	std::cout << "User: [" << user << "]" << " password: [" << password << "] was added." << std::endl;
 }
 
-std::string		checkLocationPath(std::string &startLine)
+std::string		checkLocationPath(std::string &startLine, int lineCount)
 {
 	startLine.erase(0, startLine.find_first_of(WHITESPACE, 0));
 	startLine = removeLeadingAndTrailingSpaces(startLine);
 	if (startLine[0] == '*' && startLine[1] == '.')
-		return startLine = setLocationPath(startLine, '*');
+		return startLine = setLocationPath(startLine, '*', lineCount);
 	else if (startLine[0] == '/')
-		return startLine = setLocationPath(startLine, '/');
+		return startLine = setLocationPath(startLine, '/', lineCount);
 	else
-		parseError(startLine, ConfigParser::getLineCount());
+	{
+		parseError(startLine, lineCount);
+	}
 	return NULL;
 }
 
-std::string		setLocationPath(std::string &startLine, const char beginOfPathCharacter)
+std::string		setLocationPath(std::string &startLine, const char beginOfPathCharacter, int lineCount)
 {
 	size_t bracketPosition = startLine.find_first_of("{", 0);
 	size_t forwardslashPosition = startLine.find_first_of(beginOfPathCharacter, 0);
@@ -102,11 +104,15 @@ std::string		setLocationPath(std::string &startLine, const char beginOfPathChara
 	size_t checkIfOnlyBlanksBetweenPathAndBracket = startLine.find_first_not_of(WHITESPACE, endoflocationPath);
 
 	if (bracketPosition == std::string::npos || forwardslashPosition == std::string::npos)
-		parseError(startLine, this->_lineCount);
+	{
+		parseError(startLine, lineCount);
+	}
 	else if (endoflocationPath == std::string::npos) // no space between path and bracket
 		startLine = startLine.substr(forwardslashPosition, bracketPosition - forwardslashPosition);
 	else if (checkIfOnlyBlanksBetweenPathAndBracket != bracketPosition)
-		parseError(startLine, this->_lineCount);
+	{
+		parseError(startLine, lineCount);
+	}
 	else
 	{
 		size_t lengthOfLocationPath = endoflocationPath - forwardslashPosition;
@@ -121,4 +127,4 @@ std::string		setLocationPath(std::string &startLine, const char beginOfPathChara
 	return startLine;
 }
 
-} // end of namespace UTILS
+} // End of UTILS Namespace

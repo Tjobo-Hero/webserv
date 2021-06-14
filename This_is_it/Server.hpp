@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 11:59:42 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 13:56:50 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ class Server
 
 		Server&		operator=(Server const &obj);
 
-		void	setPortNumber(const std::string &listen);
-		void	setMaxBodySize(const std::string &maxBodySize);
-		void	setAutoIndex(const std::string &autoIndex);
-		void	setRoot(const std::string &root);
-		void	setErrorPage(const std::string &errorPage);
-		void	setHost(const std::string &host);
-		void	setServerNames(const std::string &serverNames);
-		void	setIndices(const std::string &indices);
+		void	setPortNumber(std::string &listen);
+		void	setMaxBodySize(std::string &maxBodySize);
+		void	setAutoIndex(std::string &autoIndex);
+		void	setRoot(std::string &root);
+		void	setErrorPage(std::string &errorPage);
+		void	setHost(std::string &host);
+		void	setServerNames(std::string &serverNames);
+		void	setIndices(std::string &indices);
 		void	setAlternativeServers(Server *alternative);
 
 		void	setupRespStr(int index);
@@ -76,7 +76,7 @@ class Server
 		const long						&getSocketFD() const;
 		const struct sockaddr_in		&getSocketAddress() const;
 
-		void							findKey(std::string &key, std::string configLine);
+		void							findKey(std::string &key, std::string configLine, int lineCount);
 		bool							parameterCheck() const;
 		void							addLocation(Location *newLocation);
 

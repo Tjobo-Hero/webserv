@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 10:27:31 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 13:41:13 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fstream>
 # include <algorithm>
 # include <sstream>
+# include <stdexcept>
 
 
 // All the includes for C

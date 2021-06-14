@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 10:29:59 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 09:29:08 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 13:55:12 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ std::string removeLeadingSpaces(const std::string &line);
 std::string removeTrailingSpaces(const std::string &line);
 std::string removeLeadingAndTrailingSpaces(const std::string &line);
 void		getKeyValue(std::string &line, std::string &key, std::string &value, const char* delimiter, const char* endOfLine);
-std::string checkLocationPath(std::string &startLine);
-std::string setLocationPath(std::string &startLine, const char beginOfPathCharacter);
+std::string checkLocationPath(std::string &startLine, int lineCount);
+std::string setLocationPath(std::string &startLine, const char beginOfPathCharacter, int lineCount);
 
 }
-#endif;
+#endif 

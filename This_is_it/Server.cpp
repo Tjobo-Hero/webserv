@@ -6,11 +6,12 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 12:00:55 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 13:56:31 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "ConfigParser.hpp"
 
 Server::Server() : _portNumber(0), _maxBodySize(1000000), _autoIndex(false), _errorPage(DEFAULT_ERROR_PAGE), _socketFD(-1) {
 	this->_typeFunctionMap.insert(std::make_pair("listen", &Server::setPortNumber));
@@ -61,21 +62,21 @@ Server&			Server::operator=(Server const &obj) {
 }
 
 
-void			Server::setPortNumber(const std::string &listen) {
+void			Server::setPortNumber(std::string &listen) {
 	std::stringstream ss;
 	ss << listen;
 	ss >> this->_portNumber;
 	return;
 }
 
-void 			Server::setMaxBodySize(const std::string &maxBodySize) {
+void 			Server::setMaxBodySize(std::string &maxBodySize) {
 	std::stringstream ss;
 	ss << maxBodySize;
 	ss >> this->_maxBodySize;
 	return;
 }
 
-void			Server::setAutoIndex(const std::string &autoIndex) {
+void			Server::setAutoIndex(std::string &autoIndex) {
 	if (autoIndex.compare("on"))
 		this->_autoIndex = true;
 	else if (autoIndex.compare("off"))
@@ -85,22 +86,22 @@ void			Server::setAutoIndex(const std::string &autoIndex) {
 	return;
 }
 
-void			Server::setRoot(const std::string &root) {
+void			Server::setRoot(std::string &root) {
 	this->_root = root;
 	return;
 }
 
-void			Server::setErrorPage(const std::string &errorPage) {
+void			Server::setErrorPage(std::string &errorPage) {
 	this->_errorPage = errorPage;
 	return;
 }
 
-void			Server::setHost(const std::string &host) {
+void			Server::setHost(std::string &host) {
 	this->_host = host;
 	return;
 }
 
-void			Server::setServerNames(const std::string &serverNames) {
+void			Server::setServerNames(std::string &serverNames) {
 	std::stringstream ss;
 	std::string serverName;
 	ss << serverNames;
@@ -110,8 +111,8 @@ void			Server::setServerNames(const std::string &serverNames) {
 	return;
 }
 
-void			Server::setIndices(const std::string &indices) {
-	std::stringstream ss;
+void			Server::setIndices(std::string &indices) {
+	std::stringstream ss(indices);
 	std::string index;
 	
 	while (ss >> index)
@@ -173,13 +174,13 @@ void		Server::addLocation(Location *newLocation) {
 	return;
 }
 
-void		Server::findKey(std::string &key, std::string configLine)
+void		Server::findKey(std::string &key, std::string configLine, int lineCount)
 {
 	std::string parameter;
 	
 	if (*(configLine.rbegin()) != ';')
 	{
-		throw parseError("syntax error, line doesn't end with ';'", ConfigParser::getLineCount());
+		throw parseError("syntax error, line doesn't end with ';'", lineCount);
 		return;
 	}
 	std::map<std::string, setter>::iterator it;
@@ -187,7 +188,7 @@ void		Server::findKey(std::string &key, std::string configLine)
 	it = this->_typeFunctionMap.find(key);
 	if (it == this->_typeFunctionMap.end())
 	{
-		throw parseError (configLine += ": unknown key", ConfigParser::getLineCount());
+		throw parseError (configLine += ": unknown key", lineCount);
 		return;
 	}
 	configLine.resize(configLine.size() - 1); //remove the ';'
