@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 14:38:07 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 11:52:24 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,6 @@ void		Location::setHTPasswordPath(const std::string &passwordpath)
 }
 
 
-
 const bool&	Location::getOwnAutoIndex() const
 {
 	return this->_ownAutoIndex;
@@ -208,3 +207,42 @@ const std::string&	Location::getAuthUserFile() const {
 const bool&		Location::getIsFileExtension() const {
 	return this->_isFileExtension;
 }
+
+void				Location::findKey(std::string &key, std::string configLine) {
+	std::map<std::string, setter>::iterator it;
+
+	std::string parameter;
+
+	if (*(configLine.rbegin()) != ';')
+	{
+		throw parseError("syntax error, line doesn't end with ';'", ConfigParser::getLineCount());
+		return;
+	}
+	it = this->_typeFunctionMap.find(key);
+	if (it == this->_typeFunctionMap.end())
+	{
+		throw parseError(configLine, ConfigParser::getLineCount());
+		return;
+	}
+	configLine.resize(key.length() - 1); // remove ';'
+	parameter = configLine.substr(configLine.find_first_of(WHITESPACE, 0));
+	(this->*(this->_typeFunctionMap.at(key)))(parameter);
+	return;
+}
+
+// TODO: deze functie kan echt veel mooier
+bool			Location::parameterCheck() const {
+	std::vector<std::string>::const_iterator it;
+	
+	bool ret = true;
+
+	for (it = this->_methods.begin(); it != this->_methods.end(); ++it)
+	{
+		if ((*it) != allowedMethods[0] && (*it) != allowedMethods[1] && (*it) != allowedMethods[2] && (*it) != allowedMethods[3] && (*it) != allowedMethods[4])
+			ret = false;
+	}
+	if (!ret)
+		return (ret);
+	return true;	
+}
+

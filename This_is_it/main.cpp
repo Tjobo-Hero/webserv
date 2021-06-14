@@ -6,25 +6,25 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 10:50:16 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 12:03:41 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "Webserver.hpp"
 #include "ConfigParser.hpp"
 #include "Error.hpp"
-// #include "ServerCluster.hpp"
+#include "ServerCluster.hpp"
 
 int main (int argc, char **argv)
 {
-	// ServerCluster serverCluster;
+	ServerCluster	serverCluster;
 	ConfigParser	configParser(argc, argv);
 	if (argc == 2)
 	{
 		try 
 		{
 			configParser.openConfigFile();
-			configParser.parseTheConfigFile();
+			configParser.parseTheConfigFile(&serverCluster);
 			
 		}
 		catch (std::exception &e)

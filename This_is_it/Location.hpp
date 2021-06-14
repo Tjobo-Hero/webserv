@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 14:31:44 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 10:37:26 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define LOCATION_HPP
 
 #include "Webserver.hpp"
-#include "Utils.hpp"
+#include "ParserUtils.hpp"
+#include "ConfigParser.hpp"
 
 class Location
 {
@@ -80,8 +81,8 @@ class Location
 		const bool&			getAuthMatch(const std::string &username, const std::string &password);
 		const std::string&	getHTPasswordPath() const;
 		
-		void				findValue(std::string &key, std::string line);
-		bool				valueCheck() const;
+		void				findKey(std::string &key, std::string line);
+		bool				parameterCheck() const;
 
 };
 #endif

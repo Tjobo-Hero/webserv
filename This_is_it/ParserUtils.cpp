@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   utils.cpp                                          :+:    :+:            */
+/*   ParserUtils.cpp                                    :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 12:39:32 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 09:29:02 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Utils.hpp"
-
+#include "ParserUtils.hpp"
+#include "ConfigParser.hpp"
 
 namespace Utils
 {
@@ -79,6 +79,46 @@ void		getKeyValue(std::string &line, std::string &user, std::string &password, c
 		std::cout << "No password was set for user: ["<< user << "]" << "defautl password is set." << std::endl;
 	}
 	std::cout << "User: [" << user << "]" << " password: [" << password << "] was added." << std::endl;
+}
+
+std::string		checkLocationPath(std::string &startLine)
+{
+	startLine.erase(0, startLine.find_first_of(WHITESPACE, 0));
+	startLine = removeLeadingAndTrailingSpaces(startLine);
+	if (startLine[0] == '*' && startLine[1] == '.')
+		return startLine = setLocationPath(startLine, '*');
+	else if (startLine[0] == '/')
+		return startLine = setLocationPath(startLine, '/');
+	else
+		parseError(startLine, ConfigParser::getLineCount());
+	return NULL;
+}
+
+std::string		setLocationPath(std::string &startLine, const char beginOfPathCharacter)
+{
+	size_t bracketPosition = startLine.find_first_of("{", 0);
+	size_t forwardslashPosition = startLine.find_first_of(beginOfPathCharacter, 0);
+	size_t endoflocationPath = startLine.find_first_of(WHITESPACE, forwardslashPosition);
+	size_t checkIfOnlyBlanksBetweenPathAndBracket = startLine.find_first_not_of(WHITESPACE, endoflocationPath);
+
+	if (bracketPosition == std::string::npos || forwardslashPosition == std::string::npos)
+		parseError(startLine, this->_lineCount);
+	else if (endoflocationPath == std::string::npos) // no space between path and bracket
+		startLine = startLine.substr(forwardslashPosition, bracketPosition - forwardslashPosition);
+	else if (checkIfOnlyBlanksBetweenPathAndBracket != bracketPosition)
+		parseError(startLine, this->_lineCount);
+	else
+	{
+		size_t lengthOfLocationPath = endoflocationPath - forwardslashPosition;
+		startLine = startLine.substr(forwardslashPosition, lengthOfLocationPath);
+	}
+	if (startLine.back() != '/' && beginOfPathCharacter == '/')
+	{
+		std::cout << "BACK PATH: " << startLine.back() << std::endl;
+		startLine.append("/");
+	}
+	std::cout << "location path: [" << startLine << "]" << std::endl;
+	return startLine;
 }
 
 } // end of namespace UTILS

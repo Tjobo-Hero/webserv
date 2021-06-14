@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:13:43 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/10 15:07:03 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 12:20:02 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 class parseError : public std::exception {
 		public:
 			parseError(std::string line, size_t lineCount) 
-				: _error(std::string(line) + ": syntax error line " + std::to_string(lineCount) + "\n") {
+				: _error("Error: " + std::string(line) + ": syntax error line " + std::to_string(lineCount) + "\n") {
 			}
 			parseError(std::string line, const char *message) 
 				: _error("Error: line:" + std::string(line) + ": " + message) {
@@ -47,6 +47,20 @@ class openFileError : public std::exception
 				return _error.c_str();
 			}
 			virtual ~openFileError() throw() {}
+		private:
+			std::string _error;
+};
+
+class clusterError : public std::exception 
+{
+		public:
+			clusterError(const char *message, const char *configPath) 
+				: _error(message + std::string(configPath)) {
+			}
+			const char *what() const throw() {
+				return _error.c_str();
+			}
+			virtual ~clusterError() throw() {}
 		private:
 			std::string _error;
 };

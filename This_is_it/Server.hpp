@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 10:06:54 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 11:59:42 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "Webserver.hpp"
 #include "Error.hpp"
+#include "Location.hpp"
 
 class Server
 {
@@ -75,7 +76,9 @@ class Server
 		const long						&getSocketFD() const;
 		const struct sockaddr_in		&getSocketAddress() const;
 
-
+		void							findKey(std::string &key, std::string configLine);
+		bool							parameterCheck() const;
+		void							addLocation(Location *newLocation);
 
 };
 

@@ -6,43 +6,44 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/09 12:22:42 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 12:18:28 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #ifndef SERVERCLUSTER_HPP
-// # define SERVERCLUSTER_HPP
+#ifndef SERVERCLUSTER_HPP
+# define SERVERCLUSTER_HPP
 
-// #include "Webserver.hpp"
+#include "Webserver.hpp"
+#include "Server.hpp"
 
-// class ServerCluster
-// {
-// 	public:
+class ServerCluster
+{
+	public:
 
-// 		fd_set readFds;
-// 		fd_set writeFds;
+		fd_set readFds;
+		fd_set writeFds;
 	
-// 	private:
+	private:
 
-// 		std::vector< server* >	_servers;
-// 		std::map<int, std::map<int, int> > _doublePorts;
-// 		int _numberOfServers;
-// 		long	highestFd;
+		std::vector< Server* >	_allServers;
+		std::map<int, std::map<int, int> > _doublePorts;
+		int _numberOfServers;
+		long	_highestFD;
 	
-// 	public:	
+	public:	
 
-// 		ServerCluster();
-// 		ServerCluster(ServerCluster const &src);
-// 		~ServerCluster();
-// 		ServerCluster&		operator=(ServerCluster const &obj);
+		ServerCluster();
+		ServerCluster(ServerCluster const &src);
+		~ServerCluster();
+		ServerCluster&		operator=(ServerCluster const &obj);
 		
-// 		void	addServer(Server *newServer);
-// 		bool	isEmpty() const;
+		void	addServer(Server *newServer);
+		bool	clusterIsEmpty() const;
 		
-// 		void	duplicatePorts();
-// 		void	startup();
+		void	duplicatePorts();
+		void	startup();
 		
 		
 		
-// };
-// #endif
+};
+#endif

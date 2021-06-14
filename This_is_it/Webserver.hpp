@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 14:39:58 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 10:27:31 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 #define DEFAULT_ERROR_PAGE "default_error_page"
 
 const std::string WHITESPACE = " \n\r\t\f\v";
+const std::string allowedMethods[5] = {"", "HEAD", "GET", "POST", "PUT"};
 
 // // Config
 // // # define DEFAULT_CONFIG	"./config_files/default.config"

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 14:43:26 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 12:06:09 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 
 #include "Webserver.hpp"
 #include "Error.hpp"
-#include "Utils.hpp"
+#include "ParserUtils.hpp"
 #include "Server.hpp"
 #include "Location.hpp"
+#include "ServerCluster.hpp"
 
 class ConfigParser
 {
@@ -26,7 +27,7 @@ class ConfigParser
 		std::fstream _configFile;
 		int	_argc;
 		char **_argv;
-		int _lineCount;
+		static int _lineCount;
 		ConfigParser(void);
 
 	public:
@@ -38,10 +39,11 @@ class ConfigParser
 		ConfigParser&		operator=(ConfigParser const &obj);
 
 
-		void			parseTheConfigFile();
-		// LocationBlock	getLocationBlock(std::string &startline, size_t &lineCount);
-		void				openConfigFile();
-		std::fstream&		getConfigFile();
+		void			parseTheConfigFile(ServerCluster *serverCluster);
+		Location*		getLocation(std::string &startline);
+		void			openConfigFile();
+		std::fstream&	getConfigFile();
+		static int				getLineCount();
 
 };
 

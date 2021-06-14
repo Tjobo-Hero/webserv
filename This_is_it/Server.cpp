@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/11 10:07:03 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 12:00:55 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,3 +168,38 @@ const struct sockaddr_in&	Server::getSocketAddress() const {
 	return this->_addr;
 }
 
+void		Server::addLocation(Location *newLocation) {
+	this->_locations.push_back(newLocation);
+	return;
+}
+
+void		Server::findKey(std::string &key, std::string configLine)
+{
+	std::string parameter;
+	
+	if (*(configLine.rbegin()) != ';')
+	{
+		throw parseError("syntax error, line doesn't end with ';'", ConfigParser::getLineCount());
+		return;
+	}
+	std::map<std::string, setter>::iterator it;
+
+	it = this->_typeFunctionMap.find(key);
+	if (it == this->_typeFunctionMap.end())
+	{
+		throw parseError (configLine += ": unknown key", ConfigParser::getLineCount());
+		return;
+	}
+	configLine.resize(configLine.size() - 1); //remove the ';'
+	parameter = configLine.substr(configLine.find_first_of(WHITESPACE, 0));
+	(this->*(this->_typeFunctionMap.at(key)))(parameter);
+	return;
+}
+
+bool	Server::parameterCheck() const {
+	if (this->_portNumber <= 0)
+		return false;
+	if (this->_host.empty())
+		return false;
+	return true;
+}
