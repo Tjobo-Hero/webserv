@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 14:49:11 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/14 14:50:40 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,26 +153,24 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 			}
 			
 		}
-		// std::vector<Location*> allLocations = newServer->getLocations();
-		// // std::vector<Location*>::iterator it = allLocations.begin();
-		// for (std::vector<Location*>::iterator it = allLocations.begin(); it != allLocations.end(); ++it)
-		// {
-		// 	std::cout << (*it)->hasOwnAutoIndex() << std::endl;
-			
-		// 	if (!(*it)->hasOwnAutoIndex())
-		// 	{
-		// 		if (newServer->getAutoIndex())
-		// 			(*it)->setAutoIndex("on");
-		// 		else
-		// 			(*it)->setAutoIndex("off");
-		// 	}
-		// 	if (!(*it)->hasOwnBodySize())
-		// 	{
-		// 		std::stringstream ss;
-		// 		ss << newServer->getMaxBodySize();
-		// 		(*it)->setMaxBodySize(ss.str());
-		// 	}
-		// }
+		std::vector<Location*> allLocations = newServer->getLocations();
+		// std::vector<Location*>::iterator it = allLocations.begin();
+		for (std::vector<Location*>::iterator it = allLocations.begin(); it != allLocations.end(); ++it)
+		{
+			if (!(*it)->hasOwnAutoIndex())
+			{
+				if (newServer->getAutoIndex())
+					(*it)->setAutoIndex("on");
+				else
+					(*it)->setAutoIndex("off");
+			}
+			if (!(*it)->hasOwnBodySize())
+			{
+				std::stringstream ss;
+				ss << newServer->getMaxBodySize();
+				(*it)->setMaxBodySize(ss.str());
+			}
+		}
 		if (!newServer->parameterCheck())
 		{
 			throw parseError("Paramater check failed", this->_lineCount);
