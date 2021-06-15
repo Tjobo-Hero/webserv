@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 11:09:32 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 12:46:50 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ void		Location::setAuthBasic(const std::string &authBasic)
 void		Location::setHTPasswordPath(const std::string &passwordpath)
 {
 	struct stat statstruct = {};
+	std::cout << passwordpath << std::endl;
 	if (stat(passwordpath.c_str(), &statstruct) == -1)
 	{
 		// TODO: Error?
@@ -142,20 +143,28 @@ void		Location::setHTPasswordPath(const std::string &passwordpath)
 	std::fstream configFile;
 	std::string line;
 
-	configFile.open(this->_htpasswd_path.c_str());
-	if (!configFile)
+	try
 	{
-		// TODO error?
-		return;
+		configFile.open(this->_htpasswd_path.c_str());
+		if (!configFile)
+		{
+			// TODO error?
+			return;
+		}
+		while (std::getline(configFile, line))
+		{
+			std::string user;
+			std::string pass;
+			Utils::getKeyValue(line, user, pass, ":", "\n\r#;");
+			this->_loginfo[user] = pass;
+		}
+		configFile.close();
 	}
-	while (std::getline(configFile, line))
+	catch(const std::exception& e)
 	{
-		std::string user;
-		std::string pass;
-		Utils::getKeyValue(line, user, pass, ":", "\n\r#;");
-		this->_loginfo[user] = pass;
+		std::cerr << e.what() << '\n';
 	}
-	configFile.close();
+	
 }
 
 
@@ -286,14 +295,12 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 	}
 	os	<< '\n'
 		<< std::setw(15) << std::left << "auth_basic:" << location.getAuthBasic() << '\n'
-		<< std::setw(15) << std::left << "auth_basic_user_file:" << location.getAuthBasic() << '\n'
+		<< std::setw(15) << std::left << "auth_basic_user_file:" << location.getHTPasswordPath() << '\n'
 		<< std::setw(15) << std::left << "client_max_body_size:" << location.getMaxBodySize() << '\n'
 		<< std::setw(15) << std::left << "cgi_exec:" << location.getCGIPath() << '\n'
 		<< std::setw(15) << std::left << "autoindex:" << ((location.getAutoIndex() == true) ? ("on\n") : ("off\n"))
 		<< std::setw(15) << std::left << "file_extension:" << ((location.getIsFileExtension() == true) ? ("on\n") : ("off\n"))
 		<< std::setw(15) << std::left << "error_page:" << location.getErrorPage() << '\n'
-		<< std::setw(15) << std::left << "http_password_path:" << location.getHTPasswordPath() << '\n'
-		<< std::setw(15) << std::left << "http_password_path:" << location.getHTPasswordPath() << '\n'
 		<< std::setw(15) << std::setfill(' ') << "Log info:" << '\n';
 	for (; !locationLogInfo.empty() && it_location_loginfo != locationLogInfo.end(); ++it_location_loginfo)
 	{

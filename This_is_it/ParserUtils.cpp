@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 09:32:11 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 12:47:41 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,12 @@ std::string removeLeadingAndTrailingSpaces(const std::string &line) {
 
 void		getKeyValue(std::string &line, std::string &user, std::string &password, const char* delimiter, const char* endOfLine)
 {
+	size_t delimiterCheck = line.find_first_of(delimiter);
+	if (delimiterCheck == std::string::npos)
+	{
+		throw parseError(" no delimeter between user and password", "check your input");
+		return;
+	}
 	size_t userBegin = line.find_first_not_of(delimiter);
 	size_t userEnd = line.find_first_of(delimiter, userBegin);
 	
