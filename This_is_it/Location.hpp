@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 14:05:16 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 10:38:36 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,13 +74,16 @@ class Location
 		const std::string&	getHTPasswordPath() const;
 		const std::string&	getAuthBasic() const;
 		const std::string&	getAuthUserFile () const;
-		const std::vector<std::string>&	getMehtods() const;
+		const std::vector<std::string>&	getMethods() const;
 		const std::vector<std::string>&	getIndices() const;
+		const std::map<std::string, std::string>&	getLogInfo() const;
 		
 		const bool&			getAuthMatch(const std::string &username, const std::string &password);
 		
 		void				findKey(std::string &key, std::string line, int lineCount);
 		bool				parameterCheck() const;
-
 };
+
+std::ostream&	operator<<(std::ostream &os, const Location &location);
+
 #endif

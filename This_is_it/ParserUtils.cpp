@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 14:23:38 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 09:32:11 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,8 @@ std::string		setLocationPath(std::string &startLine, const char beginOfPathChara
 	}
 	if (startLine.back() != '/' && beginOfPathCharacter == '/')
 	{
-		std::cout << "BACK PATH: " << startLine.back() << std::endl;
 		startLine.append("/");
 	}
-	std::cout << "location path: [" << startLine << "]" << std::endl;
 	return startLine;
 }
 

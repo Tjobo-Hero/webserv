@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 14:50:40 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 10:48:25 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ Location*	ConfigParser::getLocation(std::string &startline)
 		throw parseError("parameter check failed" + configLine, this->_lineCount);
 		return NULL;
 	}
+	std::cout << *newLocation << std::endl;
 	return (newLocation);
 }
 
@@ -177,6 +178,7 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 			return;
 		}
 		serverCluster->addServer(newServer);
+		// std::cout << *newServer << std::endl;
 	}
 	if (serverCluster->clusterIsEmpty())
 	{

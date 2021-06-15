@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 14:44:45 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 10:50:42 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,10 @@ const size_t&	Location::getMaxBodySize() const {
 	return this->_maxBodySize;
 }
 
+const std::string&	Location::getHTPasswordPath() const {
+	return this->_htpasswd_path;
+}
+
 const std::string&	Location::getMatch() const {
 	return this->_match;
 }
@@ -189,7 +193,7 @@ const std::vector<std::string>&	Location::getIndices() const {
 	return this->_indices;
 }
 
-const std::vector<std::string>&	Location::getMehtods() const {
+const std::vector<std::string>&	Location::getMethods() const {
 	return this->_methods;
 }
 
@@ -209,6 +213,9 @@ const bool&		Location::getIsFileExtension() const {
 	return this->_isFileExtension;
 }
 
+const std::map<std::string, std::string>&	Location::getLogInfo() const {
+	return this->_loginfo;
+}
 void				Location::findKey(std::string &key, std::string configLine, int lineCount) {
 	std::map<std::string, setter>::iterator it;
 
@@ -226,17 +233,8 @@ void				Location::findKey(std::string &key, std::string configLine, int lineCoun
 		return;
 	}
 	configLine.resize(configLine.size() - 1); // remove ';'
-	std::cout << "configLine1: " << configLine << std::endl;
-
-	// size_t endOfFirstWord = configLine.find_first_of(WHITESPACE, 0);
 	parameter = configLine.substr(configLine.find_first_of(WHITESPACE) + 1);
-	std::cout << "key: " << key << std::endl;
-	std::cout << "configLine2: " << configLine << std::endl;
-
-
-
 	(this->*(this->_typeFunctionMap.at(key)))(parameter);
-	std::cout << "parameter: " << parameter << std::endl;
 	return;
 }
 
@@ -256,3 +254,46 @@ bool			Location::parameterCheck() const {
 	return true;	
 }
 
+std::ostream&	operator<<(std::ostream &os, const Location &location)
+{
+	std::vector<std::string> locationMethods;
+	std::vector<std::string> locationIndices;
+	std::map<std::string, std::string> locationLogInfo;
+	locationMethods = location.getMethods();
+	locationIndices = location.getIndices();
+	locationLogInfo = location.getLogInfo();
+	std::vector<std::string>::iterator it_location_methods = locationMethods.begin();
+	std::vector<std::string>::iterator it_location_indices = locationIndices.begin();
+	std::map<std::string, std::string>::iterator it_location_loginfo = locationLogInfo.begin();
+
+
+	std::cout << std::setfill('.') << std::left;
+	os	<< std::setw(15) << std::left << "match:" << location.getMatch() << '\n'
+		<< std::setw(15) << "method:";
+	for (;!locationMethods.empty() && it_location_methods != locationMethods.end(); ++it_location_methods) {
+		os << *it_location_methods;
+	}
+	os	<< '\n'
+		<< std::setw(15) << std::left << "root:" << location.getRoot() << '\n'
+		<< std::setw(15) << std::left << "index:";
+	for (;!locationIndices.empty() && it_location_indices!= locationIndices.end(); ++it_location_indices) {
+		os << *it_location_indices;
+	}
+	os	<< '\n'
+		<< std::setw(15) << std::left << "auth_basic:" << location.getAuthBasic() << '\n'
+		<< std::setw(15) << std::left << "auth_basic_user_file:" << location.getAuthBasic() << '\n'
+		<< std::setw(15) << std::left << "client_max_body_size:" << location.getMaxBodySize() << '\n'
+		<< std::setw(15) << std::left << "cgi_exec:" << location.getCGIPath() << '\n'
+		<< "----------------------------------\n"
+		<< std::setw(15) << std::left << "autoindex:" << ((location.getAutoIndex() == true) ? ("on\n") : ("off\n"))
+		<< std::setw(15) << std::left << "file_extension:" << ((location.getIsFileExtension() == true) ? ("on\n") : ("off\n"))
+		<< std::setw(15) << std::left << "error_page:" << location.getErrorPage() << '\n'
+		<< std::setw(15) << std::left << "http_password_path:" << location.getHTPasswordPath() << '\n'
+		<< std::setw(15) << std::left << "http_password_path:" << location.getHTPasswordPath() << '\n'
+		<< std::setw(15) << std::setfill(' ') << "Log info:" << '\n';
+	for (; !locationLogInfo.empty() && it_location_loginfo != locationLogInfo.end(); ++it_location_loginfo)
+	{
+		os << "User:" << it_location_loginfo->first << "Password:" << it_location_loginfo->second << '\n';
+	}
+	return os;
+}

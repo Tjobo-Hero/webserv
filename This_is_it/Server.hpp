@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 13:56:50 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 09:28:05 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,7 @@ class Server
 		void							addLocation(Location *newLocation);
 
 };
+
+std::ostream&	operator<<(std::ostream &os, const Server &server);
 
 #endif

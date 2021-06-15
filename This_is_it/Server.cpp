@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 13:56:31 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 10:10:31 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ void 			Server::setMaxBodySize(std::string &maxBodySize) {
 }
 
 void			Server::setAutoIndex(std::string &autoIndex) {
-	if (autoIndex.compare("on"))
+	if (autoIndex == "on")
 		this->_autoIndex = true;
-	else if (autoIndex.compare("off"))
+	else if (autoIndex == "off")
 		this->_autoIndex = false;
 	else
 		throw parseError(autoIndex, "invalid auto_index");
@@ -193,6 +193,7 @@ void		Server::findKey(std::string &key, std::string configLine, int lineCount)
 	}
 	configLine.resize(configLine.size() - 1); //remove the ';'
 	parameter = configLine.substr(configLine.find_first_of(WHITESPACE, 0));
+	parameter = Utils::removeLeadingAndTrailingSpaces(parameter);
 	(this->*(this->_typeFunctionMap.at(key)))(parameter);
 	return;
 }
@@ -203,4 +204,35 @@ bool	Server::parameterCheck() const {
 	if (this->_host.empty())
 		return false;
 	return true;
+}
+
+std::ostream&	operator<<(std::ostream &os, const Server &server)
+{
+	std::vector<std::string> serverNames;
+	std::vector<std::string> serverIndices;
+
+	serverNames = server.getServerNames();
+	serverIndices = server.getIndices();
+	std::vector<std::string>::iterator it_server_name = serverNames.begin();
+	std::vector<std::string>::iterator it_indices = serverIndices.begin();
+
+	std::cout << std::setfill('.');
+	for (;!serverNames.empty() && it_server_name != serverNames.end(); ++it_server_name) {
+		os << std::setw(15) << std::left << "server_name:" << *it_server_name << '\n';
+	}
+	os	<< std::setw(15) << std::left << "port_mumber:" << server.getPortNumber() << '\n'
+		<< std::setw(15) << std::left << "host:" << server.getHost() << '\n'
+		<< std::setw(15) << "error_page:" << server.getErrorPage() << '\n'
+		<< std::setw(15) << std::left << "autoindex:" << ((server.getAutoIndex() == true) ? ("on\n") : ("off\n"))
+		<< std::setw(15) << "root:" << server.getRoot() << '\n';
+	for (;!serverIndices.empty() && it_indices != serverIndices.end(); ++it_indices) {
+		os << std::setw(15) << std::left << "index" << *it_indices << '\n';
+	}
+	os	<< std::setw(15) << "socketfd:" << server.getSocketFD() << '\n'
+		<< std::setw(15) << "max_body_size:" << server.getMaxBodySize() << '\n'
+		<< std::setw(15) << std::setfill(' ') << "locations in this server:" << '\n';
+	for (size_t i = 0; i < server.getLocations().size(); ++i) {
+		os << i << ":" << server.getLocations()[i]->getMatch() << '\n';
+	}
+	return os;
 }

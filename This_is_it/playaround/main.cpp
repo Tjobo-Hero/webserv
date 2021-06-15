@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 10:37:24 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 11:26:05 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 08:48:08 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,28 @@
 #include <unistd.h>
 #include <sstream>
 #include <vector>
+#include <iomanip>
+#include <locale>
 
 
 
 int main()
 {
-	std::vector<std::string> result;
-	std::string dit = "robijn maarten wester tim";
-	std::stringstream ss(dit);
-	std::string hoi;
-	
-	while (ss >> hoi)
-		result.push_back(hoi);
-	std::vector<std::string>::iterator it = result.begin();
-	for (; it != result.end(); ++it)
-		std::cout << *it << std::endl;
-	
+    // std::cout.imbue(std::locale("en_US.utf8"));
+    std::cout << "Left fill:\n" << std::left << std::setfill('*')
+              << std::setw(12) << -1.23  << '\n'
+              << std::setw(12) << std::hex << std::showbase << 42 << '\n'
+              << std::setw(12) << std::put_money(123, true) << "\n\n";
+ 
+    std::cout << "Internal fill:\n" << std::internal
+              << std::setw(12) << -1.23  << '\n'
+              << std::setw(12) << 42 << '\n'
+              << std::setw(12) << std::put_money(123, true) << "\n\n";
+ 
+    std::cout << "Right fill:\n" << std::right
+              << std::setw(12) << -1.23  << '\n'
+              << std::setw(12) << 42 << '\n'
+              << std::setw(12) << std::put_money(123, true) << '\n';
 	return 0;
 }
 
