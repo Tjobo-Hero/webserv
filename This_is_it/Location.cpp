@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 13:52:02 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 15:38:42 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,36 +238,27 @@ void				Location::findKey(std::string &key, std::string configLine, int lineCoun
 	std::string parameter;
 
 	if (*(configLine.rbegin()) != ';')
-	{
-		throw parseError("syntax error, line doesn't end with ';'", lineCount);
-		return;
-	}
+		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
 	it = this->_typeFunctionMap.find(key);
 	if (it == this->_typeFunctionMap.end())
-	{
-		throw parseError("key invalid, not found key:" + key, lineCount);
-		return;
-	}
+		throw parseError("key invalid, not found key: " + key + " ", lineCount);
 	configLine.resize(configLine.size() - 1); // remove ';'
 	parameter = configLine.substr(configLine.find_first_of(WHITESPACE) + 1);
 	parameter = Utils::removeLeadingAndTrailingSpaces(parameter);
 	(this->*(this->_typeFunctionMap.at(key)))(parameter);
-	return;
 }
 
 // TODO: deze functie kan echt veel mooier
-bool			Location::parameterCheck() const {
+bool			Location::parameterCheck(int &lineCount) const {
 	std::vector<std::string>::const_iterator it;
-	
-	bool ret = true;
 
 	for (it = this->_methods.begin(); it != this->_methods.end(); ++it)
 	{
 		if ((*it) != allowedMethods[0] && (*it) != allowedMethods[1] && (*it) != allowedMethods[2] && (*it) != allowedMethods[3] && (*it) != allowedMethods[4])
-			ret = false;
+			throw parseError("invalid method ", lineCount);
 	}
-	if (!ret)
-		return (ret);
+	if (this->_root.empty() == true)
+		throw parseError("missing root ", lineCount);
 	return true;	
 }
 

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 09:28:05 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 15:56:15 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ class Server
 		const struct sockaddr_in		&getSocketAddress() const;
 
 		void							findKey(std::string &key, std::string configLine, int lineCount);
-		bool							parameterCheck() const;
+		bool							parameterCheck(int &lineCount) const;
 		void							addLocation(Location *newLocation);
 
 };

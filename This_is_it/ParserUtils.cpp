@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 12:47:41 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 15:54:37 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void		getKeyValue(std::string &line, std::string &user, std::string &password, c
 		password = "admin";
 		std::cout << "No password was set for user: ["<< user << "]" << "defautl password is set." << std::endl;
 	}
-	std::cout << "User: [" << user << "]" << " password: [" << password << "] was added." << std::endl;
+	// std::cout << "User: [" << user << "]" << " password: [" << password << "] was added." << std::endl;
 }
 
 std::string		checkLocationPath(std::string &startLine, int lineCount)
@@ -96,9 +96,7 @@ std::string		checkLocationPath(std::string &startLine, int lineCount)
 	else if (startLine[0] == '/')
 		return startLine = setLocationPath(startLine, '/', lineCount);
 	else
-	{
-		parseError(startLine, lineCount);
-	}
+		throw parseError("missing location path ", lineCount);
 	return NULL;
 }
 
@@ -110,24 +108,18 @@ std::string		setLocationPath(std::string &startLine, const char beginOfPathChara
 	size_t checkIfOnlyBlanksBetweenPathAndBracket = startLine.find_first_not_of(WHITESPACE, endoflocationPath);
 
 	if (bracketPosition == std::string::npos || forwardslashPosition == std::string::npos)
-	{
-		parseError(startLine, lineCount);
-	}
+		throw parseError("missing block ", lineCount);
 	else if (endoflocationPath == std::string::npos) // no space between path and bracket
 		startLine = startLine.substr(forwardslashPosition, bracketPosition - forwardslashPosition);
 	else if (checkIfOnlyBlanksBetweenPathAndBracket != bracketPosition)
-	{
-		parseError(startLine, lineCount);
-	}
+		throw parseError("invalid path, character between path and '{' ", lineCount);
 	else
 	{
 		size_t lengthOfLocationPath = endoflocationPath - forwardslashPosition;
 		startLine = startLine.substr(forwardslashPosition, lengthOfLocationPath);
 	}
 	if (startLine.back() != '/' && beginOfPathCharacter == '/')
-	{
 		startLine.append("/");
-	}
 	return startLine;
 }
 

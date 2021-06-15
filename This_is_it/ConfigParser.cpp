@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 13:52:34 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 15:57:39 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void		ConfigParser::openConfigFile()
 Location*	ConfigParser::getLocation(std::string &startline)
 {
 	std::string configLine;
-	std::string locationPath;;
+	std::string locationPath;
 
 	locationPath = Utils::checkLocationPath(startline, this->_lineCount);
 	Location *newLocation = new Location(locationPath);
@@ -60,10 +60,7 @@ Location*	ConfigParser::getLocation(std::string &startline)
 	{
 		++this->_lineCount;
 		if (this->_configFile.eof())
-		{
-			throw parseError("file is EOF", "what to do?");
-			return NULL;
-		}
+			throw parseError("end of file ", this->_lineCount);
 		if (Utils::isEmptyLine(configLine))
 			continue;
 		if (configLine[0] == '#')
@@ -71,27 +68,19 @@ Location*	ConfigParser::getLocation(std::string &startline)
 		configLine = Utils::removeLeadingAndTrailingSpaces(configLine);
 		if (configLine == "server {" || Utils::findFirstWord(configLine) == "location")
 		{
-			throw parseError("block not closed" + configLine, this->_lineCount);
+			throw parseError("block not closed ", this->_lineCount);
 			return NULL;
 		}
 		if (configLine == "}")
 			break;
-		try 
-		{
-			std::string key = Utils::findFirstWord(configLine);
-			newLocation->findKey(key, configLine, this->_lineCount);
-		}
-		catch(std::exception &e)
-		{
-			std::cerr << e.what() << std::endl;
-			return NULL;
-		}
+		std::string key = Utils::findFirstWord(configLine);
+		// if (key.size() <= 0)
+			// throw parseError("not found " + configLine, this->_lineCount);
+		newLocation->findKey(key, configLine, this->_lineCount); // removed try/catch block
 	}
-	if (!newLocation->parameterCheck())
-	{
-		throw parseError("parameter check failed" + configLine, this->_lineCount);
-		return NULL;
-	}
+	newLocation->parameterCheck(this->_lineCount);
+	if (this->_configFile.eof())
+		throw parseError("end of file ", this->_lineCount);
 	return (newLocation);
 }
 
@@ -111,19 +100,13 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 		if (configLine[0] == '#')
 			continue;
 		if (configLine != "server {")
-		{
-			throw parseError("no sever block detected " + configLine, this->_lineCount);
-			return;
-		}
+			throw parseError("no Server block detected", this->_lineCount);
 		Server	*newServer = new Server;
 		while (std::getline(this->_configFile, configLine))
 		{
 			this->_lineCount++;
 			if (this->_configFile.eof())
-			{
-				throw parseError("end of file" + configLine, this->_lineCount);
-				return;
-			}
+				throw parseError("end of file ", this->_lineCount);
 			configLine.erase(std::find(configLine.begin(), configLine.end(), '#'), configLine.end()); // remove comments
 			if (Utils::isEmptyLine(configLine))
 				continue;
@@ -137,19 +120,11 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 			}
 			else if (configLine == "}")
 				break;
-			else
-			{
-				try
-				{
-					std::string key = Utils::findFirstWord(configLine);
-					newServer->findKey(key, configLine, this->_lineCount);
-				}
-				catch(const std::exception& e)
-				{
-					std::cerr << e.what() << '\n';
-					return;
-				}
-				
+			else {
+				std::string key = Utils::findFirstWord(configLine);
+				// if (key.size() <= 0)
+					// throw parseError("not found " + configLine, this->_lineCount);
+				newServer->findKey(key, configLine, this->_lineCount); // removed try/catch block
 			}
 		}
 		std::vector<Location*> allLocations = newServer->getLocations();
@@ -169,18 +144,11 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 				(*it)->setMaxBodySize(ss.str());
 			}
 		}
-		if (!newServer->parameterCheck())
-		{
-			throw parseError("Paramater check failed", this->_lineCount);
-			return;
-		}
+		newServer->parameterCheck(this->_lineCount);
 		serverCluster->addServer(newServer);
 		std::cout << *newServer << std::endl;
 	}
 	if (serverCluster->clusterIsEmpty())
-	{
 		throw clusterError("Cluster seems to be empty", "check your input");
-		return;
-	}
 }
 

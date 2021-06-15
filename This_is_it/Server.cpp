@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 11:12:38 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 16:00:49 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,18 +179,12 @@ void		Server::findKey(std::string &key, std::string configLine, int lineCount)
 	std::string parameter;
 	
 	if (*(configLine.rbegin()) != ';')
-	{
-		throw parseError("syntax error, line doesn't end with ';'", lineCount);
-		return;
-	}
+		throw parseError("HALLO syntax error, line doesn't end with ';' ", lineCount);
 	std::map<std::string, setter>::iterator it;
 
 	it = this->_typeFunctionMap.find(key);
 	if (it == this->_typeFunctionMap.end())
-	{
-		throw parseError (configLine += ": unknown key", lineCount);
-		return;
-	}
+		throw parseError ("unknown key: " + configLine + " ", lineCount);
 	configLine.resize(configLine.size() - 1); //remove the ';'
 	parameter = configLine.substr(configLine.find_first_of(WHITESPACE, 0));
 	parameter = Utils::removeLeadingAndTrailingSpaces(parameter);
@@ -198,11 +192,11 @@ void		Server::findKey(std::string &key, std::string configLine, int lineCount)
 	return;
 }
 
-bool	Server::parameterCheck() const {
+bool	Server::parameterCheck(int &lineCount) const {
 	if (this->_portNumber <= 0)
-		return false;
+		throw parseError("invalid port number ", lineCount);
 	if (this->_host.empty())
-		return false;
+		throw parseError("invalid host ", lineCount);
 	return true;
 }
 

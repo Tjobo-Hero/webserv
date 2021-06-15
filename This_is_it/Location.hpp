@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 11:04:23 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 15:25:10 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ class Location
 		const bool&			getAuthMatch(const std::string &username, const std::string &password);
 		
 		void				findKey(std::string &key, std::string line, int lineCount);
-		bool				parameterCheck() const;
+		bool				parameterCheck(int &lineCount) const;
 };
 
 std::ostream&	operator<<(std::ostream &os, const Location &location);
