@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 15:56:15 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 16:17:40 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ class Server
 		void							findKey(std::string &key, std::string configLine, int lineCount);
 		bool							parameterCheck(int &lineCount) const;
 		void							addLocation(Location *newLocation);
+		void							setAutoIndexOfLocations();
 
 };
 

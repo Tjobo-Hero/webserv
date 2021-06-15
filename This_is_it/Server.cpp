@@ -6,12 +6,13 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 16:00:49 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 16:29:18 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "ConfigParser.hpp"
+#include "Location.hpp"
 
 Server::Server() : _portNumber(0), _maxBodySize(1000000), _autoIndex(false), _errorPage(DEFAULT_ERROR_PAGE), _socketFD(-1) {
 	this->_typeFunctionMap.insert(std::make_pair("listen", &Server::setPortNumber));
@@ -198,6 +199,28 @@ bool	Server::parameterCheck(int &lineCount) const {
 	if (this->_host.empty())
 		throw parseError("invalid host ", lineCount);
 	return true;
+}
+
+void	Server::setAutoIndexOfLocations()
+{
+	std::vector<Location*> locs = this->getLocations();
+	for (std::vector<Location*>::iterator it = locs.begin(); it != locs.end(); it++)
+	{
+		if ((*it)->hasOwnAutoIndex() == false)
+		{
+			if (this->getAutoIndex() == true)
+				(*it)->setAutoIndex("on");
+			else
+				(*it)->setAutoIndex("off");
+		}
+		if (!(*it)->hasOwnBodySize())
+		{
+			std::stringstream ss;
+			ss << this->getMaxBodySize();
+			(*it)->setMaxBodySize(ss.str());
+		}
+	}
+	return;
 }
 
 std::ostream&	operator<<(std::ostream &os, const Server &server)

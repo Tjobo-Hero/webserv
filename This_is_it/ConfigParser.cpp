@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 15:57:39 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 16:30:58 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,23 +127,7 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 				newServer->findKey(key, configLine, this->_lineCount); // removed try/catch block
 			}
 		}
-		std::vector<Location*> allLocations = newServer->getLocations();
-		for (std::vector<Location*>::iterator it = allLocations.begin(); it != allLocations.end(); ++it)
-		{
-			if (!(*it)->hasOwnAutoIndex())
-			{
-				if (newServer->getAutoIndex())
-					(*it)->setAutoIndex("on");
-				else
-					(*it)->setAutoIndex("off");
-			}
-			if (!(*it)->hasOwnBodySize())
-			{
-				std::stringstream ss;
-				ss << newServer->getMaxBodySize();
-				(*it)->setMaxBodySize(ss.str());
-			}
-		}
+		newServer->setAutoIndexOfLocations();
 		newServer->parameterCheck(this->_lineCount);
 		serverCluster->addServer(newServer);
 		std::cout << *newServer << std::endl;

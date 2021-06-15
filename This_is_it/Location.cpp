@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 15:38:42 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 16:28:57 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void		Location::printLocation() const {
 void		Location::setAutoIndex(const std::string &autoIndex)
 {
 	this->_ownAutoIndex = true;
-	if (autoIndex.compare("on") == true)
+	if (autoIndex == "on")
 	{
 		this->_autoIndex = true;
 		return;
