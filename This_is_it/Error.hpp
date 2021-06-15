@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:13:43 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 12:20:02 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 13:51:38 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ class openFileError : public std::exception
 		public:
 			openFileError(const char *message, const char *configPath) 
 				: _error(message + std::string(configPath)) {
+			}
+			openFileError(const char *message, std::string configPath) 
+				: _error(message + configPath) {
 			}
 			const char *what() const throw() {
 				return _error.c_str();

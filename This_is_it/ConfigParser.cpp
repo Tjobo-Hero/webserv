@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 12:47:39 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 13:52:34 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,10 +151,8 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 				}
 				
 			}
-			
 		}
 		std::vector<Location*> allLocations = newServer->getLocations();
-		// std::vector<Location*>::iterator it = allLocations.begin();
 		for (std::vector<Location*>::iterator it = allLocations.begin(); it != allLocations.end(); ++it)
 		{
 			if (!(*it)->hasOwnAutoIndex())

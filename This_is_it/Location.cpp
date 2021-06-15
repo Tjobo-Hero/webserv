@@ -6,12 +6,13 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 12:46:50 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 13:52:02 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Location.hpp"
 #include "ConfigParser.hpp"
+#include "Error.hpp"
 
 Location::Location(std::string &match) : _autoIndex(false), _ownAutoIndex(false), _ownBodySize(false), _isFileExtension(false), _maxBodySize(1000000)
 {
@@ -132,23 +133,23 @@ void		Location::setAuthBasic(const std::string &authBasic)
 void		Location::setHTPasswordPath(const std::string &passwordpath)
 {
 	struct stat statstruct = {};
-	std::cout << passwordpath << std::endl;
-	if (stat(passwordpath.c_str(), &statstruct) == -1)
-	{
-		// TODO: Error?
-		return;
-	}
-	this->_htpasswd_path = passwordpath;
 	
 	std::fstream configFile;
 	std::string line;
 
 	try
 	{
+		if (stat(passwordpath.c_str(), &statstruct) == -1)
+		{
+			throw parseError("set password path error", "check input");
+			return;
+		}
+		this->_htpasswd_path = passwordpath;
+		
 		configFile.open(this->_htpasswd_path.c_str());
 		if (!configFile)
 		{
-			// TODO error?
+			throw openFileError("Error: failed to open filepath: ", this->_htpasswd_path);
 			return;
 		}
 		while (std::getline(configFile, line))
@@ -163,6 +164,8 @@ void		Location::setHTPasswordPath(const std::string &passwordpath)
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
+		exit(1);
+		return;
 	}
 	
 }
