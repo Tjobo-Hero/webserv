@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 10:38:36 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 11:04:23 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ class Location
 		~Location(void);
 
 		Location&		operator=(Location const &obj);
+		void			printLocation() const;
 
 		void	setAutoIndex(const std::string &autoIndex);
 		void	setMaxBodySize(const std::string &maxBodySize);

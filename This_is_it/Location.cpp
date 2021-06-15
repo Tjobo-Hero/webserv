@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 10:50:42 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 11:09:32 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ Location::Location(std::string &match) : _autoIndex(false), _ownAutoIndex(false)
 	if (match[0] == '*' && match[1] == '.')
 		this->_isFileExtension = true;
 	this->_typeFunctionMap.insert(std::make_pair("autoindex", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("root", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("method", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("error_page", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("index", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("cgi_exec", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("auth_basic", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("auth_basic_user_file", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("client_max_body_size", &Location::setAutoIndex));
+	this->_typeFunctionMap.insert(std::make_pair("root", &Location::setRoot));
+	this->_typeFunctionMap.insert(std::make_pair("method", &Location::setMethod));
+	this->_typeFunctionMap.insert(std::make_pair("error_page", &Location::setErrorPage));
+	this->_typeFunctionMap.insert(std::make_pair("index", &Location::setIndices));
+	this->_typeFunctionMap.insert(std::make_pair("cgi_exec", &Location::setCgiPath));
+	this->_typeFunctionMap.insert(std::make_pair("auth_basic", &Location::setAuthBasic));
+	this->_typeFunctionMap.insert(std::make_pair("auth_basic_user_file", &Location::setHTPasswordPath));
+	this->_typeFunctionMap.insert(std::make_pair("client_max_body_size", &Location::setMaxBodySize));
 	return;
 }
 
@@ -56,6 +56,10 @@ Location&	Location::operator=(Location const &obj)
 		this->_isFileExtension = obj._isFileExtension;
 	}
 	return *this;
+}
+
+void		Location::printLocation() const {
+	std::cout << *this << std::endl;
 }
 
 void		Location::setAutoIndex(const std::string &autoIndex)
@@ -234,6 +238,7 @@ void				Location::findKey(std::string &key, std::string configLine, int lineCoun
 	}
 	configLine.resize(configLine.size() - 1); // remove ';'
 	parameter = configLine.substr(configLine.find_first_of(WHITESPACE) + 1);
+	parameter = Utils::removeLeadingAndTrailingSpaces(parameter);
 	(this->*(this->_typeFunctionMap.at(key)))(parameter);
 	return;
 }
@@ -268,7 +273,7 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 
 
 	std::cout << std::setfill('.') << std::left;
-	os	<< std::setw(15) << std::left << "match:" << location.getMatch() << '\n'
+	os	<< std::setw(15) << std::left << "location:" << location.getMatch() << '\n'
 		<< std::setw(15) << "method:";
 	for (;!locationMethods.empty() && it_location_methods != locationMethods.end(); ++it_location_methods) {
 		os << *it_location_methods;
@@ -284,7 +289,6 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 		<< std::setw(15) << std::left << "auth_basic_user_file:" << location.getAuthBasic() << '\n'
 		<< std::setw(15) << std::left << "client_max_body_size:" << location.getMaxBodySize() << '\n'
 		<< std::setw(15) << std::left << "cgi_exec:" << location.getCGIPath() << '\n'
-		<< "----------------------------------\n"
 		<< std::setw(15) << std::left << "autoindex:" << ((location.getAutoIndex() == true) ? ("on\n") : ("off\n"))
 		<< std::setw(15) << std::left << "file_extension:" << ((location.getIsFileExtension() == true) ? ("on\n") : ("off\n"))
 		<< std::setw(15) << std::left << "error_page:" << location.getErrorPage() << '\n'
@@ -295,5 +299,6 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 	{
 		os << "User:" << it_location_loginfo->first << "Password:" << it_location_loginfo->second << '\n';
 	}
+	os << "----------------------------------\n";
 	return os;
 }

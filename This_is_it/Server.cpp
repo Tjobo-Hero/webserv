@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 10:10:31 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 11:12:38 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,15 +208,18 @@ bool	Server::parameterCheck() const {
 
 std::ostream&	operator<<(std::ostream &os, const Server &server)
 {
+	static int serverCount = 1;
 	std::vector<std::string> serverNames;
 	std::vector<std::string> serverIndices;
-
+	
 	serverNames = server.getServerNames();
 	serverIndices = server.getIndices();
 	std::vector<std::string>::iterator it_server_name = serverNames.begin();
 	std::vector<std::string>::iterator it_indices = serverIndices.begin();
 
 	std::cout << std::setfill('.');
+	os << "Serverblock: " << serverCount << '\n';
+	
 	for (;!serverNames.empty() && it_server_name != serverNames.end(); ++it_server_name) {
 		os << std::setw(15) << std::left << "server_name:" << *it_server_name << '\n';
 	}
@@ -230,9 +233,11 @@ std::ostream&	operator<<(std::ostream &os, const Server &server)
 	}
 	os	<< std::setw(15) << "socketfd:" << server.getSocketFD() << '\n'
 		<< std::setw(15) << "max_body_size:" << server.getMaxBodySize() << '\n'
-		<< std::setw(15) << std::setfill(' ') << "locations in this server:" << '\n';
+		<< std::setw(15) << std::setfill(' ') << "locations in this server:" << "\n\n";
 	for (size_t i = 0; i < server.getLocations().size(); ++i) {
-		os << i << ":" << server.getLocations()[i]->getMatch() << '\n';
+		os << "locationBlock: " << i + 1 << '\n';
+		server.getLocations()[i]->printLocation();
 	}
+	++serverCount;
 	return os;
 }
