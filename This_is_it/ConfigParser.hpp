@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/14 13:51:58 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/15 16:31:48 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ class ConfigParser
 		ConfigParser(void);
 
 	public:
-		
 
 		ConfigParser(int argc, char **argv);
 		ConfigParser(ConfigParser const &src);
