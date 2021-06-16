@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 16:29:18 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/16 14:38:16 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ Server::~Server(void) {
 	close(this->_socketFD);
 	std::vector<Location*>::iterator it;
 	it = this->_locations.begin();
-	while (!this->_locations.empty() && it != this->_locations.end())
-	{
+	while (!this->_locations.empty() && it != this->_locations.end()) {
 		delete (*it);
 		++it;
 	}
@@ -106,9 +105,8 @@ void			Server::setServerNames(std::string &serverNames) {
 	std::stringstream ss;
 	std::string serverName;
 	ss << serverNames;
-	while (ss >> serverName) {
+	while (ss >> serverName)
 		this->_serverNames.push_back(serverName);
-	}
 	return;
 }
 
@@ -175,8 +173,7 @@ void		Server::addLocation(Location *newLocation) {
 	return;
 }
 
-void		Server::findKey(std::string &key, std::string configLine, int lineCount)
-{
+void		Server::findKey(std::string &key, std::string configLine, int lineCount) {
 	std::string parameter;
 	
 	if (*(configLine.rbegin()) != ';')
@@ -201,20 +198,17 @@ bool	Server::parameterCheck(int &lineCount) const {
 	return true;
 }
 
-void	Server::setAutoIndexOfLocations()
-{
+void	Server::setAutoIndexOfLocations() {
 	std::vector<Location*> locs = this->getLocations();
-	for (std::vector<Location*>::iterator it = locs.begin(); it != locs.end(); it++)
-	{
-		if ((*it)->hasOwnAutoIndex() == false)
-		{
-			if (this->getAutoIndex() == true)
+	for (std::vector<Location*>::iterator it = locs.begin(); it != locs.end(); it++) {
+		if ((*it)->hasOwnAutoIndex() == false) {
+			if (this->getAutoIndex() == true) {
 				(*it)->setAutoIndex("on");
+			}
 			else
 				(*it)->setAutoIndex("off");
 		}
-		if (!(*it)->hasOwnBodySize())
-		{
+		if (!(*it)->hasOwnBodySize()) {
 			std::stringstream ss;
 			ss << this->getMaxBodySize();
 			(*it)->setMaxBodySize(ss.str());
@@ -223,8 +217,30 @@ void	Server::setAutoIndexOfLocations()
 	return;
 }
 
-std::ostream&	operator<<(std::ostream &os, const Server &server)
-{
+void			Server::startListening() {
+	this->_socketFD = socket(PF_INET, SOCK_STREAM, 0);
+	if (this->_socketFD < 0 )
+		throw startupError("to create socket for server with host: ", this->_host);
+	bzero(&this->_addr, sizeof(this->_addr));
+	this->_addr.sin_family = AF_INET;
+	this->_addr.sin_port = htons(this->_portNumber);
+	this->_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	int ret;
+	int options = 1;
+	ret = setsockopt(this->_socketFD, SOL_SOCKET, SO_REUSEPORT, &options, sizeof(options));
+	if (ret < 0)
+		throw startupError("to setsockopt for server with host: ", this->_host);
+	ret = bind(this->_socketFD, (sockaddr*)&(this->_addr), sizeof(this->_addr));
+	if (ret < 0)
+		throw startupError("to bind for server with host: ", this->_host);
+	ret = listen(this->_socketFD, NR_OF_CONNECTIONS);
+	if (ret < 0)
+		throw startupError("to listen for server host: ", this->_host);
+	std::cout << "Startup was succesfull" << std::endl;
+}
+
+std::ostream&	operator<<(std::ostream &os, const Server &server) {
 	static int serverCount = 1;
 	std::vector<std::string> serverNames;
 	std::vector<std::string> serverIndices;

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:13:43 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 14:39:48 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/16 12:38:06 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,13 @@
 
 #include "Webserver.hpp"
 
-// void	errMsgAndExit(const std::string &errMsg, int code)
-// {
-// 	std::cerr << "error: " << errMsg << std::endl;
-// 	exit(code);
-// }
-
 class parseError : public std::exception {
 		public:
 			parseError(std::string line, size_t lineCount) 
-				: _error("Error: " + std::string(line) + ": syntax error line " + std::to_string(lineCount)) {
+				: _error("Error: " + line + ": syntax error line " + std::to_string(lineCount)) {
 			}
 			parseError(std::string line, const char *message) 
-				: _error("Error: line:" + std::string(line) + ": " + message) {
+				: _error("Error: line:" + line + ": " + message) {
 			}
 			const char *what() const throw() {
 				return _error.c_str();
@@ -50,6 +44,20 @@ class openFileError : public std::exception
 				return _error.c_str();
 			}
 			virtual ~openFileError() throw() {}
+		private:
+			std::string _error;
+};
+
+class startupError : public std::exception 
+{
+		public:
+			startupError(std::string message, std::string host) 
+				: _error("Error: startup failed: " + message + host) {
+			}
+			const char *what() const throw() {
+				return _error.c_str();
+			}
+			virtual ~startupError() throw() {}
 		private:
 			std::string _error;
 };
