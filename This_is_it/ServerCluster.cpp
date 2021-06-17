@@ -6,11 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/16 14:36:57 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 12:24:19 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerCluster.hpp"
+#include "Connection.hpp"
+
+Connection	*g_recentConnection;
 
 ServerCluster::ServerCluster() : _numberOfServers(0), _highestFD(0) {
 	FD_ZERO(&this->readFds);
@@ -79,5 +82,17 @@ void	ServerCluster::startup() {
 		FD_SET((*it)->getSocketFD(), &this->readFds);
 		this->_highestFD = std::max(this->_highestFD, (*it)->getSocketFD());
 		this->_numberOfServers += 1;
+	}
+}
+
+void	ServerCluster::startListening() {
+	while (true)
+	{
+		fd_set	readSet;
+		fd_set	writeSet;
+		int		ret;
+		long	maxFD= this->_highestFD;
+		std::vector<Server*>::iterator it = this->_allServers.begin();
+		g_recentConnection = NULL;
 	}
 }

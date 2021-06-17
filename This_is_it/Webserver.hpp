@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 09:46:22 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 12:33:22 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,16 @@
 # include <algorithm>
 # include <sstream>
 # include <stdexcept>
-#include <regex>
+# include <regex>
 
 
 // All the includes for C
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <sys/time.h>
 
 // Container includes
 # include <map>
@@ -42,16 +43,15 @@
 # include <sys/socket.h>
 
 // Defines 
-#define NR_OF_CONNECTIONS 200
-#define DEFAULT_ERROR_PAGE "default_error_page"
+# define NR_OF_CONNECTIONS 200
+# define KB 1024
+# define MB (KB * 1024)
+# define MAX_SEND_SIZE (7 * MB)
+# define MAX_READ_SIZE (7 * MB)
+# define DEFAULT_ERROR_PAGE "default_error_page"
 
 const std::string WHITESPACE = " \n\r\t\f\v";
 const std::string allowedMethods[5] = {"", "HEAD", "GET", "POST", "PUT"};
-
-// // Config
-// // # define DEFAULT_CONFIG	"./config_files/default.config"
-
-// // # define READER_BUFFER_SIZE 1024 // optimal read buffer size
-
+const std::string HEAD_AND_CONTENT_SEPERATOR = "\r\n\r\n";
 
 #endif

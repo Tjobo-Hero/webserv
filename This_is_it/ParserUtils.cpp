@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 10:34:19 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 10:39:31 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,6 @@ std::string removeLeadingAndTrailingSpaces(const std::string &line) {
 	return removeTrailingSpaces(removeLeadingSpaces(line));
 }
 
-// bool		checkIfDelimiterIsPresent(const std::string &line, const char* delimiter)
-// {
-// 	size_t delimiterCheck = line.find_first_of(delimiter);
-// 	if (delimiterCheck == std::string::npos)
-// 		return false;
-// 	else
-// 		return true;
-// }
-
 std::string splitUserFromString(const std::string &line, const char* delimiter) {
 	std::string result;
 
@@ -87,16 +78,14 @@ std::string removeSpacesFromString(std::string string) {
 	return string;
 }
 
-bool		checkIfInputIsValid(const std::string &line) {
-	bool result;
+bool		checkIfUserAndPasswordInputIsValid(const std::string &line) {
 	std::regex regex("^[a-zA-Z0-9._]*:{1}[a-zA-Z0-9._]*$");
-	result = std::regex_match(line, regex);
-	return result;
+	return std::regex_match(line, regex);
 }
 
 void		getKeyValue(const std::string &line, std::string &user, std::string &password, const char* delimiter, const char* endOfLine)
 {
-	if (checkIfInputIsValid(line) == false)
+	if (checkIfUserAndPasswordInputIsValid(line) == false)
 		throw parseError("regex check returns false", "please check your username and password input");
 	user = splitUserFromString(line, delimiter);
 	password = splitPasswordFromString(line, delimiter, endOfLine);
@@ -108,7 +97,6 @@ void		getKeyValue(const std::string &line, std::string &user, std::string &passw
 		std::cout << "No password was set for user: ["<< user << "]" << " default password is set." << std::endl;
 		password = "admin";
 	}
-	std::cout << user << ":" <<password << std::endl;
 }
 
 std::string		checkLocationPath(std::string &startLine, int lineCount)
