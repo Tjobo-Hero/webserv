@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 10:41:29 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 14:47:18 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "Webserver.hpp"
 #include "Server.hpp"
+#include "ConnectionUtils.hpp"
 
 class ServerCluster
 {

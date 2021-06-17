@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:01 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 12:29:49 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 14:46:56 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Webserver.hpp"
 namespace Utils
 {
-	long getTime();
+	long	getTime();
+	void	signalHandler(int signal);
 }
 #endif

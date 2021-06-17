@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 10:44:17 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 11:17:24 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 14:02:06 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class Connection
 {	
 	private:
 
-		unsigned long	_timeLastContact;
+		unsigned long	_timeLastContactInSeconds;
 		long			_acceptFD;
 		size_t			_bodyBytesSent;
 		std::string		_responseString;

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/16 12:25:52 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 14:51:03 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "Webserver.hpp"
 #include "Error.hpp"
 #include "Location.hpp"
+#include "Connection.hpp"
 
 class Server
 {
@@ -44,7 +45,7 @@ class Server
 	public:
 
 		size_t _bodylen;
-		// connection connections[NR_OF_CONNECTIONS];
+		Connection connections[NR_OF_CONNECTIONS];
 		Server(void);
 		Server(Server const &src);
 		~Server(void);

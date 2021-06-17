@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 12:33:22 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 14:53:34 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,14 @@
 # define MAX_SEND_SIZE (7 * MB)
 # define MAX_READ_SIZE (7 * MB)
 # define DEFAULT_ERROR_PAGE "default_error_page"
+# define CONNECTION_TIMEOUT 0 // 0 will make it never time out a connection
 
 const std::string WHITESPACE = " \n\r\t\f\v";
 const std::string allowedMethods[5] = {"", "HEAD", "GET", "POST", "PUT"};
 const std::string HEAD_AND_CONTENT_SEPERATOR = "\r\n\r\n";
+
+#include "Connection.hpp"
+extern Connection *g_recentConnection;
+
 
 #endif

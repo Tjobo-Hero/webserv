@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 12:24:19 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 14:54:47 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,21 @@ void	ServerCluster::startListening() {
 		long	maxFD= this->_highestFD;
 		std::vector<Server*>::iterator it = this->_allServers.begin();
 		g_recentConnection = NULL;
+		signal(SIGPIPE, Utils::signalHandler); // if we're trying to read or write to a socket that's no longer valid
+		FD_ZERO(&writeSet);
+		FD_ZERO(&readSet);
+		readSet = this->readFds;
+		while (it != this->_allServers.end()) {
+			for (int i = 0; i < NR_OF_CONNECTIONS; ++i) {
+				unsigned long a = Utils::getTime();
+				unsigned long b = (*it)->connections[i].getTimeLastRead();
+				if (CONNECTION_TIMEOUT > 0 && a - b > CONNECTION_TIMEOUT) {
+					if (!(*it)->connections[i].getBuffer().empty()) {
+						g_recentConnection = &((*it)->connections[i]);
+						(*it)->c
+					}
+				}
+			}
+		}
 	}
 }
