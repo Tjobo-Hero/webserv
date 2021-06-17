@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:59:49 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/16 15:00:45 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/17 10:34:19 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,54 +56,59 @@ std::string removeLeadingAndTrailingSpaces(const std::string &line) {
 	return removeTrailingSpaces(removeLeadingSpaces(line));
 }
 
-void		getKeyValue(std::string &line, std::string &user, std::string &password, const char* delimiter, const char* endOfLine)
-{
-	bool isUserSet = true;
-	bool isPasswordSet = true;
-	
-	size_t delimiterCheck = line.find_first_of(delimiter);
-	if (delimiterCheck == std::string::npos)
-		throw parseError(" no delimeter between user and password", "check your input");
-	size_t userBegin = line.find_first_not_of(delimiter);
-	size_t userEnd = line.find_first_of(delimiter, userBegin);
-	size_t passwordBegin = line.find_first_not_of(delimiter, userEnd);
-	size_t passwordEnd = line.find_first_of(endOfLine, passwordBegin);
+// bool		checkIfDelimiterIsPresent(const std::string &line, const char* delimiter)
+// {
+// 	size_t delimiterCheck = line.find_first_of(delimiter);
+// 	if (delimiterCheck == std::string::npos)
+// 		return false;
+// 	else
+// 		return true;
+// }
 
-	std::cout	<< "UserBegin: " << userBegin << '\n'\
-				<< "UserEnd: " << userEnd << '\n'\
-				<< "PasswordBegin" << passwordBegin << '\n' \
-				<< "PasswordEnd" << passwordEnd << '\n';
-	
-	if (delimiterCheck < userBegin) { // no user was added
-		std::cout << "No user was added so username is set default, username: [" << user << "]" << std::endl;
+std::string splitUserFromString(const std::string &line, const char* delimiter) {
+	std::string result;
+
+	result = line.substr(0, (line.find_first_of(delimiter)));
+	return result;
+}
+
+std::string splitPasswordFromString(const std::string &line, const char* delimiter, const char* endOfLine) {
+	std::string result;
+	result = line.substr(line.find_first_of(delimiter) + 1, line.find_first_of(endOfLine));
+	return result;
+}
+
+bool		checkIfStringIsEmpty(const std::string &string) {
+	return string.empty();
+}
+
+std::string removeSpacesFromString(std::string string) {
+	string.erase(std::remove_if(string.begin(), string.end(), ::isspace), string.end());
+	return string;
+}
+
+bool		checkIfInputIsValid(const std::string &line) {
+	bool result;
+	std::regex regex("^[a-zA-Z0-9._]*:{1}[a-zA-Z0-9._]*$");
+	result = std::regex_match(line, regex);
+	return result;
+}
+
+void		getKeyValue(const std::string &line, std::string &user, std::string &password, const char* delimiter, const char* endOfLine)
+{
+	if (checkIfInputIsValid(line) == false)
+		throw parseError("regex check returns false", "please check your username and password input");
+	user = splitUserFromString(line, delimiter);
+	password = splitPasswordFromString(line, delimiter, endOfLine);
+	if (checkIfStringIsEmpty(user) == true) {
 		user = "admin";
-		isUserSet = false;
-		passwordBegin = line.find_first_not_of(delimiter, delimiterCheck);
-		passwordEnd = line.find_first_of(endOfLine, passwordBegin);
+		std::cout << "No user was added. Default username is set: [" << user << "]" << std::endl;
 	}
-	if (isUserSet == true) {
-		user = line.substr(userBegin, userEnd - userBegin);
-		user = removeLeadingAndTrailingSpaces(user);
-	}
-	if (user.empty()) {
-		user = "admin";
-		std::cout << "No user was added so user name is set default, username: [" << user << "]" << std::endl;
-	}
-	if (passwordBegin == std::string::npos) {
+	if (checkIfStringIsEmpty(password) == true) {
 		std::cout << "No password was set for user: ["<< user << "]" << " default password is set." << std::endl;
 		password = "admin";
-		isPasswordSet = false;
 	}
-	if (isPasswordSet == true) {
-		password = line.substr(passwordBegin, passwordEnd - passwordBegin);
-		password = removeLeadingAndTrailingSpaces(password);
-	}
-	if (password.empty())
-	{
-		password = "admin";
-		std::cout << "No password was set for user: ["<< user << "]" << "defautl password is set." << std::endl;
-	}
-	std::cout << "user:" << user << "  password:" << password << std::endl;
+	std::cout << user << ":" <<password << std::endl;
 }
 
 std::string		checkLocationPath(std::string &startLine, int lineCount)
