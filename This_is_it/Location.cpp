@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 16:28:57 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/18 12:19:27 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,28 +130,28 @@ void		Location::setAuthBasic(const std::string &authBasic)
 	return;
 }
 
-void		Location::setHTPasswordPath(const std::string &passwordpath)
+void		Location::setHTPasswordPath(const std::string &passwordpath) // check if done compiling
 {
 	struct stat statstruct = {};
 	
 	std::fstream configFile;
 	std::string line;
 
-	try
-	{
+	// try
+	// {
 		if (stat(passwordpath.c_str(), &statstruct) == -1)
-		{
+		// {
 			throw parseError("set password path error", "check input");
-			return;
-		}
+			// return;
+		// }
 		this->_htpasswd_path = passwordpath;
 		
 		configFile.open(this->_htpasswd_path.c_str());
 		if (!configFile)
-		{
+		// {
 			throw openFileError("Error: failed to open filepath: ", this->_htpasswd_path);
-			return;
-		}
+			// return;
+		// }
 		while (std::getline(configFile, line))
 		{
 			std::string user;
@@ -160,13 +160,13 @@ void		Location::setHTPasswordPath(const std::string &passwordpath)
 			this->_loginfo[user] = pass;
 		}
 		configFile.close();
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << e.what() << '\n';
-		exit(1);
-		return;
-	}
+	// }
+	// catch(const std::exception& e)
+	// {
+		// std::cerr << e.what() << '\n';
+		// exit(1);
+		// return;
+	// }
 	
 }
 

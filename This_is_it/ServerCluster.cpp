@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 14:54:47 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/18 12:22:31 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	ServerCluster::startListening() {
 				if (CONNECTION_TIMEOUT > 0 && a - b > CONNECTION_TIMEOUT) {
 					if (!(*it)->connections[i].getBuffer().empty()) {
 						g_recentConnection = &((*it)->connections[i]);
-						(*it)->c
+						// (*it)->c
 					}
 				}
 			}
