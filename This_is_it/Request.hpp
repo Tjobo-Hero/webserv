@@ -6,15 +6,14 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:57:31 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/21 12:39:08 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/21 15:47:55 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
-#include <map>
-#include <string>
+#include "Webserver.hpp"
 
 class Request { // cpp niet af
 	public:
@@ -40,6 +39,8 @@ class Request { // cpp niet af
 		void	parseHeaders();
 		void	parseBody();
 		void	checkCGI();
+
+		filetype getFileType() const;
 
 	private:
 		Request();

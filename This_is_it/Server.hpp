@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/21 09:47:48 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/21 16:00:20 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ class Server
 		void							addLocation(Location *newLocation);
 		void							setAutoIndexOfLocations();
 		void							startListening();
+
+		Location*						findLocation(std::string &match);
 
 		void							createResponse(int index)
 

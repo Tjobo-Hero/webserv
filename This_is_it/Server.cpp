@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/21 12:37:43 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/21 16:03:16 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ void		Server::findKey(std::string &key, std::string configLine, int lineCount) {
 	std::string parameter;
 	
 	if (*(configLine.rbegin()) != ';')
-		throw parseError("HALLO syntax error, line doesn't end with ';' ", lineCount);
+		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
 	std::map<std::string, setter>::iterator it;
 
 	it = this->_typeFunctionMap.find(key);
@@ -216,6 +216,15 @@ void	Server::setAutoIndexOfLocations() {
 		}
 	}
 	return;
+}
+
+Location*		Server::findLocation(std::string &match) {
+	std::vector<Location*>::iterator it;
+	for (it = this->_locations.begin(); !this->_locations.empty() && it != this->_locations.end(); ++it) {
+		if ((*it)->getMatch() == match)
+			return (*it);
+	}
+	return NULL;
 }
 
 void			Server::startListening() {

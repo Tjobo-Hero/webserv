@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/21 12:42:41 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/21 14:38:14 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void	Request::parseRequestLine() { // nog naar kijken want snap niet wat er prec
 	size_t	pos1;
 	size_t	pos2;
 
-	if (_request[0] == ' ' || _request.find("\r\n") == std::string::npos)
+	if (_request[0] == ' ' || _request.find(END_OF_LINE) == std::string::npos)
 		_status = 400;
 	pos2 = _request.find(' ');
 	_method = _request.substr(0, pos2);
@@ -162,17 +162,105 @@ void	Request::parseRequestLine() { // nog naar kijken want snap niet wat er prec
 		_uri = _request.substr(pos2, pos1 - pos2);
 		pos2 = _request.find(' ', pos1);
 	}
-	pos1 = _request.find("\r\n");
+	pos1 = _request.find(END_OF_LINE);
 	pos2++;
 	_version = _request.substr(pos1, pos1 - pos2);
 	_request = _request.substr(pos1 + 2);
 }
 
-// void Request::parseHeaders()
+void Request::parseHeaders() {
+	size_t	position = 0;
+	size_t	length;
+	std::string header;
+	std::string upperHeader;
+	std::string value;
+	std::map<std::string, std::string>::iterator it;
+	bool	loop = true;
 
-// void Request::parseBody() {
-// 	size_t begin
-// }
+	while (loop = true) {
+		header.clear();
+		value.clear();
+		upperHeader.clear();
+		if (this->_request.find(":", position) == std::string::npos) {
+			this->_status = 400;
+			return;
+		}
+		length = this->_request.find(":", position);
+		if (std::isspace(this->_request[length -1])) {
+			this->_status = 400;
+			return;
+		}
+		header = this->_request.substr(position, length - position);
+		if (std::isspace(this->_request[length + 1]))
+			position = length + 2;
+		else
+			position = length + 1;
+		length = this->_request.find(END_OF_LINE, position);
+		value = this->_request.substr(position, length - position);
+		if (header[0] ==  'X' && header[1] == '-') {
+			std::string insert("HTTP_");
+			std::replace(header.begin(), header.end(), '-', '_');
+			insert.append(header);
+			this->_CGIHeaders.insert(std::make_pair(insert, value));
+			position = length + 2;
+			if (this->_request[position] == '\r' && this->_request[position + 1] == '\n')
+				loop = false;
+			continue;
+		}
+		for (int i = 0; header[i]; ++i)
+			upperHeader += std::toupper(header[i]);
+		it = this->_defHeaders.find(upperHeader);
+		if (it != this->_defHeaders.end()) {
+			this->_status = 400;
+			return;
+		}
+		this->_defHeaders.insert(std::make_pair(upperHeader, value));
+		position = length + 2;
+		if (this->_request[position] == '\r' && this->_request[position + 1] == '\n')
+			loop = false;
+	}
+	if (this->_defHeaders.empty()) {
+		this->_status = 400;
+		return;
+	}
+	for (it = this->_defHeaders.begin(); it != this->_defHeaders.end(); ++it) {
+		if (it->first.compare("CONTENT-LENGTH") == 0) {
+			std::stringstream ss;
+			ss << std::dec << it->second.c_str();
+			ss >> this->_contentLength;
+			break;
+		}
+	}
+	this->_request = this->_request.substr(position + 2);
+}
+
+void Request::parseBody() {
+	size_t begin = 0;
+	size_t end;
+	
+	std::string hex;
+	size_t last = this->_request.rfind(END_OF_LINE);
+	this->_body = "";
+	if (this->_request.compare("0\r\n\r\n") == 0)
+		return;
+	while (begin != last - 2) {
+		end = this->_request.find(END_OF_LINE, begin);
+		hex = this->_request.substr(begin, end - begin);
+		std::stringstream ss;
+		
+		int tmp;
+		ss << std::hex << hex.c_str();
+		ss >> tmp;
+		this->_bodyLength += tmp;
+		begin = end + 2;
+		end = this->_request.find(END_OF_LINE, begin);
+		this->_body.append(this->_request, begin, end - begin);
+		begin = this->_request.find(END_OF_LINE, end + 2);
+		hex.clear();
+	}
+	if (this->_bodyLength != this->_contentLength && this->_contentLength != -1)
+		this->_status = 413;
+}
 
 bool Request::getCGI() const {
 	return _CGI;
