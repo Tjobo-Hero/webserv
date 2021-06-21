@@ -6,13 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/16 14:38:16 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/21 12:37:43 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "ConfigParser.hpp"
 #include "Location.hpp"
+#include "Request.hpp"
 
 Server::Server() : _portNumber(0), _maxBodySize(1000000), _autoIndex(false), _errorPage(DEFAULT_ERROR_PAGE), _socketFD(-1) {
 	this->_typeFunctionMap.insert(std::make_pair("listen", &Server::setPortNumber));
@@ -238,6 +239,56 @@ void			Server::startListening() {
 	if (ret < 0)
 		throw startupError("to listen for server host: ", this->_host);
 	std::cout << "Startup was succesfull" << std::endl;
+}
+
+static size_t requestNumber = 0;
+
+void		Server::createResponse(int index) {
+	
+	Connection	*currentConnection = &this->connections[index];
+	std::cout << " Handling request nr" << requestNumber << std::endl;
+	
+#if PRINTLOG == 1
+
+	if (requestNumber >= MAXLOGS) {
+		std::stringstream oldName;
+		oldName << "logs/request_";
+		size_t oldNumber = requestNumber - MAXLOGS;
+		oldName << oldNumber;
+		remove(oldName.str().c_str());
+	}
+	std::stringstream logName;
+	logName << "logs/request_";
+	logName << requestNumber;
+	std::ofstream reqLog(logName.str().c_str()), std::ios::out);
+	reqLog << connections[index].getBuffer();
+	reqLog.close();
+#endif
+
+#if PRINTOUT == 1
+	std::cout << "==REQUEST==" << std::endl;
+	int len = std::min(connections[index].getBuffer().length(), (size_t)500);
+	if (write(1, connections[index].getBuffer().c_str(), len) == -1) {;}
+	std::cout << "==end==" << std::endl;
+
+#endif
+
+	Request request(this->connections[index].getBuffer());
+	if (!(*this)._alternativeServers.empty()) {
+		if ((*this)._serverNames[0] != request.getHost()) {
+			std::vector<Server*>::const_iterator it;
+			for (it = (*this)._alternativeServers.begin(); it != (*this)._alternativeServers.end(); ++it) {
+				if ((*it)->_serverNames[0] == request.getHost()) {
+					*this = *(*it);
+					break;
+				}
+			}
+		}
+	}
+	currentConnection->myResponse = new Response(request, *this);
+	currentConnection->myResponse->setupResponse(request, *this);
+	
+	requestNumber += 1;
 }
 
 std::ostream&	operator<<(std::ostream &os, const Server &server) {

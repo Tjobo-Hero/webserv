@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/18 14:51:58 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/21 12:42:41 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,23 @@ std::string	Request::getContentType() {
 	if (it == _defHeaders.end())
 		return ("NULL");
 	return (it->second);
+}
+
+std::string Request::getHost() {
+	if (this->_defHeaders.begin() == this->_defHeaders.end()) {
+		this->_status = 400;
+		return "NULL";
+	}
+	std::map<std::string, std::string>::iterator it = this->_defHeaders.find("HOST");
+	if (it == this->_defHeaders.end()) {
+		this->_status = 400;
+		return "NULL";
+	}
+	std::string host = it->second;
+	std::size_t found = host.find(":");
+	if (found != std::string::npos)
+		host = host.substr(0, found);
+	return host;
 }
 
 std::string	Request::getCGIEnv() const {

@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:57:31 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/18 14:43:57 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/21 12:39:08 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ class Request { // cpp niet af
 		std::map<std::string, std::string>	getDefHeaders() const;
 		std::map<std::string, std::string>	getCGIHeaders() const;
 		std::string	getBody() const;
+		std::string getHost();
 		std::string	getContentType();
 		std::string	getCGIEnv() const;
 		bool	getCGI() const;

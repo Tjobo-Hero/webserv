@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/18 13:44:40 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/21 12:24:10 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@
 # include <netinet/in.h>
 # include <sys/socket.h>
 
+// Debug Macros
+
+# define PRINTLOG 1
+# define PRINTOUT 1
+
 // Defines 
 # define NR_OF_CONNECTIONS 200
 # define KB 1024
@@ -50,6 +55,8 @@
 # define MAX_READ_SIZE (7 * MB)
 # define DEFAULT_ERROR_PAGE "default_error_page"
 # define CONNECTION_TIMEOUT 0 // 0 will make it never time out a connection
+# define MAXLOGS 25 // this is to prevent the Log of 100.000 connections, this way it only shows the most recent connections
+
 
 const std::string WHITESPACE = " \n\r\t\f\v";
 const std::string allowedMethods[5] = {"", "HEAD", "GET", "POST", "PUT"};

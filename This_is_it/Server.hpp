@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 14:51:03 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/21 09:47:48 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "Error.hpp"
 #include "Location.hpp"
 #include "Connection.hpp"
+#include <fstream>
 
 class Server
 {
@@ -82,6 +83,8 @@ class Server
 		void							addLocation(Location *newLocation);
 		void							setAutoIndexOfLocations();
 		void							startListening();
+
+		void							createResponse(int index)
 
 };
 

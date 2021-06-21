@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:01 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 14:46:56 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/21 09:36:47 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,6 @@ namespace Utils
 {
 	long	getTime();
 	void	signalHandler(int signal);
+	void	freeArray(char **array);
 }
 #endif
