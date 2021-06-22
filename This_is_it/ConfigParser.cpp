@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/16 12:46:14 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/21 17:02:07 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,8 @@ Location*	ConfigParser::getLocation(std::string &startline)
 		if (configLine == "}")
 			break;
 		std::string key = Utils::findFirstWord(configLine);
-		// if (key.size() <= 0)
-			// throw parseError("not found " + configLine, this->_lineCount);
+		if (key.size() <= 0)
+			throw parseError("not found " + configLine, this->_lineCount);
 		newLocation->findKey(key, configLine, this->_lineCount); // removed try/catch block
 	}
 	newLocation->parameterCheck(this->_lineCount);
