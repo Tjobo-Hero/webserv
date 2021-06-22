@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:13:43 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/16 12:38:06 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 10:49:29 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,20 @@ class clusterError : public std::exception
 				return _error.c_str();
 			}
 			virtual ~clusterError() throw() {}
+		private:
+			std::string _error;
+};
+
+class runtimeError : public std::exception 
+{
+		public:
+			runtimeError(std::string message) 
+				: _error(message) {
+			}
+			const char *what() const throw() {
+				return _error.c_str();
+			}
+			virtual ~runtimeError() throw() {}
 		private:
 			std::string _error;
 };

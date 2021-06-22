@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/18 14:43:33 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 11:55:29 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ class Response
 		const std::string&	getResponse() const;
 		size_t	getBodySize() const;
 		void	setCurrentLocation(Location *newLocation);
-		const bool	checkIfMethodIsAllowd() const; // Veranderd naar const
+		const bool	checkIfMethodIsAllowd(); // Veranderd naar const
 		const std::string&	methodType() const; // moet dit getMethodType() zijn?
 		const int&	getStatus() const; // Status van wat?
 		const bool&	getUseCGI() const;
@@ -79,7 +79,7 @@ class Response
 		void	getMethod();
 		void	headMethod();
 		void	finishErrorPage(Server &server);
-		void	finishPort();
+		void	finishPost();
 		void	finishPut();
 		void	finishPostCGI();
 };
