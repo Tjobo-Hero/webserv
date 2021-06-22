@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:28:00 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:46:04 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,7 +351,7 @@ int			Response::authenticate(Request &request) {
 	std::string type, credentials;
 	Utils::getKeyValue(auth, type, credentials, " ", "\n\r#;");
 	credentials = Utils::base64_decode(credentials);
-	Utils::getKeyValue(credentials, username, passwd, ":", "\n\r#;");
+	Utils::getKeyValue(credentials, username, password, ":", "\n\r#;");
 	request._defHeaders["AUTHORIZATION"] = request._defHeaders["AUTHORIZATION"].substr(0, request._defHeaders["AUTHORIZATION"].find_first_of(' '));
 	request._defHeaders["REMOTE-USER"] = username;
 	if (this->_currentLocation->getAuthMatch(username, password)) {
@@ -376,7 +376,7 @@ size_t	Response::getBodySize() const {
 	return this->_content.size();
 }
 
-const std:::string& Response::methodType() const {
+const std::string& Response::methodType() const {
 	return this->_method;
 }
 

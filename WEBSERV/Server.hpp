@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:37:46 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:45:30 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ class Server
 
 		Location*						findLocation(std::string &match);
 
-		void							createResponse(int index)
+		void							createResponse(int index);
 
 };
 
