@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 16:31:48 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 14:46:57 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CONFIGPARSER_HPP
 
 #include "Webserver.hpp"
+#include "Libraries.hpp"
 #include "Error.hpp"
 #include "ParserUtils.hpp"
 #include "Server.hpp"
