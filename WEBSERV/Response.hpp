@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 11:55:29 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:53:38 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ class Response
 		const std::string&	getResponse() const;
 		size_t	getBodySize() const;
 		void	setCurrentLocation(Location *newLocation);
-		const bool	checkIfMethodIsAllowd(); // Veranderd naar const
+		bool	checkIfMethodIsAllowd(); // Veranderd naar const
 		const std::string&	methodType() const; // moet dit getMethodType() zijn?
 		const int&	getStatus() const; // Status van wat?
 		const bool&	getUseCGI() const;

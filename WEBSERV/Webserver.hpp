@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:36:02 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 13:01:13 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ const std::string allowedMethods[5] = {"", "HEAD", "GET", "POST", "PUT"};
 const std::string HEAD_AND_CONTENT_SEPERATOR = "\r\n\r\n";
 const std::string END_OF_LINE = "\r\n";
 
-#include "Connection.hpp"
+// #include "Connection.hpp" // kan niet zomaar
 extern Connection *g_recentConnection;
 
 enum filetype { PY = 1, PHP = 2, BLA = 3, CGIBIN = 4};

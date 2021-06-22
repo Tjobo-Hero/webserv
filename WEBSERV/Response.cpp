@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:46:04 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:53:56 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ Response&	Response::operator=(Response const &obj) {
 	return *this;
 }
 
-const bool	Response::checkIfMethodIsAllowd() {
+bool	Response::checkIfMethodIsAllowd() {
 	if (!this->_currentLocation)
 		return false;
 	std::vector<std::string>::iterator it;
