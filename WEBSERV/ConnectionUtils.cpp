@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:04 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:15:31 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:30:28 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,5 @@ std::string base64_decode(std::string const& encoded_string) {
 			ret += char_array_3[j];
 	}
 	return ret;
+}
 }
