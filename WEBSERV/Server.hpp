@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:12:31 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:37:46 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ class Server
 		void	setIndices(std::string &indices);
 		void	setAlternativeServers(Server *alternative);
 
-		void	setupRespStr(int index);
+		void	setupResponseString(int index);
 		int		acceptConnections();
 
 		const int						&getPortNumber() const;

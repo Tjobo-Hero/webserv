@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/21 15:46:38 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:36:02 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@
 
 // Debug Macros
 
-# define PRINTLOG 1
-# define PRINTOUT 1
+# define PRINTLOG 0
+# define PRINTOUT 0
 
 // Defines 
 # define NR_OF_CONNECTIONS 200
