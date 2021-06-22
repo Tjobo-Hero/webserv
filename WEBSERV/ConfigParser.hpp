@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 14:46:57 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:18:13 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "Webserver.hpp"
 #include "Libraries.hpp"
-#include "Error.hpp"
+// #include "Error.hpp"
 #include "ParserUtils.hpp"
 #include "Server.hpp"
 #include "Location.hpp"

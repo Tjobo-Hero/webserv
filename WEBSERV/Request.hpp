@@ -6,14 +6,15 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:57:31 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/21 15:47:55 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 14:54:58 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
-#include "Webserver.hpp"
+// #include "Webserver.hpp"
+#include "Libraries.hpp"
 
 class Request { // cpp niet af
 	public:

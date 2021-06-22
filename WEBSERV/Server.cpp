@@ -6,15 +6,15 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:13:56 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:18:52 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "ConfigParser.hpp"
 #include "Location.hpp"
-#include "Request.hpp"
-#include "Response.hpp"
+// #include "Request.hpp"
+// #include "Response.hpp"
 
 Server::Server() : _portNumber(0), _maxBodySize(1000000), _autoIndex(false), _errorPage(DEFAULT_ERROR_PAGE), _socketFD(-1) {
 	this->_typeFunctionMap.insert(std::make_pair("listen", &Server::setPortNumber));

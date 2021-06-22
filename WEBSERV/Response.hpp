@@ -6,18 +6,20 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 11:55:29 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:26:54 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESPONSE_HPP
 # define RESPONSE_HPP
 
-#include "Webserver.hpp"
-#include "Location.hpp"
+#include "ResponseHeader.hpp"
 #include "Server.hpp"
-#include "Request.hpp"
 #include "CGI.hpp"
+#include "Location.hpp"
+#include "Libraries.hpp"
+// #include "Webserver.hpp"
+// #include "Request.hpp"
 
 class Response
 {
@@ -67,7 +69,7 @@ class Response
 		const std::string&	getResponse() const;
 		size_t	getBodySize() const;
 		void	setCurrentLocation(Location *newLocation);
-		const bool	checkIfMethodIsAllowd(); // Veranderd naar const
+		bool	checkIfMethodIsAllowd(); // Veranderd naar const
 		const std::string&	methodType() const; // moet dit getMethodType() zijn?
 		const int&	getStatus() const; // Status van wat?
 		const bool&	getUseCGI() const;

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:05:49 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:14:33 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 
 # define SELECT_TIMEOUT 2
 
-#include "Webserver.hpp"
 #include "Server.hpp"
-#include "ConnectionUtils.hpp"
+#include "Libraries.hpp"
+#include "Webserver.hpp"
+// #include "ConnectionUtils.hpp"
 
 class ServerCluster
 {
@@ -28,7 +29,7 @@ class ServerCluster
 	
 	private:
 
-		std::vector< Server* >	_allServers;
+		std::vector<Server*>	_allServers;
 		std::map<int, std::map<int, int> > _doublePorts;
 		int _numberOfServers;
 		long	_highestFD;

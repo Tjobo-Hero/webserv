@@ -6,15 +6,15 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:28:00 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:27:00 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 #include "getPath.hpp"
-#include "CGI.hpp"
-#include "ResponseHeader.hpp"
-#include "ConnectionUtils.hpp"
+// #include "CGI.hpp"
+// #include "ResponseHeader.hpp"
+// #include "ConnectionUtils.hpp"
 
 Response::Response(Request &request, Server &server) : _useCGI(request.getCGI()), _body(request.getBody()), _status(request.getStatus()), _contentType(request.getContentType()), _method(request.getMethod()), _fileFD(-1), _isFinished(false) {
 	getPath path(server, request, *this);
@@ -58,7 +58,7 @@ Response&	Response::operator=(Response const &obj) {
 	return *this;
 }
 
-const bool	Response::checkIfMethodIsAllowd() {
+bool	Response::checkIfMethodIsAllowd() {
 	if (!this->_currentLocation)
 		return false;
 	std::vector<std::string>::iterator it;

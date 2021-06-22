@@ -6,14 +6,15 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:12:31 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:22:26 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-#include "Webserver.hpp"
+// #include "Webserver.hpp"
+#include "Libraries.hpp"
 #include "Error.hpp"
 #include "Location.hpp"
 #include "Connection.hpp"
@@ -87,7 +88,7 @@ class Server
 
 		Location*						findLocation(std::string &match);
 
-		void							createResponse(int index)
+		void							createResponse(int index);
 
 };
 

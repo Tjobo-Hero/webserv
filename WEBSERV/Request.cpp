@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/21 14:38:14 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:26:27 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ void Request::parseHeaders() {
 	std::map<std::string, std::string>::iterator it;
 	bool	loop = true;
 
-	while (loop = true) {
+	while (loop == true) {
 		header.clear();
 		value.clear();
 		upperHeader.clear();

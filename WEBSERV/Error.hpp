@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:13:43 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 10:49:29 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 14:53:48 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define ERROR_HPP
 
 #include "Webserver.hpp"
+#include "Libraries.hpp"
 
 class parseError : public std::exception {
 		public:

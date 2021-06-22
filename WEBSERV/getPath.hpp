@@ -6,14 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/21 15:08:02 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/21 15:18:07 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:15:08 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GETPATH_HPP
 # define GETPATH_HPP
 
-#include "Webserver.hpp"
+// #include "Webserver.hpp"
 #include "Server.hpp"
 #include "Request.hpp"
 #include "Response.hpp"

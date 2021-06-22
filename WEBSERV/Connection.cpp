@@ -6,14 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 10:44:14 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 14:17:53 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:23:38 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Connection.hpp"
 #include "ConnectionUtils.hpp"
 
-Connection::Connection() :	_timeLastContactInSeconds(0), _acceptFD(-1), _hasFullRequest(false), _bodyBytesSent(0),
+Connection::Connection() :	_timeLastContactInSeconds(0), _acceptFD(-1), _bodyBytesSent(0), _hasFullRequest(false),
 							_headerSend(false), myResponse(NULL) {
 	return;
 }
