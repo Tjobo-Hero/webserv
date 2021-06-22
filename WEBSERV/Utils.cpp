@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:41:42 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/18 13:42:18 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:14:14 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,4 +22,11 @@ void	free_array(char **array)
 		i++;
 	}
 	free(array);
+}
+
+long 	getTime()
+{
+	struct timeval currentTime;
+	gettimeofday(&currentTime, NULL);
+	return (currentTime.tv_sec);
 }
