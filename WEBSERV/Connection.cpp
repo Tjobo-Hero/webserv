@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 10:44:14 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:23:38 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 16:30:15 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ void	Connection::resetConnection() {
 	this->_bodyBytesSent = 0;
 	this->_headerSend = false;
 	this->_responseString.clear();
-	if (this->myResponse)
-		delete (this->myResponse);
+	// if (this->myResponse)
+		// delete (this->myResponse);
 	this->myResponse = NULL;
 }
 

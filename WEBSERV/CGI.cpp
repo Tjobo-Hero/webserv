@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:12:22 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:19:37 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 16:59:09 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 #include "Error.hpp"
 
 CGI::CGI(std::string &path, Request &request, Server &server) :
-	_path(path) {
+	_path(path),
+	_type(request.getFileType()) {
 		_initEnvironment(request, server);
 	}
 
@@ -32,38 +33,42 @@ CGI::~CGI() {
 	_environment.clear();
 }
 
-std::string	CGI::executeCGI(std::string &body) {
+void	CGI::setupIn() {
+	if ((this->_fileIn = open("/tmp/utilityFileForCGI_IN.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1) {
+		// std::cout << "Error CGI" << std::endl;
+		exit(1); // Fix throw
+	}
+}
+
+void	CGI::executeCGI(std::string &body) {
 	_convertEnvironment();
-	int		fileIn;
 	int		pidStatus;
-	int		writeRet;
-	int		fileOut;
-	int		fd;
+	int		returnValue;
 	long	executableStart;
 	
-	if ((fileIn = open("/tmp/utilityFileForCGI_IN.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1)
+	returnValue = write(this->_fileIn, body.c_str(), body.length());
+	if (close(this->_fileIn) == -1)
 		exit(1); // check for other throw
-	writeRet = write(fileIn, body.c_str(), body.length());
-	if (close(fileIn) == -1)
-		exit(1); // check for other throw
-	if (writeRet == -1)
+	if (returnValue == -1)
 		exit(1); // check for other throw
 	if ((_pid = fork()) == -1)
 		exit(1); // check for other throw
 	if (_pid == 0) {
-		if ((fileOut = open("/tmp/utilityFileForCGI_OUT.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1)
+		if ((this->_fileOut = open("/tmp/utilityFileForCGI_OUT.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1)
 			exit(1); // check for other throw
-		if (dup2(fileOut, STDOUT_FILENO) == -1)
+		if (dup2(this->_fileOut, STDOUT_FILENO) == -1)
 			exit(1); // check for other throw
-		if (close(fileOut) == -1)
+		if (close(this->_fileOut) == -1)
 			exit(1); // check for other throw
-		if ((fileIn = open("/tmp/utilityFileForCGI_IN.txt", O_RDONLY, S_IRWXU)) == -1)
+		if ((this->_fileIn = open("/tmp/utilityFileForCGI_IN.txt", O_RDONLY, S_IRWXU)) == -1)
 			exit(1); // check for other throw
-		if (dup2(fileIn, STDIN_FILENO) == -1) {
-			close(fileIn);
+		if (dup2(this->_fileIn, STDIN_FILENO) == -1) {
+			close(this->_fileIn);
 			exit(1); // check for other throw
 		}
-		close(fileIn);
+		close(this->_fileIn);
+		if (this->_type == PHP)
+			_path = "cgi-bin/php-cgi";
 		executableStart = _path.rfind('/') + 1;
 		std::string executable = _path.substr(executableStart);
 		std::string pathStart = _path.substr(0, executableStart);
@@ -79,24 +84,24 @@ std::string	CGI::executeCGI(std::string &body) {
 			exit(1); // check for other throw
 		}
 	}
-	std::string ret;
+	// std::string ret;
 	if (waitpid(0, &pidStatus, 0) == -1)
 		exit(1); // check for other throw
 	Utils::freeArray(_env);
-	if ((fd = open("/tmp/utilityFileForCGI_OUT.txt", O_RDONLY)) == -1)
+	if ((this->_fileRet = open("/tmp/utilityFileForCGI_OUT.txt", O_RDONLY)) == -1)
 		exit(1); // check for other throw
-	char buff[MB];
-	int readRet = 1;
-	while (readRet)
-	{
-		bzero(buff, MB);
-		if ((readRet = read(fd, buff, MB - 1)) == -1)
-			exit(1); // check for other throw
-		ret += buff;
-	}
-	if (close(fd) == -1)
-		exit(1); // check for other throw
-	return ret;
+	// char buff[MB];
+	// int readRet = 1;
+	// while (readRet)
+	// {
+	// 	bzero(buff, MB);
+	// 	if ((readRet = read(fd, buff, MB - 1)) == -1)
+	// 		exit(1); // check for other throw
+	// 	ret += buff;
+	// }
+	// if (close(fd) == -1)
+	// 	exit(1); // check for other throw
+	// return ret;
 }
 
 void	CGI::_initEnvironment(Request &request, Server &server) {
@@ -124,6 +129,8 @@ void	CGI::_initEnvironment(Request &request, Server &server) {
 	this->_environment["REQUEST_METHOD"] = request.getMethod();
 	this->_environment["REQUEST_URI"] = request.getUri();
 	this->_environment["SCRIPT_NAME"] = request.getUri();
+	if (_type == PHP)
+		this->_environment["SCRIPT_FILENAME"] = "php_tester.php";
 	if (requestHeaders.find("HOST") != requestHeaders.end())
 		this->_environment["SERVER_NAME"] = requestHeaders["HOST"];
 	else
@@ -136,6 +143,28 @@ void	CGI::_initEnvironment(Request &request, Server &server) {
     for (; it != CGIHeaders.end(); it++) {
         _environment.insert(std::make_pair(it->first, it->second));
 	}
+}
+
+std::string	CGI::readOutput() {
+	char buff[MB];
+	int readRet = 1;
+	std::string ret;
+	while (readRet) {
+		bzero(buff, MB);
+		if ((readRet = read(this->_fileRet, buff, MB -1)) == -1)
+			exit(1);
+		ret += buff;
+	}
+	if (close(this->_fileRet) == -1)
+		exit(1);
+	return ret;
+}
+
+std::string	CGI::_setRedirectStatus() {
+	if (this->_type == PHP)
+		return ("200");
+	else
+		return ("CGI");
 }
 
 void	CGI::_convertEnvironment() { //  creating our _env var from our _environment map
@@ -156,31 +185,31 @@ void	CGI::_convertEnvironment() { //  creating our _env var from our _environmen
 	_env[i] = NULL;
 }
 
-void	CGI::setupIn() {
-	if ((this->_fileIn = open("/tmp/fuckyoupeerin.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1) // change txt file
-		throw runtimeError("Error: CGI malfunction\n"); // is this working
-}
+// void	CGI::setupIn() {
+// 	if ((this->_fileIn = open("/tmp/fuckyoupeerin.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1) // change txt file
+// 		throw runtimeError("Error: CGI malfunction\n"); // is this working
+// }
 
-std::string CGI::readOutput() {
-	char buff[MB];
-	int readret = 1;
-	std::string ret;
-	while(readret) {
-		bzero(buff, MB);
-		if ((readret = read(this->_fileRet, buff, MB - 1)) == -1) {
-			throw runtimeError("Error: CGI read failed\n");
-		ret += buff;
-		}
-	}
-	if (close(this->_fileRet) == -1)
-		throw runtimeError("Error: CGI close file failed\n");
-	return ret;
-}
+// std::string CGI::readOutput() {
+// 	char buff[MB];
+// 	int readret = 1;
+// 	std::string ret;
+// 	while(readret) {
+// 		bzero(buff, MB);
+// 		if ((readret = read(this->_fileRet, buff, MB - 1)) == -1) {
+// 			throw runtimeError("Error: CGI read failed\n");
+// 		ret += buff;
+// 		}
+// 	}
+// 	if (close(this->_fileRet) == -1)
+// 		throw runtimeError("Error: CGI close file failed\n");
+// 	return ret;
+// }
 
-std::string CGI::_setRedirectStatus() {
-	if (this->_type == PHP)
-		return "200";
-	else
-		return "CGI";
-}
+// std::string CGI::_setRedirectStatus() {
+// 	if (this->_type == PHP)
+// 		return "200";
+// 	else
+// 		return "CGI";
+// }
 

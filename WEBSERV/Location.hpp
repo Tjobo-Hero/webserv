@@ -6,14 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 15:25:10 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 16:28:08 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LOCATION_HPP
 # define LOCATION_HPP
 
-#include "Webserver.hpp"
+// #include "Webserver.hpp"
 #include "ParserUtils.hpp"
 
 class Location

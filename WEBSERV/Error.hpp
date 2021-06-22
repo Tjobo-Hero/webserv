@@ -6,14 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:13:43 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 14:53:48 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 16:24:42 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_HPP
 # define ERROR_HPP
 
-#include "Webserver.hpp"
+// #include "Webserver.hpp"
 #include "Libraries.hpp"
 
 class parseError : public std::exception {

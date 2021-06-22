@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:07:58 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:24:44 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 16:53:18 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class CGI {
 		CGI();
 		CGI(CGI &src);
 		~CGI();
-		std::string	executeCGI(std::string &body);
+		void		executeCGI(std::string &body);
 		std::string readOutput();
 		void		setupIn();
 		
@@ -34,7 +34,7 @@ class CGI {
 		std::string _setRedirectStatus();
 
 		int	_fileIn;
-		// int	_fileOut;
+		int	_fileOut;
 		int	_fileRet;
 		
 		std::map<std::string, std::string>	_environment;
