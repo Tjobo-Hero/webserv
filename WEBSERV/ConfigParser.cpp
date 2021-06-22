@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/21 17:02:07 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 10:15:16 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 		newServer->setAutoIndexOfLocations();
 		newServer->parameterCheck(this->_lineCount);
 		serverCluster->addServer(newServer);
-		// std::cout << *newServer << std::endl;
+		std::cout << *newServer << std::endl;
 	}
 	if (serverCluster->clusterIsEmpty())
 		throw clusterError("Cluster seems to be empty", "check your input");
