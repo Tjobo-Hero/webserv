@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/21 09:45:57 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:18:57 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,58 @@ void	ServerCluster::startListening() {
 		readSet = this->readFds;
 		while (it != this->_allServers.end()) {
 			for (int i = 0; i < NR_OF_CONNECTIONS; ++i) {
-				unsigned long a = Utils::getTime();
-				unsigned long b = (*it)->connections[i].getTimeLastRead();
-				if (CONNECTION_TIMEOUT > 0 && a - b > CONNECTION_TIMEOUT) {
-					if (!(*it)->connections[i].getBuffer().empty()) {
-						g_recentConnection = &((*it)->connections[i]);
-						(*it)->createRes
+				if ((*it)->connections[i].getAcceptFD() != -1) {
+					unsigned long a = Utils::getTime();
+					unsigned long b = (*it)->connections[i].getTimeLastRead();
+					if (CONNECTION_TIMEOUT > 0 && a - b > CONNECTION_TIMEOUT) {
+						if (!(*it)->connections[i].getBuffer().empty()) {
+							g_recentConnection = &((*it)->connections[i]);
+							(*it)->createResponse(i);
+							(*it)->connections[i].sendData((*it)->_bodylen);
+						}
+						(*it)->connections[i].resetConnection();
+						(*it)->connections[i].closeConnection();
+						continue;
+					}
+					maxFD = std::max(maxFD, (*it)->connections[i].getAcceptFD());
+					if (!(*it)->connections[i].hasFullRequst())
+						FD_SET((*it)->connections[i].getAcceptFD(), &readSet);
+					else
+						FD_SET((*it)->connections[i].getAcceptFD(), &writeSet);
+				}
+			}
+			it++;
+		}
+		struct timeval timeout;
+		timeout.tv_sec = SELECT_TIMEOUT;
+		timeout.tv_usec = 0;
+		if ((ret = select(maxFD + 1, &readSet, &writeSet, NULL, &timeout)) == -1)
+			exit(1); // check trhow
+		for (it = this->_allServers.begin(); it != this->_allServers.end(); it++) {
+			long fd;
+			fd = (*it)->getSocketFD();
+			if (FD_ISSET(fd, &readSet)) {
+				if ((*it)->acceptConnections() == 1)
+					break;
+			}
+			static int connectionCounter = 0;
+			for (int i = 0; i < NR_OF_CONNECTIONS; i++) {
+				if ((*it)->connections[connectionCounter].getAcceptFD() != -1) {
+					fd = (*it)->connections[connectionCounter].getAcceptFD();
+					if (FD_ISSET(fd, &readSet)) {
+						g_recentConnection = &((*it)->connections[connectionCounter]);
+						(*it)->connections[connectionCounter].startReading();
+						break;
+					}
+					if (FD_ISSET(fd, &writeSet)) {
+						g_recentConnection = &((*it)->connections[connectionCounter]);
+						(*it)->createResponse(connectionCounter);
+						(*it)->connections[connectionCounter].sendData((*it)->_bodylen);
+						break;
 					}
 				}
+				connectionCounter++;
+				connectionCounter %= NR_OF_CONNECTIONS;
 			}
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/21 16:00:20 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:12:31 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ class Server
 		void	setAlternativeServers(Server *alternative);
 
 		void	setupRespStr(int index);
+		int		acceptConnections();
 
 		const int						&getPortNumber() const;
 		const size_t					&getMaxBodySize() const;

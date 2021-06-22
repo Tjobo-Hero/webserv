@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 10:15:56 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:13:56 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,24 @@ void			Server::startListening() {
 	if (ret < 0)
 		throw startupError("to listen for server host: ", this->_host);
 	std::cout << "Startup was succesfull" << std::endl;
+}
+
+int			Server::acceptConnections() {
+	struct sockaddr connectingAddr;
+	socklen_t		addressLength;
+	int				i;
+
+	for (i = 0; i < NR_OF_CONNECTIONS; i++) {
+		if (this->connections[i].getAcceptFD() == -1)
+			break;
+	}
+	if (i == NR_OF_CONNECTIONS)
+		return (0);
+	this->connections[i].setFD(accept(this->_socketFD, &connectingAddr, &addressLength));
+	if (this->connections[i].getAcceptFD() == -1)
+		std::cerr << "Could not create FD" << std::endl;
+	this->connections[i].setTimeLastRead(getTime());
+	return (1);
 }
 
 static size_t requestNumber = 0;

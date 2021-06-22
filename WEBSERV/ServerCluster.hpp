@@ -6,12 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 14:47:18 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:05:49 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVERCLUSTER_HPP
 # define SERVERCLUSTER_HPP
+
+# define SELECT_TIMEOUT 2
 
 #include "Webserver.hpp"
 #include "Server.hpp"
