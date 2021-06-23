@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/22 14:41:31 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:21:31 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 15:29:29 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@
 
 // Debug Macros
 
-# define PRINTLOG 1
-# define PRINTOUT 1
+# define PRINTLOG 0
+# define PRINTOUT 0
 
 // Defines 
 # define NR_OF_CONNECTIONS 200

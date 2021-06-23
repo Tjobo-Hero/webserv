@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:32:14 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 15:30:06 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,30 +276,30 @@ void		Server::createResponse(int index) {
 	Connection	*currentConnection = &this->connections[index];
 	std::cout << " Handling request nr" << requestNumber << std::endl;
 	
-// #if PRINTLOG == 1
+#if PRINTLOG == 1
 
-// 	if (requestNumber >= MAXLOGS) {
-// 		std::stringstream oldName;
-// 		oldName << "logs/request_";
-// 		size_t oldNumber = requestNumber - MAXLOGS;
-// 		oldName << oldNumber;
-// 		remove(oldName.str().c_str());
-// 	}
-// 	std::stringstream logName;
-// 	logName << "logs/request_";
-// 	logName << requestNumber;
-// 	std::ofstream reqLog(logName.str().c_str()), std::ios::out);
-// 	reqLog << connections[index].getBuffer();
-// 	reqLog.close();
-// #endif
+	if (requestNumber >= MAXLOGS) {
+		std::stringstream oldName;
+		oldName << "logs/request_";
+		size_t oldNumber = requestNumber - MAXLOGS;
+		oldName << oldNumber;
+		remove(oldName.str().c_str());
+	}
+	std::stringstream logName;
+	logName << "logs/request_";
+	logName << requestNumber;
+	std::ofstream reqLog(logName.str().c_str(), std::ios::out);
+	reqLog << connections[index].getBuffer();
+	reqLog.close();
+#endif
 
-// #if PRINTOUT == 1
-// 	std::cout << "==REQUEST==" << std::endl;
-// 	int len = std::min(connections[index].getBuffer().length(), (size_t)500);
-// 	if (write(1, connections[index].getBuffer().c_str(), len) == -1) {;}
-// 	std::cout << "==end==" << std::endl;
+#if PRINTOUT == 1
+	std::cout << "==REQUEST==" << std::endl;
+	int len = std::min(connections[index].getBuffer().length(), (size_t)500);
+	if (write(1, connections[index].getBuffer().c_str(), len) == -1) {;}
+	std::cout << "==end==" << std::endl;
 
-// #endif
+#endif
 
 	Request request(this->connections[index].getBuffer());
 	if (!(*this)._alternativeServers.empty()) {
@@ -339,7 +339,7 @@ void	Server::setupResponseString(int index) {
 	this->_bodylen = currentConnection->myResponse->getBodySize();
 	currentConnection->setResponseString(currentConnection->myResponse->getResponse());
 
-#ifdef PRINTLOG
+#if PRINTLOG == 1
 	if (requestNumber >= MAXLOGS)
 	{
 		std::stringstream oldname;
@@ -355,7 +355,7 @@ void	Server::setupResponseString(int index) {
 	respLog << currentConnection->getResponseString();
 	respLog.close();
 #endif
-#ifdef PRINTOUT
+#if PRINTOUT == 1
 	std::cout << "==RESPONSE==" << std::endl;
 	int len1 = std::min(currentConnection->getResponseString().length(), (size_t)500);
 	if (write(1, currentConnection->getResponseString().c_str(), len1) == -1) {;}

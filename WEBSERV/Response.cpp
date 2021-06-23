@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:31:31 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 15:31:08 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,11 @@ void	Response::setupResponse(Request &request, Server &server) {
 		}
 	}
 	else if (this->_method == "POST") {
+		// std::cout << "----------------------------- " << getBodySize() << std::endl;
 		if (this->checkIfMethodIsAllowd()) {
 			this->postMethod(request.getBody());
 		}
+		// std::cout << "----------------------------- " << getBodySize() << std::endl;
 	}
 	else if (this->_method == "PUT") {
 		if (this->checkIfMethodIsAllowd()) {
@@ -103,6 +105,7 @@ void	Response::setupResponse(Request &request, Server &server) {
 	if (this->_status >= 299) {
 		this->errorPage(server);
 	}
+	// std::cout << "--------------------------------------------------- " << this->_status << std::endl;
 	return;
 }
 
@@ -121,8 +124,10 @@ void	Response::readContent() {
 	if (stat(this->_path.c_str(), &statBuf) != 0)
 		return this->setStatus(404);
 	this->_fileFD = open(this->_path.c_str(), O_RDONLY);
+	// std::cout << "1--------------------------------------------------- " << this->_status << std::endl;
 	if (this->_fileFD == -1 && this->_status == 200)
 		return this->setStatus(403);
+	// std::cout << "1--------------------------------------------------- " << this->_status << std::endl;
 	if (stat(_path.c_str(), &statBuf) != 0 && this->_status == 200)
 		return this->setStatus(404);
 	return;
@@ -259,7 +264,7 @@ void	Response::parseContent() {
 		ss >> this->_status;
 	}
 	if ((position = this->_content.find("Content-Type")) != std::string::npos)
-		this->_contentType = this->headerValue(position + 1);
+		this->_contentType = this->headerValue(position + 14);
 	return;
 }
 
@@ -272,8 +277,10 @@ void	Response::postMethod(std::string content) {
 	if (this->_currentLocation->getMaxBodySize() < this->_postContent.length())
 		return this->setStatus(413);
 	this->_fileFD = open(this->_path.c_str(), O_WRONLY | O_APPEND | O_CREAT);
+	std::cout << "2--------------------------------------------------- " << this->_status << std::endl;
 	if (this->_fileFD == -1 && this->_status == 200)
 		this->setStatus(403);
+	std::cout << "2--------------------------------------------------- " << this->_status << std::endl;
 	struct stat statBuf;
 	if (stat(this->_path.c_str(), &statBuf) < 0 && this->_status == 200)
 		this->setStatus(201);
@@ -285,7 +292,7 @@ void	Response::finishPostCGI() {
 	this->finishRead();
 	this->parseContent();
 	position = this->_content.find("\r\n\r\n");
-	this->_content.erase(0, position +4);
+	this->_content.erase(0, position + 4);
 	ResponseHeader header(this->_content, this->_path, this->_status, this->_contentType);
 	this->_response = header.getHeader(this->_status) + this->_content;
 	this->_isFinished = true;
@@ -317,8 +324,10 @@ void	Response::putMethod(std::string const &content) {
 	if (stat(this->_path.c_str(), &statBuf) < 0 && this->_status == 200)
 		this->setStatus(201);
 	this->_fileFD = open(this->_path.c_str(), O_RDWR | O_TRUNC | O_CREAT, 0744);
+	// std::cout << "3--------------------------------------------------- " << this->_status << std::endl;
 	if (this->_fileFD == -1)
 		return this->setStatus(403);
+	// std::cout << "3--------------------------------------------------- " << this->_status << std::endl;
 	return;
 }
 

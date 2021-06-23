@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:12:22 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:18:20 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 14:49:40 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ CGI::~CGI() {
 
 void	CGI::setupIn() {
 	if ((this->_fileIn = open("/tmp/utilityFileForCGI_IN.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1) {
-		// std::cout << "Error CGI" << std::endl;
+		std::cout << "Error CGI" << std::endl;
 		exit(1); // Fix throw
 	}
 }
@@ -110,6 +110,7 @@ void	CGI::_initEnvironment(Request &request, Server &server) {
 	this->_environment["GATEWAY_INTERFACE"] = "CGI"; 
 	this->_environment["PATH_INFO"] = request.getUri() + request.getCGIEnv();
 	this->_environment["PATH_TRANSLATED"] = request.getUri();
+	this->_environment["REDIRECT_STATUS"] = _setRedirectStatus();
 	this->_environment["QUERY_STRING"] = request.getCGIEnv();
 	this->_environment["REMOTE_ADDR"] = server.getHost();
 	this->_environment["REMOTE_IDENT"] = "ID"; 

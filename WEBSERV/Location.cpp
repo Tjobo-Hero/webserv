@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:22:46 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 14:36:44 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,8 +240,8 @@ bool			Location::parameterCheck(int &lineCount) const {
 		if ((*it) != allowedMethods[0] && (*it) != allowedMethods[1] && (*it) != allowedMethods[2] && (*it) != allowedMethods[3] && (*it) != allowedMethods[4])
 			throw parseError("invalid method ", lineCount);
 	}
-	if (this->_root.empty() == true)
-		throw parseError("missing root ", lineCount);
+	// if (this->_root.empty() == true)
+		// throw parseError("missing root ", lineCount);
 	return true;	
 }
 

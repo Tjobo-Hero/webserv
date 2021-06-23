@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:31:23 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 15:03:04 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ Request	&Request::operator=(const Request &src) {
 
 Request::Request(std::string request) : _request(request) {
 	_bodyLength = 0;
-	_contentLength = 0;
+	_contentLength = -1;
 	_status = 200;
 	parseRequest();
 }
@@ -124,21 +124,31 @@ void	Request::parseRequest() {
 			parseBody();
 	}
 	else
-		_body = _request.substr(0, _request.length() -2);
+		_body = _request.substr(0, _request.length() - 2);
 	_request.clear();
 }
 
 void	Request::checkCGI() {
-	if (_request.find(".py") != std::string::npos)
+	if (_request.find(".py") != std::string::npos) {
 		_CGI = true;
-	else if (_request.find(".php") != std::string::npos)
+		_type = PY;
+	}
+	else if (_request.find(".php") != std::string::npos) {
 		_CGI = true;
-	else if (_request.find(".bla") != std::string::npos)
+		_type = PHP;
+	}
+	else if (_request.find(".bla") != std::string::npos) {
 		_CGI = true;
-	else if (_request.find(".cgi") != std::string::npos)
+		_type = BLA;
+	}
+	else if (_request.find(".cgi") != std::string::npos) {
 		_CGI = true;
-	else if (_request.find(".cgi-bin") != std::string::npos)
+		_type = CGIBIN;
+	}
+	else if (_request.find(".cgi-bin") != std::string::npos) {
 		_CGI = true;
+		_type = CGIBIN;	
+	}
 	else
 		_CGI = false;
 }

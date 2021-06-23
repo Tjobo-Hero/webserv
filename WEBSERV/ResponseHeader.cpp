@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/22 10:51:36 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 10:50:35 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 15:12:24 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ std::string	ResponseHeader::writeHeader() {
 	if (strtol(this->_contentLength.c_str(), NULL, 10) < MAXSENDSIZE)
 		header += "Content-Length: " + this->_contentLength + ENDOFLINE;
 	else
-		header += "Transfer-Encooding: " + this->_transferEncoding + ENDOFLINE;
+		header += "Transfer-Encoding: " + this->_transferEncoding + ENDOFLINE;
 	if (this->_contentLocation.empty() == false)
 		header += "Content-Location: " + this->_contentLocation + ENDOFLINE;
 	if (this->_contentType.empty() == false)

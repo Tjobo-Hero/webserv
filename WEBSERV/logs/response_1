@@ -1,27 +1,20 @@
-HTTP/1.1 404 Not _found
+HTTP/1.1 200 OK
 Content-Language: en-US
-Content-Length: 423
+Content-Length: 218
+Content-Location: html_pages/index.html
 Content-Type: NULL
-Date: Wed, 23 Jun 2021 09:47:37 UTC
+Date: Wed, 23 Jun 2021 13:24:30 UTC
+Last-Modified: Wed, 23 Jun 2021 09:57:28 UTC
 Server: WEBSERV project RRT
 
-<!Doctype html>
-<html>
-<head>
-    <title>Error 404</title>
-</head>
-<style>
-    body{
-        background-color:#cf4845 ;
-    }
-    .error_img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: cover;
-    }
-</style>
-<body>
-<h1 STYLE="font-size: 24px; font-family: serif;">Error 404 - Not Found</h1>
-<img src="error_image.png" alt="error image" width="960" height="440" class="error_img">
-</body>
-</html>
+<HTML>
+
+	<HEAD>
+		<TITLE><- Look it's a cowboy!</TITLE>
+	</HEAD>
+
+	<BODY BGCOLOR="FFFFFF">
+		<H1>Welcome to our AMAZING webserv</H1>
+		<P> If you can see this, you must have done something right! </P>
+	</BODY>
+</HTML>

@@ -1,0 +1,9 @@
+*.o
+objects/
+.idea/
+cmake-build-debug/
+html_pages/Downloads/Download*
+html_pages/Downloads/file_should_exist_after
+html_pages/Downloads/multiple_same
+webserv
+logs/
