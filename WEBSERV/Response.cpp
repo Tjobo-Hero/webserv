@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 16:12:10 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 10:49:31 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "getPath.hpp"
 // #include "CGI.hpp"
 // #include "ResponseHeader.hpp"
-// #include "ConnectionUtils.hpp"
+#include "ConnectionUtils.hpp"
 
 Response::Response(Request &request, Server &server) : _useCGI(request.getCGI()), _body(request.getBody()), _status(request.getStatus()), _contentType(request.getContentType()), _method(request.getMethod()), _fileFD(-1), _isFinished(false) {
 	getPath path(server, request, *this);
@@ -365,7 +365,7 @@ int			Response::authenticate(Request &request) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Response &response) {
-	os	<< "_respone: " << response._response \
+	os	<< "_response: " << response._response \
 		<< " _content: " << response._content \
 		<< " _path: " << response._path \
 		<< "_status: " << response._status;

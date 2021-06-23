@@ -8,4 +8,4 @@ TODO:
 	extreem lange functies.
 - Check vooral bij nieuwere stukken na het parsen of alle exits en
 	throws mooi en correct zjn.
-- 
+- Wat is base_64?? Er zit copyright op maar hoezo, mag je dat gebruiken??
