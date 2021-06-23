@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:13:56 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:52:23 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,8 +265,8 @@ int			Server::acceptConnections() {
 	this->connections[i].setFD(accept(this->_socketFD, &connectingAddr, &addressLength));
 	if (this->connections[i].getAcceptFD() == -1)
 		std::cerr << "Could not create FD" << std::endl;
-	this->connections[i].setTimeLastRead(getTime());
-	return (1);
+	this->connections[i].setTimeLastRead(Utils::getTime());
+	return 1;
 }
 
 static size_t requestNumber = 0;
@@ -317,6 +317,51 @@ void		Server::createResponse(int index) {
 	currentConnection->myResponse->setupResponse(request, *this);
 	
 	requestNumber += 1;
+}
+
+void	Server::setupResponseString(int index) {
+	Connection *currentConnection = &this->connections[index];
+	
+	if (!currentConnection->myResponse->isResponseFinished()) {
+		if (currentConnection->myResponse->getUseCGI())
+			currentConnection->myResponse->getCGI().executeCGI(currentConnection->myResponse->getBody());
+		if (currentConnection->myResponse->getStatus() > 299)
+			currentConnection->myResponse->finishErrorPage(*this);
+		else if (currentConnection->myResponse->methodType() == "GET")
+			currentConnection->myResponse->getMethod();
+		else if (currentConnection->myResponse->methodType() == "HEAD")
+			currentConnection->myResponse->headMethod();
+		else if (currentConnection->myResponse->methodType() == "POST")
+			currentConnection->myResponse->finishPost();
+		else if (currentConnection->myResponse->methodType() == "PUT")
+			currentConnection->myResponse->finishPut();
+	}
+	this->_bodylen = currentConnection->myResponse->getBodySize();
+	currentConnection->setResponseString(currentConnection->myResponse->getResponse());
+
+#ifdef PRINTLOG
+	if (requestNumber >= MAXLOGS)
+	{
+		std::stringstream oldname;
+		oldname << "logs/response_";
+		size_t oldnr = requestNumber - MAXLOGS;
+		oldname << oldnr;
+		remove(oldname.str().c_str());
+	}
+	std::stringstream logname1;
+	logname1 << "logs/response_";
+	logname1 << requestNumber;
+	std::ofstream respLog(logname1.str().c_str(), std::ios::out);
+	respLog << currentConnection->getResponseString();
+	respLog.close();
+#endif
+#ifdef PRINTOUT
+	std::cout << "==RESPONSE==" << std::endl;
+	int len1 = std::min(currentConnection->getResponseString().length(), (size_t)500);
+	if (write(1, currentConnection->getResponseString().c_str(), len1) == -1) {;}
+	std::cout << "\n==end==" << std::endl;
+#endif
+	return;
 }
 
 std::ostream&	operator<<(std::ostream &os, const Server &server) {

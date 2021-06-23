@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 14:49:39 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:27:54 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@
 
 // Debug Macros
 
-# define PRINTLOG 1
-# define PRINTOUT 1
+# define PRINTLOG 0
+# define PRINTOUT 0
 
 // Defines 
 # define NR_OF_CONNECTIONS 200
@@ -73,6 +73,7 @@ const std::string allowedMethods[5] = {"", "HEAD", "GET", "POST", "PUT"};
 const std::string HEAD_AND_CONTENT_SEPERATOR = "\r\n\r\n";
 const std::string END_OF_LINE = "\r\n";
 
+// #include "Connection.hpp" // kan niet zomaar
 extern Connection *g_recentConnection;
 
 // #include "Connection.hpp"

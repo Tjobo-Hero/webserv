@@ -6,12 +6,13 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 10:44:14 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/17 14:17:53 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 12:48:49 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Connection.hpp"
 #include "ConnectionUtils.hpp"
+#include "Webserver.hpp"
 
 Connection::Connection() :	_timeLastContactInSeconds(0), _acceptFD(-1), _hasFullRequest(false), _bodyBytesSent(0),
 							_headerSend(false), myResponse(NULL) {
