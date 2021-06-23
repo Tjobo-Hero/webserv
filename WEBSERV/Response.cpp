@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:31:31 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 12:52:24 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool	Response::checkIfMethodIsAllowd() {
 		return false;
 	std::vector<std::string>::iterator it;
 	std::vector<std::string> vc = this->_currentLocation->getMethods();
-	for (it = vc.begin(); it != vc.end(); ++it) {
+	for (it = vc.begin(); it < vc.end(); ++it) {
 		if ((*it) == this->_method)
 			return true;
 	}
@@ -97,7 +97,11 @@ void	Response::setupResponse(Request &request, Server &server) {
 	}
 	else if (this->_method == "PUT") {
 		if (this->checkIfMethodIsAllowd()) {
+			std::cout <<"STATUS BEFORE:" << this->_status << std::endl;
 			putMethod(this->_body);
+			std::cout << "-----------------------------------------HIERI" << std::endl;
+			std::cout <<"STATUS AFTER:" << this->_status << std::endl;
+
 		}
 	}
 	if (this->_status >= 299) {
@@ -259,7 +263,7 @@ void	Response::parseContent() {
 		ss >> this->_status;
 	}
 	if ((position = this->_content.find("Content-Type")) != std::string::npos)
-		this->_contentType = this->headerValue(position + 1);
+		this->_contentType = this->headerValue(position + 14);
 	return;
 }
 
@@ -269,6 +273,7 @@ void	Response::postMethod(std::string content) {
 		this->readContent();
 		return;
 	}
+	std::cout << "---PostContent:" << this->_postContent.length() << std::endl;
 	if (this->_currentLocation->getMaxBodySize() < this->_postContent.length())
 		return this->setStatus(413);
 	this->_fileFD = open(this->_path.c_str(), O_WRONLY | O_APPEND | O_CREAT);

@@ -1,0 +1,12 @@
+HTTP/1.1 200 OK
+Content-Language: en-US
+Content-Length: 58
+Content-Location: cgi-bin/cgi_tester
+Content-Type: NULL
+Date: Wed, 23 Jun 2021 10:35:35 UTC
+Last-Modified: Wed, 23 Jun 2021 09:55:37 UTC
+Server: WEBSERV project RRT
+
+Status: 200 OK
+Content-Type: text/html; charset=utf-8
+

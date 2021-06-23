@@ -1,0 +1,10 @@
+HTTP/1.1 405 Method Not Allowed
+Allow: Get, Head, Post, Put
+Content-Language: en-US
+Content-Length: 0
+Content-Location: html_pages/index.html
+Content-Type: NULL
+Date: Wed, 23 Jun 2021 10:35:35 UTC
+Last-Modified: Wed, 23 Jun 2021 09:55:37 UTC
+Server: WEBSERV project RRT
+

@@ -1,0 +1,29 @@
+HTTP/1.1 405 Method Not Allowed
+Allow: Get, Head, Post, Put
+Content-Language: en-US
+Content-Length: 432
+Content-Location: html_pages/Download_0
+Content-Type: test/file
+Date: Wed, 23 Jun 2021 10:35:35 UTC
+Server: WEBSERV project RRT
+
+<!Doctype html>
+<html>
+<head>
+    <title>Error 405</title>
+</head>
+<style>
+    body{
+        background-color:#cf4845 ;
+    }
+    .error_img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+</style>
+<body>
+<h1 STYLE="font-size: 24px; font-family: serif;">Error 405 - Method not allowed</h1>
+<img src="error_image.png" alt="error image" width="960" height="440" class="error_img">
+</body>
+</html>

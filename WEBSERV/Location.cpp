@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:22:46 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 12:30:34 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,8 @@ void		Location::setMaxBodySize(const std::string &maxBodySize)
 {
 	this->_ownBodySize = true;
 
-	std::stringstream ss;
+	std::stringstream ss(maxBodySize);
 
-	ss << maxBodySize;
 	ss >> this->_maxBodySize;
 	if (this->_maxBodySize == 0)
 		this->_maxBodySize = (ULONG_MAX);
@@ -94,10 +93,9 @@ void		Location::setRoot(const std::string &root) {
 }
 
 void		Location::setMethod(const std::string &method) {
-	std::stringstream ss;
+	std::stringstream ss(method);
 	std::string	methods;
 	
-	ss << method;
 	while (ss >> methods)
 		this->_methods.push_back(methods);
 	return;
@@ -240,8 +238,8 @@ bool			Location::parameterCheck(int &lineCount) const {
 		if ((*it) != allowedMethods[0] && (*it) != allowedMethods[1] && (*it) != allowedMethods[2] && (*it) != allowedMethods[3] && (*it) != allowedMethods[4])
 			throw parseError("invalid method ", lineCount);
 	}
-	if (this->_root.empty() == true)
-		throw parseError("missing root ", lineCount);
+	// if (this->_root.empty() == true)
+	// 	throw parseError("missing root ", lineCount);
 	return true;	
 }
 

@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/22 14:41:31 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:21:31 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 12:34:46 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@
 # include <sys/socket.h>
 
 // Debug Macros
-
-# define PRINTLOG 1
-# define PRINTOUT 1
 
 // Defines 
 # define NR_OF_CONNECTIONS 200

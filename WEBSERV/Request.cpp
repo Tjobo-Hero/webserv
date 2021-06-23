@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:31:23 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 12:56:28 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ Request	&Request::operator=(const Request &src) {
 
 Request::Request(std::string request) : _request(request) {
 	_bodyLength = 0;
-	_contentLength = 0;
+	_contentLength = -1;
 	_status = 200;
 	parseRequest();
 }
@@ -264,7 +264,10 @@ void Request::parseBody() {
 		hex.clear();
 	}
 	if (this->_bodyLength != this->_contentLength && this->_contentLength != -1)
+	{
+		std::cout << "CHECK" << std::endl;
 		this->_status = 413;
+	}
 }
 
 bool Request::getCGI() const {
