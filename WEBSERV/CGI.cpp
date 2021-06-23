@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:12:22 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/22 16:59:09 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:18:20 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,18 +90,6 @@ void	CGI::executeCGI(std::string &body) {
 	Utils::freeArray(_env);
 	if ((this->_fileRet = open("/tmp/utilityFileForCGI_OUT.txt", O_RDONLY)) == -1)
 		exit(1); // check for other throw
-	// char buff[MB];
-	// int readRet = 1;
-	// while (readRet)
-	// {
-	// 	bzero(buff, MB);
-	// 	if ((readRet = read(fd, buff, MB - 1)) == -1)
-	// 		exit(1); // check for other throw
-	// 	ret += buff;
-	// }
-	// if (close(fd) == -1)
-	// 	exit(1); // check for other throw
-	// return ret;
 }
 
 void	CGI::_initEnvironment(Request &request, Server &server) {
@@ -184,32 +172,3 @@ void	CGI::_convertEnvironment() { //  creating our _env var from our _environmen
 	}
 	_env[i] = NULL;
 }
-
-// void	CGI::setupIn() {
-// 	if ((this->_fileIn = open("/tmp/fuckyoupeerin.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1) // change txt file
-// 		throw runtimeError("Error: CGI malfunction\n"); // is this working
-// }
-
-// std::string CGI::readOutput() {
-// 	char buff[MB];
-// 	int readret = 1;
-// 	std::string ret;
-// 	while(readret) {
-// 		bzero(buff, MB);
-// 		if ((readret = read(this->_fileRet, buff, MB - 1)) == -1) {
-// 			throw runtimeError("Error: CGI read failed\n");
-// 		ret += buff;
-// 		}
-// 	}
-// 	if (close(this->_fileRet) == -1)
-// 		throw runtimeError("Error: CGI close file failed\n");
-// 	return ret;
-// }
-
-// std::string CGI::_setRedirectStatus() {
-// 	if (this->_type == PHP)
-// 		return "200";
-// 	else
-// 		return "CGI";
-// }
-

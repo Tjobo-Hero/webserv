@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/22 10:51:36 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/22 11:43:16 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 10:50:35 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ ResponseHeader	&ResponseHeader::operator=(const ResponseHeader &src) {
 		this->_transferEncoding = src._transferEncoding;
 		this->_wwwAuthenticate = src._wwwAuthenticate;
 	}
+	return *this;
 }
 
 std::string	ResponseHeader::getHeader(int status) {

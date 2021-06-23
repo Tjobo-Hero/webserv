@@ -6,27 +6,32 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 10:49:31 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:23:35 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 #include "getPath.hpp"
-// #include "CGI.hpp"
-// #include "ResponseHeader.hpp"
 #include "ConnectionUtils.hpp"
 
-Response::Response(Request &request, Server &server) : _useCGI(request.getCGI()), _body(request.getBody()), _status(request.getStatus()), _contentType(request.getContentType()), _method(request.getMethod()), _fileFD(-1), _isFinished(false) {
-	getPath path(server, request, *this);
-	this->_path = path.createPath();
-	CGI cgiTemp(this->_path, request, server);
-	this->_myCGI = cgiTemp;
-	this->_errorMessage[204] = "No Content"; //  can this be done before and make it const?
-	this->_errorMessage[400] = "Bad Request";
-	this->_errorMessage[403] = "Forbidden";
-	this->_errorMessage[404] = "Not Found";
-	this->_errorMessage[405] = "Method not allowed";
-	this->_errorMessage[413] = "Payload too large";
+Response::Response(Request &request, Server &server) :
+	_useCGI(request.getCGI()),
+	_status(request.getStatus()),
+	_body(request.getBody()),
+	_contentType(request.getContentType()),
+	_method(request.getMethod()),
+	_fileFD(-1),
+	_isFinished(false) {
+		getPath path(server, request, *this);
+		this->_path = path.createPath();
+		CGI cgiTemp(this->_path, request, server);
+		this->_myCGI = cgiTemp;
+		this->_errorMessage[204] = "No Content"; //  can this be done before and make it const?
+		this->_errorMessage[400] = "Bad Request";
+		this->_errorMessage[403] = "Forbidden";
+		this->_errorMessage[404] = "Not Found";
+		this->_errorMessage[405] = "Method not allowed";
+		this->_errorMessage[413] = "Payload too large";
 	return;
 }
 
@@ -376,7 +381,7 @@ size_t	Response::getBodySize() const {
 	return this->_content.size();
 }
 
-const std:::string& Response::methodType() const {
+const std::string& Response::methodType() const {
 	return this->_method;
 }
 

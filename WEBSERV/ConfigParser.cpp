@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 10:15:16 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:19:02 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,6 @@ void		ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 				break;
 			else {
 				std::string key = Utils::findFirstWord(configLine);
-				// if (key.size() <= 0)
-					// throw parseError("not found " + configLine, this->_lineCount);
 				newServer->findKey(key, configLine, this->_lineCount); // removed try/catch block
 			}
 		}

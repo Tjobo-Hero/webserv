@@ -6,14 +6,13 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:11:58 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:23:02 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigParser.hpp"
 #include "ServerCluster.hpp"
 #include "Webserver.hpp"
-// #include "Error.hpp"
 
 int main (int argc, char **argv)
 {

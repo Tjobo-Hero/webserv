@@ -6,14 +6,13 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:07:58 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/22 16:53:18 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:18:30 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CGI_HPP
 #define CGI_HPP
 
-// #include "Webserver.hpp"
 #include "Libraries.hpp"
 #include "Request.hpp"
 #include "Server.hpp"

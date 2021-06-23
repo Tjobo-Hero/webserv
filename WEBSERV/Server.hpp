@@ -6,14 +6,13 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:22:26 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:24:21 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
 
-// #include "Webserver.hpp"
 #include "Libraries.hpp"
 #include "Error.hpp"
 #include "Location.hpp"

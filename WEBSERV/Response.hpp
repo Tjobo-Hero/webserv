@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:26:54 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:23:49 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 #include "CGI.hpp"
 #include "Location.hpp"
 #include "Libraries.hpp"
-// #include "Webserver.hpp"
-// #include "Request.hpp"
 
 class Response
 {

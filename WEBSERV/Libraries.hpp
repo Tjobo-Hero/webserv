@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/22 14:41:31 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:19:50 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:21:31 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,5 @@ const std::string WHITESPACE = " \n\r\t\f\v";
 const std::string allowedMethods[5] = {"", "HEAD", "GET", "POST", "PUT"};
 const std::string HEAD_AND_CONTENT_SEPERATOR = "\r\n\r\n";
 const std::string END_OF_LINE = "\r\n";
-
-
 
 #endif

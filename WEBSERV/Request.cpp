@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:26:27 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:08:29 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@ std::string	Request::getCGIEnv() const {
 
 int	Request::getStatus() const {
 	return _status;
+}
+
+filetype Request::getFileType() const
+{
+	return _type;
 }
 
 void	Request::parseRequest() {

@@ -6,14 +6,12 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 16:09:30 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:24:30 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerCluster.hpp"
-// #include "Connection.hpp"
 #include "ConnectionUtils.hpp"
-// #include "Webserver.hpp"
 #include "Request.hpp"
 
 Connection	*g_recentConnection;

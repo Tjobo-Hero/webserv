@@ -6,15 +6,15 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 15:18:52 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:24:10 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "ConfigParser.hpp"
 #include "Location.hpp"
-// #include "Request.hpp"
-// #include "Response.hpp"
+#include "ConnectionUtils.hpp"
+#include "Response.hpp"
 
 Server::Server() : _portNumber(0), _maxBodySize(1000000), _autoIndex(false), _errorPage(DEFAULT_ERROR_PAGE), _socketFD(-1) {
 	this->_typeFunctionMap.insert(std::make_pair("listen", &Server::setPortNumber));
@@ -265,7 +265,7 @@ int			Server::acceptConnections() {
 	this->connections[i].setFD(accept(this->_socketFD, &connectingAddr, &addressLength));
 	if (this->connections[i].getAcceptFD() == -1)
 		std::cerr << "Could not create FD" << std::endl;
-	this->connections[i].setTimeLastRead(getTime());
+	this->connections[i].setTimeLastRead(Utils::getTime());
 	return (1);
 }
 
@@ -276,30 +276,30 @@ void		Server::createResponse(int index) {
 	Connection	*currentConnection = &this->connections[index];
 	std::cout << " Handling request nr" << requestNumber << std::endl;
 	
-#if PRINTLOG == 1
+// #if PRINTLOG == 1
 
-	if (requestNumber >= MAXLOGS) {
-		std::stringstream oldName;
-		oldName << "logs/request_";
-		size_t oldNumber = requestNumber - MAXLOGS;
-		oldName << oldNumber;
-		remove(oldName.str().c_str());
-	}
-	std::stringstream logName;
-	logName << "logs/request_";
-	logName << requestNumber;
-	std::ofstream reqLog(logName.str().c_str()), std::ios::out);
-	reqLog << connections[index].getBuffer();
-	reqLog.close();
-#endif
+// 	if (requestNumber >= MAXLOGS) {
+// 		std::stringstream oldName;
+// 		oldName << "logs/request_";
+// 		size_t oldNumber = requestNumber - MAXLOGS;
+// 		oldName << oldNumber;
+// 		remove(oldName.str().c_str());
+// 	}
+// 	std::stringstream logName;
+// 	logName << "logs/request_";
+// 	logName << requestNumber;
+// 	std::ofstream reqLog(logName.str().c_str()), std::ios::out);
+// 	reqLog << connections[index].getBuffer();
+// 	reqLog.close();
+// #endif
 
-#if PRINTOUT == 1
-	std::cout << "==REQUEST==" << std::endl;
-	int len = std::min(connections[index].getBuffer().length(), (size_t)500);
-	if (write(1, connections[index].getBuffer().c_str(), len) == -1) {;}
-	std::cout << "==end==" << std::endl;
+// #if PRINTOUT == 1
+// 	std::cout << "==REQUEST==" << std::endl;
+// 	int len = std::min(connections[index].getBuffer().length(), (size_t)500);
+// 	if (write(1, connections[index].getBuffer().c_str(), len) == -1) {;}
+// 	std::cout << "==end==" << std::endl;
 
-#endif
+// #endif
 
 	Request request(this->connections[index].getBuffer());
 	if (!(*this)._alternativeServers.empty()) {
