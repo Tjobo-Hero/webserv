@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 12:56:28 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/23 14:19:36 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,10 +264,7 @@ void Request::parseBody() {
 		hex.clear();
 	}
 	if (this->_bodyLength != this->_contentLength && this->_contentLength != -1)
-	{
-		std::cout << "CHECK" << std::endl;
 		this->_status = 413;
-	}
 }
 
 bool Request::getCGI() const {
