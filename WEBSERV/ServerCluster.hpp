@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:24:38 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:50:07 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ class ServerCluster
 		
 		void	checkDuplicatePorts();
 		void	startup();
+		
 		void	startListening();
 };
 #endif

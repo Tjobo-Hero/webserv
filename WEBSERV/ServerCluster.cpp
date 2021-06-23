@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:24:30 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:46:53 by timvancitte   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,11 @@ void	ServerCluster::startListening() {
 					maxFD = std::max(maxFD, (*it)->connections[i].getAcceptFD());
 					if (!(*it)->connections[i].hasFullRequst())
 						FD_SET((*it)->connections[i].getAcceptFD(), &readSet);
-					else
+					else {
 						FD_SET((*it)->connections[i].getAcceptFD(), &writeSet);
+						if (!(*it)->connections[i].myResponse)
+							(*it)->createResponse(i);
+					}
 				}
 			}
 			it++;
@@ -128,7 +131,7 @@ void	ServerCluster::startListening() {
 		timeout.tv_usec = 0;
 		if ((ret = select(maxFD + 1, &readSet, &writeSet, NULL, &timeout)) == -1)
 			exit(1); // check trhow
-		for (it = this->_allServers.begin(); it != this->_allServers.end(); it++) {
+		for (it = this->_allServers.begin(); it != this->_allServers.end() && ret; it++) {
 			long fd;
 			fd = (*it)->getSocketFD();
 			if (FD_ISSET(fd, &readSet)) {
@@ -146,7 +149,8 @@ void	ServerCluster::startListening() {
 					}
 					if (FD_ISSET(fd, &writeSet)) {
 						g_recentConnection = &((*it)->connections[connectionCounter]);
-						(*it)->createResponse(connectionCounter);
+						if ((*it)->connections[connectionCounter].getResponseString().empty())
+							(*it)->setupResponseString(connectionCounter);
 						(*it)->connections[connectionCounter].sendData((*it)->_bodylen);
 						break;
 					}
