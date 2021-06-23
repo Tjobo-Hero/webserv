@@ -6,27 +6,32 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:53:56 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:31:31 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Response.hpp"
 #include "getPath.hpp"
-#include "CGI.hpp"
-#include "ResponseHeader.hpp"
 #include "ConnectionUtils.hpp"
 
-Response::Response(Request &request, Server &server) : _useCGI(request.getCGI()), _body(request.getBody()), _status(request.getStatus()), _contentType(request.getContentType()), _method(request.getMethod()), _fileFD(-1), _isFinished(false) {
-	getPath path(server, request, *this);
-	this->_path = path.createPath();
-	CGI cgiTemp(this->_path, request, server);
-	this->_myCGI = cgiTemp;
-	this->_errorMessage[204] = "No Content"; //  can this be done before and make it const?
-	this->_errorMessage[400] = "Bad Request";
-	this->_errorMessage[403] = "Forbidden";
-	this->_errorMessage[404] = "Not Found";
-	this->_errorMessage[405] = "Method not allowed";
-	this->_errorMessage[413] = "Payload too large";
+Response::Response(Request &request, Server &server) :
+	_useCGI(request.getCGI()),
+	_status(request.getStatus()),
+	_body(request.getBody()),
+	_contentType(request.getContentType()),
+	_method(request.getMethod()),
+	_fileFD(-1),
+	_isFinished(false) {
+		getPath path(server, request, *this);
+		this->_path = path.createPath();
+		CGI cgiTemp(this->_path, request, server);
+		this->_myCGI = cgiTemp;
+		this->_errorMessage[204] = "No Content"; //  can this be done before and make it const?
+		this->_errorMessage[400] = "Bad Request";
+		this->_errorMessage[403] = "Forbidden";
+		this->_errorMessage[404] = "Not Found";
+		this->_errorMessage[405] = "Method not allowed";
+		this->_errorMessage[413] = "Payload too large";
 	return;
 }
 
@@ -365,7 +370,7 @@ int			Response::authenticate(Request &request) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Response &response) {
-	os	<< "_respone: " << response._response \
+	os	<< "_response: " << response._response \
 		<< " _content: " << response._content \
 		<< " _path: " << response._path \
 		<< "_status: " << response._status;

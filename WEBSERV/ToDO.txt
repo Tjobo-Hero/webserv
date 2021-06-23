@@ -1,0 +1,11 @@
+TODO:
+- Alles nagaan want webserv was geupdated en sommige shit klopt niet
+	meer.
+- fix alle includes, Libraries.hpp is gemaakt maar alle includes linken 
+	te ver door dus zet ze allemaal terug naar origineel en kijke of 
+	je eht vanuit daar mooier kunt maken.
+- Kijk in hoeverre je clean code methodes kunt toepassen vooral op de
+	extreem lange functies.
+- Check vooral bij nieuwere stukken na het parsen of alle exits en
+	throws mooi en correct zjn.
+- Wat is base_64?? Er zit copyright op maar hoezo, mag je dat gebruiken??

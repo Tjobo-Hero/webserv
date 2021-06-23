@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/18 12:19:27 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:22:46 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void		Location::setAutoIndex(const std::string &autoIndex)
 	}
 	if (autoIndex != "off")
 	{;}
-	// return;
 }
 
 void		Location::setMaxBodySize(const std::string &maxBodySize)
@@ -137,37 +136,21 @@ void		Location::setHTPasswordPath(const std::string &passwordpath) // check if d
 	std::fstream configFile;
 	std::string line;
 
-	// try
-	// {
-		if (stat(passwordpath.c_str(), &statstruct) == -1)
-		// {
-			throw parseError("set password path error", "check input");
-			// return;
-		// }
-		this->_htpasswd_path = passwordpath;
+	if (stat(passwordpath.c_str(), &statstruct) == -1)
+		throw parseError("set password path error", "check input");
+	this->_htpasswd_path = passwordpath;
 		
-		configFile.open(this->_htpasswd_path.c_str());
-		if (!configFile)
-		// {
-			throw openFileError("Error: failed to open filepath: ", this->_htpasswd_path);
-			// return;
-		// }
-		while (std::getline(configFile, line))
-		{
-			std::string user;
-			std::string pass;
-			Utils::getKeyValue(line, user, pass, ":", "\n\r#;");
-			this->_loginfo[user] = pass;
-		}
-		configFile.close();
-	// }
-	// catch(const std::exception& e)
-	// {
-		// std::cerr << e.what() << '\n';
-		// exit(1);
-		// return;
-	// }
-	
+	configFile.open(this->_htpasswd_path.c_str());
+	if (!configFile)
+		throw openFileError("Error: failed to open filepath: ", this->_htpasswd_path);
+	while (std::getline(configFile, line))
+	{
+		std::string user;
+		std::string pass;
+		Utils::getKeyValue(line, user, pass, ":", "\n\r#;");
+		this->_loginfo[user] = pass;
+	}
+	configFile.close();
 }
 
 
@@ -260,6 +243,17 @@ bool			Location::parameterCheck(int &lineCount) const {
 	if (this->_root.empty() == true)
 		throw parseError("missing root ", lineCount);
 	return true;	
+}
+
+bool Location::getAuthMatch(const std::string& username, const std::string& password)
+{
+	std::map<std::string, std::string>::iterator it = this->_loginfo.find(username);
+
+	if (it == this->_loginfo.end())
+		return (false);
+	if (password != it->second)
+		return (false);
+	return (true);
 }
 
 std::ostream&	operator<<(std::ostream &os, const Location &location)

@@ -6,14 +6,14 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 10:44:17 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 13:01:00 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:31:13 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONNECTION_HPP
 # define CONNECTION_HPP
 
-#include "Response.hpp"
+#include "Libraries.hpp"
 
 class Response;
 class Connection

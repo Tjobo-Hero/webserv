@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:01 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:15:43 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/22 15:01:11 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,5 @@ namespace Utils
 	void	signalHandler(int signal);
 	void	freeArray(char **array);
 	std::string base64_decode(std::string const& encoded_string);
-
 }
 #endif

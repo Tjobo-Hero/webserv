@@ -6,18 +6,18 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/22 12:53:38 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:31:35 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESPONSE_HPP
 # define RESPONSE_HPP
 
-#include "Webserver.hpp"
-#include "Location.hpp"
+#include "ResponseHeader.hpp"
 #include "Server.hpp"
-#include "Request.hpp"
 #include "CGI.hpp"
+#include "Location.hpp"
+#include "Libraries.hpp"
 
 class Response
 {

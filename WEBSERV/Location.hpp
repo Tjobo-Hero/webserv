@@ -6,14 +6,13 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/15 15:25:10 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:22:57 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LOCATION_HPP
 # define LOCATION_HPP
 
-#include "Webserver.hpp"
 #include "ParserUtils.hpp"
 
 class Location
@@ -79,7 +78,7 @@ class Location
 		const std::vector<std::string>&	getIndices() const;
 		const std::map<std::string, std::string>&	getLogInfo() const;
 		
-		const bool&			getAuthMatch(const std::string &username, const std::string &password);
+		bool				getAuthMatch(const std::string &username, const std::string &password);
 		
 		void				findKey(std::string &key, std::string line, int lineCount);
 		bool				parameterCheck(int &lineCount) const;

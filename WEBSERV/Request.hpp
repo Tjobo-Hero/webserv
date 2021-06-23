@@ -6,16 +6,16 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:57:31 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/21 15:47:55 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/23 11:23:28 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
-#include "Webserver.hpp"
+#include "Libraries.hpp"
 
-class Request { // cpp niet af
+class Request {
 	public:
 		friend class Response;
 		~Request();
@@ -56,6 +56,7 @@ class Request { // cpp niet af
 		int	_bodyLength;
 		int	_contentLength;
 		bool	_CGI;
+		filetype	_type;
 };
 
 #endif
