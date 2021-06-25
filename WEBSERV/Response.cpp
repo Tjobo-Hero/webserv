@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 15:31:08 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/25 12:59:40 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,9 @@ void	Response::setupResponse(Request &request, Server &server) {
 		}
 	}
 	else if (this->_method == "POST") {
-		// std::cout << "----------------------------- " << getBodySize() << std::endl;
 		if (this->checkIfMethodIsAllowd()) {
 			this->postMethod(request.getBody());
 		}
-		// std::cout << "----------------------------- " << getBodySize() << std::endl;
 	}
 	else if (this->_method == "PUT") {
 		if (this->checkIfMethodIsAllowd()) {
@@ -105,7 +103,6 @@ void	Response::setupResponse(Request &request, Server &server) {
 	if (this->_status >= 299) {
 		this->errorPage(server);
 	}
-	// std::cout << "--------------------------------------------------- " << this->_status << std::endl;
 	return;
 }
 
@@ -124,10 +121,8 @@ void	Response::readContent() {
 	if (stat(this->_path.c_str(), &statBuf) != 0)
 		return this->setStatus(404);
 	this->_fileFD = open(this->_path.c_str(), O_RDONLY);
-	// std::cout << "1--------------------------------------------------- " << this->_status << std::endl;
 	if (this->_fileFD == -1 && this->_status == 200)
 		return this->setStatus(403);
-	// std::cout << "1--------------------------------------------------- " << this->_status << std::endl;
 	if (stat(_path.c_str(), &statBuf) != 0 && this->_status == 200)
 		return this->setStatus(404);
 	return;
@@ -277,10 +272,8 @@ void	Response::postMethod(std::string content) {
 	if (this->_currentLocation->getMaxBodySize() < this->_postContent.length())
 		return this->setStatus(413);
 	this->_fileFD = open(this->_path.c_str(), O_WRONLY | O_APPEND | O_CREAT);
-	std::cout << "2--------------------------------------------------- " << this->_status << std::endl;
 	if (this->_fileFD == -1 && this->_status == 200)
 		this->setStatus(403);
-	std::cout << "2--------------------------------------------------- " << this->_status << std::endl;
 	struct stat statBuf;
 	if (stat(this->_path.c_str(), &statBuf) < 0 && this->_status == 200)
 		this->setStatus(201);

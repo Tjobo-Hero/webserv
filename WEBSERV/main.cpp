@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:23:02 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/25 13:00:24 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int main (int argc, char **argv)
 	ConfigParser	configParser(argc, argv);
 	if (argc == 2)
 	{
+		system("mkdir -p logs && cd logs && rm -f ./*");
+		system("rm -f html_pages/Downloads/Download_* html_pages/Downloads/file_should_exist_after html_pages/Downloads/multiple_same");
 		try 
 		{
 			configParser.openConfigFile();
