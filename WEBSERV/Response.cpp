@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/25 12:59:40 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/28 15:06:59 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	Response::readContent() {
 	struct stat statBuf;
 
 	if (this->_useCGI == true) {
-		this->_myCGI.setupIn();
+		this->_myCGI.setupInFile();
 		return;
 	}
 	if (stat(this->_path.c_str(), &statBuf) != 0)

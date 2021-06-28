@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:07:58 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:18:30 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/28 15:56:23 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,35 @@ class CGI {
 		~CGI();
 		void		executeCGI(std::string &body);
 		std::string readOutput();
-		void		setupIn();
+		void		setupInFile();
 		
 	private:
-		void	_initEnvironment(Request &request, Server &server);
-		void	_convertEnvironment();
-		std::string _setRedirectStatus();
+		void	_initializeEnvironment(Request &request, Server &server);
+		void	_convertEnvironmentMapToArray();
+		void	_convertLoop();
+		char*	_createEnvLine(std::map<std::string, std::string>::const_iterator it);
+		std::string	_readOutputLoop();
+
+		void	_setEnvContentType(Request &request);
+		void	_setEnvPathInfo(Request &request);
+		void	_setEnvPathTranslated(Request &request);
+		void	_setEnvQueryString(Request &request);
+		void	_setEnvRequestMethod(Request &request);
+		void	_setEnvRequestUri(Request &request);
+		void	_setEnvScriptName(Request &request);
+		void	_setEnvContentLength(Request &request);
+		void	_setEnvRemoteAddr(Server &server);
+		void	_setEnvServerPort(Server &server);
+		void	_setEnvServerName(std::map<std::string, std::string> requestDefaultHeaders);
+		void	_setEnvAuthType(std::map<std::string, std::string> requestDefaultHeaders);
+		void	_createEnvMap(std::map<std::string, std::string> AllCGIHeaders);
+		void	_setEnvGatewayInterface();
+		void	_setEnvRedirectStatus();
+		void	_setEnvRemoteAddr();
+		void	_setEnvRemoteUser();
+		void	_setEnvScriptFilename();
+		void	_setEnvServerProtocol();
+		void	_setEnvServerSoftware();
 
 		int	_fileIn;
 		int	_fileOut;

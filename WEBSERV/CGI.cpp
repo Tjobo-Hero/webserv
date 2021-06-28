@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:12:22 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 14:49:40 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/28 16:03:22 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,12 @@
 #include "ConnectionUtils.hpp"
 #include "Error.hpp"
 
+// writing clean but haven't looked at throws or errormessages yet
+
 CGI::CGI(std::string &path, Request &request, Server &server) :
 	_path(path),
 	_type(request.getFileType()) {
-		_initEnvironment(request, server);
+		_initializeEnvironment(request, server);
 	}
 
 CGI::CGI() {}
@@ -33,15 +35,15 @@ CGI::~CGI() {
 	_environment.clear();
 }
 
-void	CGI::setupIn() {
-	if ((this->_fileIn = open("/tmp/utilityFileForCGI_IN.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1) {
+void	CGI::setupInFile() {
+	if ((this->_fileIn = open("/tmp/fileForCGI_IN.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1) {
 		std::cout << "Error CGI" << std::endl;
-		exit(1); // Fix throw
+		exit(1);
 	}
 }
 
 void	CGI::executeCGI(std::string &body) {
-	_convertEnvironment();
+	_convertEnvironmentMapToArray();
 	int		pidStatus;
 	int		returnValue;
 	long	executableStart;
@@ -54,13 +56,13 @@ void	CGI::executeCGI(std::string &body) {
 	if ((_pid = fork()) == -1)
 		exit(1); // check for other throw
 	if (_pid == 0) {
-		if ((this->_fileOut = open("/tmp/utilityFileForCGI_OUT.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1)
+		if ((this->_fileOut = open("/tmp/fileForCGI_OUT.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1)
 			exit(1); // check for other throw
 		if (dup2(this->_fileOut, STDOUT_FILENO) == -1)
 			exit(1); // check for other throw
 		if (close(this->_fileOut) == -1)
 			exit(1); // check for other throw
-		if ((this->_fileIn = open("/tmp/utilityFileForCGI_IN.txt", O_RDONLY, S_IRWXU)) == -1)
+		if ((this->_fileIn = open("/tmp/fileForCGI_IN.txt", O_RDONLY, S_IRWXU)) == -1)
 			exit(1); // check for other throw
 		if (dup2(this->_fileIn, STDIN_FILENO) == -1) {
 			close(this->_fileIn);
@@ -88,88 +90,185 @@ void	CGI::executeCGI(std::string &body) {
 	if (waitpid(0, &pidStatus, 0) == -1)
 		exit(1); // check for other throw
 	Utils::freeArray(_env);
-	if ((this->_fileRet = open("/tmp/utilityFileForCGI_OUT.txt", O_RDONLY)) == -1)
+	if ((this->_fileRet = open("/tmp/fileForCGI_OUT.txt", O_RDONLY)) == -1)
 		exit(1); // check for other throw
 }
 
-void	CGI::_initEnvironment(Request &request, Server &server) {
-	std::stringstream ss;
-	std::map<std::string, std::string> CGIHeaders = request.getCGIHeaders();
-	std::map<std::string, std::string>::iterator it = CGIHeaders.begin();
-	std::map<std::string, std::string> requestHeaders = request.getDefHeaders();
-
-	if (requestHeaders.find("AUTHORIZATION") != requestHeaders.end())
-		this->_environment["AUTH_TYPE"] = requestHeaders["AUTHORIZATION"];
-	ss << request.getBody().length();
-	this->_environment["CONTENT-LENGTH"] = ss.str();
-	ss.clear();
+void CGI::_setEnvContentType(Request &request) {
 	if (request.getBody().empty())
 		this->_environment["CONTENT-TYPE"] = "";
 	else
 		this->_environment["CONTENT-TYPE"] = request.getMethod();
-	this->_environment["GATEWAY_INTERFACE"] = "CGI"; 
+	this->_setEnvPathInfo(request);
+}
+
+void CGI::_setEnvGatewayInterface() {
+	this->_environment["GATEWAY_INTERFACE"] = "CGI";
+	this->_setEnvRedirectStatus();
+}
+
+void CGI::_setEnvPathInfo(Request &request) {
 	this->_environment["PATH_INFO"] = request.getUri() + request.getCGIEnv();
+	this->_setEnvPathTranslated(request);
+}
+
+void CGI::_setEnvPathTranslated(Request &request) {
 	this->_environment["PATH_TRANSLATED"] = request.getUri();
-	this->_environment["REDIRECT_STATUS"] = _setRedirectStatus();
+	this->_setEnvQueryString(request);
+}
+
+void CGI::_setEnvRedirectStatus() {
+	if (this->_type == PHP)
+		this->_environment["REDIRECT_STATUS"] = "200";
+	else
+		this->_environment["REDIRECT_STATUS"] = "CGI";
+	this->_setEnvRemoteAddr();
+}
+
+void CGI::_setEnvQueryString(Request &request) {
 	this->_environment["QUERY_STRING"] = request.getCGIEnv();
+	this->_setEnvRequestMethod(request);
+}
+
+void CGI::_setEnvRemoteAddr(Server &server) {
 	this->_environment["REMOTE_ADDR"] = server.getHost();
+	this->_setEnvServerPort(server);
+}
+
+void CGI::_setEnvRemoteAddr() {
 	this->_environment["REMOTE_IDENT"] = "ID"; 
+	this->_setEnvRemoteUser();
+}
+
+void CGI::_setEnvRemoteUser() {
 	this->_environment["REMOTE_USER"] = "USER"; 
+	this->_setEnvScriptFilename();
+}
+
+void CGI::_setEnvRequestMethod(Request &request) {
 	this->_environment["REQUEST_METHOD"] = request.getMethod();
+	this->_setEnvRequestUri(request);
+}
+
+void CGI::_setEnvRequestUri(Request &request) {
 	this->_environment["REQUEST_URI"] = request.getUri();
+	this->_setEnvScriptName(request);
+}
+
+void CGI::_setEnvScriptName(Request &request) {
 	this->_environment["SCRIPT_NAME"] = request.getUri();
-	if (_type == PHP)
-		this->_environment["SCRIPT_FILENAME"] = "php_tester.php";
-	if (requestHeaders.find("HOST") != requestHeaders.end())
-		this->_environment["SERVER_NAME"] = requestHeaders["HOST"];
+	this->_setEnvContentLength(request);
+}
+
+void CGI::_setEnvServerName(std::map<std::string, std::string> requestDefaultHeaders) {
+	if (requestDefaultHeaders.find("HOST") != requestDefaultHeaders.end())
+		this->_environment["SERVER_NAME"] = requestDefaultHeaders["HOST"];
 	else
 		this->_environment["SERVER_NAME"] = this->_environment["REMOTE_ADDR"];
+	this->_setEnvAuthType(requestDefaultHeaders);
+}
+
+void CGI::_setEnvScriptFilename() {
+	if (this->_type == PHP)
+		this->_environment["SCRIPT_FILENAME"] = "php_tester.php";
+	this->_setEnvServerProtocol();
+}
+
+void CGI::_setEnvServerPort(Server &server) {
+	std::stringstream ss;
+	
 	ss << server.getPortNumber();
 	this->_environment["SERVER_PORT"] = ss.str();
 	ss.clear();
+}
+
+void CGI::_setEnvServerProtocol() {
 	this->_environment["SERVER_PROTOCOL"] = "HTTP/1.1";
+	this->_setEnvServerSoftware();
+}
+
+void CGI::_setEnvServerSoftware() {
 	this->_environment["SERVER_SOFTWARE"] = "Webserver project RRT";
-    for (; it != CGIHeaders.end(); it++) {
-        _environment.insert(std::make_pair(it->first, it->second));
+}
+
+void CGI::_createEnvMap(std::map<std::string, std::string> allCGIHeaders) {
+	std::map<std::string, std::string>::iterator it = allCGIHeaders.begin();
+	
+	for (; it != allCGIHeaders.end(); it++) {
+		_environment.insert(std::make_pair(it->first, it->second));
 	}
 }
 
-std::string	CGI::readOutput() {
+void	CGI::_setEnvAuthType(std::map<std::string, std::string> requestDefaultHeaders) {
+	if (requestDefaultHeaders.find("AUTHORIZATION") != requestDefaultHeaders.end())
+		this->_environment["AUTH_TYPE"] = requestDefaultHeaders["AUTHORIZATION"];
+}
+
+void	CGI::_setEnvContentLength(Request &request) {
+	std::stringstream ss;
+	
+	ss << request.getBody().length();
+	this->_environment["CONTENT-LENGTH"] = ss.str();
+	ss.clear();
+}
+
+void	CGI::_initializeEnvironment(Request &request, Server &server) {
+	std::map<std::string, std::string> allCGIHeaders = request.getCGIHeaders();
+	std::map<std::string, std::string> requestDefaultHeaders = request.getDefHeaders();
+	
+	// kan dit nog mooier?
+	this->_setEnvContentType(request);
+	this->_setEnvRemoteAddr(server);
+	this->_setEnvServerName(requestDefaultHeaders);
+	this->_setEnvGatewayInterface();
+	this->_createEnvMap(allCGIHeaders);
+}
+
+std::string	CGI::_readOutputLoop() {
 	char buff[MB];
 	int readRet = 1;
-	std::string ret;
+	std::string tmp;
+
 	while (readRet) {
 		bzero(buff, MB);
 		if ((readRet = read(this->_fileRet, buff, MB -1)) == -1)
 			exit(1);
-		ret += buff;
+		tmp += buff;
 	}
+	return tmp;
+}
+
+std::string	CGI::readOutput() {
+	std::string returnOutputContent;
+	
+	returnOutputContent = this->_readOutputLoop();
 	if (close(this->_fileRet) == -1)
 		exit(1);
-	return ret;
+	return returnOutputContent;
 }
 
-std::string	CGI::_setRedirectStatus() {
-	if (this->_type == PHP)
-		return ("200");
-	else
-		return ("CGI");
+char*	CGI::_createEnvLine(std::map<std::string, std::string>::const_iterator it) {
+	std::string line = it->first + "=" + it->second;
+	return strdup(line.c_str());
 }
 
-void	CGI::_convertEnvironment() { //  creating our _env var from our _environment map
+void	CGI::_convertLoop() {
 	std::map<std::string, std::string>::const_iterator it = this->_environment.begin();
-
-	this->_env = new char*[this->_environment.size() + 1];
-	if (!_env)
-		return ;
+	
 	int i = 0;
 	for (; it != this->_environment.end(); it++) {
-		std::string tmp = it->first + "=" + it->second; // add key to value
-		this->_env[i] = strdup(tmp.c_str());
+		this->_env[i] = this->_createEnvLine(it);
 		if (!this->_env[i]) {
-			exit(1); // do we have to do this as well?
+			exit(1);
 		}
 		++i;
 	}
-	_env[i] = NULL;
+	this->_env[i] = NULL;
+}
+
+void	CGI::_convertEnvironmentMapToArray() {
+	this->_env = new char*[this->_environment.size() + 1];
+	if (!_env)
+		return ;
+	this->_convertLoop();
 }
