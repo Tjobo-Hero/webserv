@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:30:43 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/29 12:10:02 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include "Server.hpp"
 
 class ServerCluster;
+
+void	outputErrorMessageAndExitCode(const std::string &errorMessage, int exitCode);
 
 extern Connection *g_recentConnection;
 

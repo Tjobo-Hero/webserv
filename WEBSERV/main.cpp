@@ -6,13 +6,18 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/25 13:00:24 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/29 12:07:34 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigParser.hpp"
 #include "ServerCluster.hpp"
 #include "Webserver.hpp"
+
+void	outputErrorMessageAndExitCode(const std::string &errorMessage, int exitCode) {
+	std::cerr << "error: " << errorMessage << std::endl;
+	exit(exitCode);
+}
 
 int main (int argc, char **argv)
 {

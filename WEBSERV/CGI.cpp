@@ -6,15 +6,13 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:12:22 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/28 16:03:22 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/29 12:14:00 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
 #include "ConnectionUtils.hpp"
 #include "Error.hpp"
-
-// writing clean but haven't looked at throws or errormessages yet
 
 CGI::CGI(std::string &path, Request &request, Server &server) :
 	_path(path),
@@ -38,60 +36,122 @@ CGI::~CGI() {
 void	CGI::setupInFile() {
 	if ((this->_fileIn = open("/tmp/fileForCGI_IN.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1) {
 		std::cout << "Error CGI" << std::endl;
-		exit(1);
+		outputErrorMessageAndExitCode("open()", 1);
 	}
 }
 
-void	CGI::executeCGI(std::string &body) {
-	_convertEnvironmentMapToArray();
-	int		pidStatus;
-	int		returnValue;
-	long	executableStart;
-	
-	returnValue = write(this->_fileIn, body.c_str(), body.length());
+void	CGI::checkForWriteErrors(int returnValue) {
 	if (close(this->_fileIn) == -1)
-		exit(1); // check for other throw
+		outputErrorMessageAndExitCode("close()", 1);
 	if (returnValue == -1)
-		exit(1); // check for other throw
-	if ((_pid = fork()) == -1)
-		exit(1); // check for other throw
-	if (_pid == 0) {
-		if ((this->_fileOut = open("/tmp/fileForCGI_OUT.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1)
-			exit(1); // check for other throw
-		if (dup2(this->_fileOut, STDOUT_FILENO) == -1)
-			exit(1); // check for other throw
-		if (close(this->_fileOut) == -1)
-			exit(1); // check for other throw
-		if ((this->_fileIn = open("/tmp/fileForCGI_IN.txt", O_RDONLY, S_IRWXU)) == -1)
-			exit(1); // check for other throw
-		if (dup2(this->_fileIn, STDIN_FILENO) == -1) {
-			close(this->_fileIn);
-			exit(1); // check for other throw
-		}
-		close(this->_fileIn);
-		if (this->_type == PHP)
-			_path = "cgi-bin/php-cgi";
-		executableStart = _path.rfind('/') + 1;
-		std::string executable = _path.substr(executableStart);
-		std::string pathStart = _path.substr(0, executableStart);
-		if (chdir(pathStart.c_str()) == -1) // if path not excisting
-			exit(1); // check for other throw
-		const char*	realArgv[2]; // why const if changed later?
-		realArgv[0] = executable.c_str();
-		realArgv[1] = NULL;
-		char *const *argv = const_cast<char *const *>(realArgv); // why cast?
-		int ret = execve(argv[0], reinterpret_cast<char *const *>(argv), _env); // execute env var
-		if (ret < 0) {
-			Utils::freeArray(_env);
-			exit(1); // check for other throw
-		}
-	}
-	// std::string ret;
-	if (waitpid(0, &pidStatus, 0) == -1)
-		exit(1); // check for other throw
-	Utils::freeArray(_env);
+		outputErrorMessageAndExitCode("write()", 1);
+}
+
+void	CGI::createForkAndCheckError() {
+	if ((this->_pid = fork()) == -1)
+		outputErrorMessageAndExitCode("fork()", 1);
+}
+
+void	CGI::openOutputFileCGI() {
+	if ((this->_fileOut = open("/tmp/fileForCGI_OUT.txt", O_CREAT | O_TRUNC | O_RDWR, S_IRWXU)) == -1)
+		outputErrorMessageAndExitCode("open()", 1);
+}
+
+void	CGI::dupOutputFileCGI() {
+	if (dup2(this->_fileOut, STDOUT_FILENO) == -1)
+		outputErrorMessageAndExitCode("dup2()", 1);
+}
+
+void	CGI::closeOutputFileCGI() {
+	if (close(this->_fileOut) == -1)
+		outputErrorMessageAndExitCode("close()", 1);
+}
+
+void	CGI::openInputFileCGI() {
+	if ((this->_fileIn = open("/tmp/fileForCGI_IN.txt", O_RDONLY, S_IRWXU)) == -1)
+		outputErrorMessageAndExitCode("open()", 1);
+}
+
+void	CGI::openInputFileCGI_ReadOnly() {
 	if ((this->_fileRet = open("/tmp/fileForCGI_OUT.txt", O_RDONLY)) == -1)
-		exit(1); // check for other throw
+		outputErrorMessageAndExitCode("open()", 1);
+}
+
+void	CGI::dupInputFileCGI() {
+	if (dup2(this->_fileIn, STDIN_FILENO) == -1) {
+		closeInputFileCGI();
+		outputErrorMessageAndExitCode("dup2()", 1);
+	}
+}
+
+void	CGI::closeInputFileCGI() {
+	if (close(this->_fileIn) == -1)
+		outputErrorMessageAndExitCode("close()", 1);
+}
+
+void	CGI::setupInputFileCGI() {
+	openInputFileCGI();
+	dupInputFileCGI();
+	closeInputFileCGI();
+}
+
+void	CGI::setupOutputFileCGI() {
+	openOutputFileCGI();
+	dupOutputFileCGI();
+	closeOutputFileCGI();
+}
+
+std::string	CGI::setupCGIPath() {
+	long	executableStart;
+
+	if (this->_type == PHP)
+		_path = "cgi-bin/php-cgi";
+	executableStart = _path.rfind('/') + 1;
+	std::string executable = _path.substr(executableStart);
+	std::string pathStart = _path.substr(0, executableStart);
+	if (chdir(pathStart.c_str()) == -1)
+		outputErrorMessageAndExitCode("chdir()", 1);
+	return executable;
+}
+
+void	CGI::checkExecveError(int ret) {
+	if (ret < 0) {
+		Utils::freeArray(_env);
+		outputErrorMessageAndExitCode("freeArray()", 1);
+	}
+}
+
+void	CGI::castAndExecute(std::string executable) {
+	const char*	realArgv[2];
+	realArgv[0] = executable.c_str();
+	realArgv[1] = NULL;
+	char *const *argv = const_cast<char *const *>(realArgv);
+	int ret = execve(argv[0], reinterpret_cast<char *const *>(argv), _env);
+	checkExecveError(ret);
+}
+
+void	CGI::startForkForCGIAndExecute() {
+	int		pidStatus;
+
+	createForkAndCheckError();
+	if (this->_pid == 0) {
+		setupOutputFileCGI();
+		setupInputFileCGI();
+		castAndExecute(setupCGIPath());
+	}
+	if (waitpid(0, &pidStatus, 0) == -1)
+		outputErrorMessageAndExitCode("waitpid()", 1);
+}
+
+void	CGI::executeCGI(std::string &body) {
+	int		returnValue;
+	
+	_convertEnvironmentMapToArray();
+	returnValue = write(this->_fileIn, body.c_str(), body.length());
+	checkForWriteErrors(returnValue);
+	startForkForCGIAndExecute();
+	Utils::freeArray(_env);
+	openInputFileCGI_ReadOnly();
 }
 
 void CGI::_setEnvContentType(Request &request) {
@@ -212,15 +272,19 @@ void	CGI::_setEnvContentLength(Request &request) {
 	ss.clear();
 }
 
-void	CGI::_initializeEnvironment(Request &request, Server &server) {
-	std::map<std::string, std::string> allCGIHeaders = request.getCGIHeaders();
+void	CGI::_setAllEnvVariables(Request &request, Server &server) {
 	std::map<std::string, std::string> requestDefaultHeaders = request.getDefHeaders();
-	
-	// kan dit nog mooier?
+
 	this->_setEnvContentType(request);
 	this->_setEnvRemoteAddr(server);
 	this->_setEnvServerName(requestDefaultHeaders);
 	this->_setEnvGatewayInterface();
+}
+
+void	CGI::_initializeEnvironment(Request &request, Server &server) {
+	std::map<std::string, std::string> allCGIHeaders = request.getCGIHeaders();
+	
+	this->_setAllEnvVariables(request, server);
 	this->_createEnvMap(allCGIHeaders);
 }
 
@@ -232,7 +296,7 @@ std::string	CGI::_readOutputLoop() {
 	while (readRet) {
 		bzero(buff, MB);
 		if ((readRet = read(this->_fileRet, buff, MB -1)) == -1)
-			exit(1);
+			outputErrorMessageAndExitCode("read()", 1);
 		tmp += buff;
 	}
 	return tmp;
@@ -243,7 +307,7 @@ std::string	CGI::readOutput() {
 	
 	returnOutputContent = this->_readOutputLoop();
 	if (close(this->_fileRet) == -1)
-		exit(1);
+		outputErrorMessageAndExitCode("close()", 1);
 	return returnOutputContent;
 }
 
@@ -259,7 +323,7 @@ void	CGI::_convertLoop() {
 	for (; it != this->_environment.end(); it++) {
 		this->_env[i] = this->_createEnvLine(it);
 		if (!this->_env[i]) {
-			exit(1);
+			outputErrorMessageAndExitCode("malloc()", 1);
 		}
 		++i;
 	}

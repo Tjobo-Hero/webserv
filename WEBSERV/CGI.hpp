@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:07:58 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/28 15:56:23 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/29 12:01:54 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,21 @@ class CGI {
 		CGI(CGI &src);
 		~CGI();
 		void		executeCGI(std::string &body);
+		void		checkForWriteErrors(int returnValue);
+		void		startForkForCGIAndExecute();
+		void		createForkAndCheckError();
+		void		setupInputFileCGI();
+		void		setupOutputFileCGI();
+		void		openOutputFileCGI();
+		void		dupOutputFileCGI();
+		void		closeOutputFileCGI();
+		void		openInputFileCGI();
+		void		dupInputFileCGI();
+		void		closeInputFileCGI();
+		void		openInputFileCGI_ReadOnly();
+		std::string	setupCGIPath();
+		void		castAndExecute(std::string executable);
+		void		checkExecveError(int ret);
 		std::string readOutput();
 		void		setupInFile();
 		
@@ -34,6 +49,7 @@ class CGI {
 		char*	_createEnvLine(std::map<std::string, std::string>::const_iterator it);
 		std::string	_readOutputLoop();
 
+		void	_setAllEnvVariables(Request &request, Server& server);
 		void	_setEnvContentType(Request &request);
 		void	_setEnvPathInfo(Request &request);
 		void	_setEnvPathTranslated(Request &request);
@@ -54,6 +70,7 @@ class CGI {
 		void	_setEnvScriptFilename();
 		void	_setEnvServerProtocol();
 		void	_setEnvServerSoftware();
+
 
 		int	_fileIn;
 		int	_fileOut;
