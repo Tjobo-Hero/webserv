@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Location.cpp                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:22:46 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/29 17:58:22 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@ Location::Location(std::string &match) : _autoIndex(false), _ownAutoIndex(false)
 	return;
 }
 
-Location::Location(Location const &src) {
+Location::Location(Location const &src)
+{
 	if (this != &src)
 		*this = src;
 	return;
 }
 
-Location::~Location(void) {
-	return;
-}
+Location::~Location(void){}
 
 Location&	Location::operator=(Location const &obj)
 {
-	if (this != &obj) {
+	if (this != &obj)
+	{
 		this->_autoIndex = obj._autoIndex;
 		this->_match = obj._match;
 		this->_root = obj._root;
@@ -59,10 +59,12 @@ Location&	Location::operator=(Location const &obj)
 	return *this;
 }
 
-void		Location::printLocation() const {
+void		Location::printLocation() const
+{
 	std::cout << *this << std::endl;
 }
 
+/* WAT TE DOEN */
 void		Location::setAutoIndex(const std::string &autoIndex)
 {
 	this->_ownAutoIndex = true;
@@ -71,8 +73,10 @@ void		Location::setAutoIndex(const std::string &autoIndex)
 		this->_autoIndex = true;
 		return;
 	}
-	if (autoIndex != "off")
+	// if (autoIndex != "off")
+	//
 	{;}
+	// return;
 }
 
 void		Location::setMaxBodySize(const std::string &maxBodySize)
@@ -88,27 +92,31 @@ void		Location::setMaxBodySize(const std::string &maxBodySize)
 	return;
 }
 
-void		Location::setRoot(const std::string &root) {
+void		Location::setRoot(const std::string &root)
+{
 	this->_root = root;
 	return;
 }
 
-void		Location::setMethod(const std::string &method) {
+void		Location::setMethod(const std::string &method)
+{
 	std::stringstream ss;
 	std::string	methods;
-	
+
 	ss << method;
 	while (ss >> methods)
 		this->_methods.push_back(methods);
 	return;
 }
 
-void		Location::setErrorPage(const std::string &errorPage) {
+void		Location::setErrorPage(const std::string &errorPage)
+{
 	this->_errorPage = errorPage;
 	return;
 }
 
-void		Location::setIndices(const std::string &indices) {
+void		Location::setIndices(const std::string &indices)
+{
 	std::stringstream ss;
 	std::string	index;
 
@@ -118,7 +126,8 @@ void		Location::setIndices(const std::string &indices) {
 	return;
 }
 
-void		Location::setCgiPath(const std::string &cgiPath) {
+void		Location::setCgiPath(const std::string &cgiPath)
+{
 	this->_cgiPath = cgiPath;
 	return;
 }
@@ -131,15 +140,16 @@ void		Location::setAuthBasic(const std::string &authBasic)
 
 void		Location::setHTPasswordPath(const std::string &passwordpath) // check if done compiling
 {
-	struct stat statstruct = {};
-	
+	struct stat statstruct =
+	{};
+
 	std::fstream configFile;
 	std::string line;
 
 	if (stat(passwordpath.c_str(), &statstruct) == -1)
 		throw parseError("set password path error", "check input");
 	this->_htpasswd_path = passwordpath;
-		
+
 	configFile.open(this->_htpasswd_path.c_str());
 	if (!configFile)
 		throw openFileError("Error: failed to open filepath: ", this->_htpasswd_path);
@@ -164,85 +174,108 @@ const bool&	Location::hasOwnBodySize() const
 	return this->_ownBodySize;
 }
 
-const bool&	Location::getAutoIndex() const {
+const bool&	Location::getAutoIndex() const
+{
 	return this->_autoIndex;
 }
 
-const size_t&	Location::getMaxBodySize() const {
+const size_t&	Location::getMaxBodySize() const
+{
 	return this->_maxBodySize;
 }
 
-const std::string&	Location::getHTPasswordPath() const {
+const std::string&	Location::getHTPasswordPath() const
+{
 	return this->_htpasswd_path;
 }
 
-const std::string&	Location::getMatch() const {
+const std::string&	Location::getMatch() const
+{
 	return this->_match;
 }
 
-const std::string&	Location::getRoot() const {
+const std::string&	Location::getRoot() const
+{
 	return this->_root;
 }
 
-const std::string&	Location::getErrorPage() const {
+const std::string&	Location::getErrorPage() const
+{
 	return this->_errorPage;
 }
 
-const std::vector<std::string>&	Location::getIndices() const {
+const std::vector<std::string>&	Location::getIndices() const
+{
 	return this->_indices;
 }
 
-const std::vector<std::string>&	Location::getMethods() const {
+const std::vector<std::string>&	Location::getMethods() const
+{
 	return this->_methods;
 }
 
-const std::string&	Location::getCGIPath() const {
+const std::string&	Location::getCGIPath() const
+{
 	return this->_cgiPath;
 }
 
-const std::string&	Location::getAuthBasic() const {
+const std::string&	Location::getAuthBasic() const
+{
 	return this->_authBasic;
 }
 
-const std::string&	Location::getAuthUserFile() const {
+const std::string&	Location::getAuthUserFile() const
+{
 	return this->_authBasicUserFile;
 }
 
-const bool&		Location::getIsFileExtension() const {
+const bool&		Location::getIsFileExtension() const
+{
 	return this->_isFileExtension;
 }
 
-const std::map<std::string, std::string>&	Location::getLogInfo() const {
+const std::map<std::string, std::string>&	Location::getLogInfo() const
+{
 	return this->_loginfo;
 }
-void				Location::findKey(std::string &key, std::string configLine, int lineCount) {
-	std::map<std::string, setter>::iterator it;
 
+void	Location::createParameter(std::string &key, std::string configLine)
+{
 	std::string parameter;
 
-	if (*(configLine.rbegin()) != ';')
-		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
-	it = this->_typeFunctionMap.find(key);
-	if (it == this->_typeFunctionMap.end())
-		throw parseError("key invalid, not found key: " + key + " ", lineCount);
-	configLine.resize(configLine.size() - 1); // remove ';'
+	configLine.resize(configLine.size() - 1);
 	parameter = configLine.substr(configLine.find_first_of(WHITESPACE) + 1);
-	parameter = Utils::removeLeadingAndTrailingSpaces(parameter);
+	Utils::removeSpacesBeforeAfter(&parameter);
 	(this->*(this->_typeFunctionMap.at(key)))(parameter);
 }
 
-// TODO: deze functie kan echt veel mooier
-bool			Location::parameterCheck(int &lineCount) const {
-	std::vector<std::string>::const_iterator it;
+void	Location::findKey(std::string &key, std::string configLine, int lineCount)
+{
+	std::map<std::string, setter>::iterator it;
 
-	for (it = this->_methods.begin(); it != this->_methods.end(); ++it)
-	{
-		if ((*it) != allowedMethods[0] && (*it) != allowedMethods[1] && (*it) != allowedMethods[2] && (*it) != allowedMethods[3] && (*it) != allowedMethods[4])
+	if (*(configLine.rbegin()) != ';')
+		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
+	if ((it = this->_typeFunctionMap.find(key)) == this->_typeFunctionMap.end())
+		throw parseError("key invalid, not found key: " + key + " ", lineCount);
+	createParameter(key, configLine);
+}
+
+bool	Location::checkAllowedMethods(const std::string method) const
+{
+	for (int i = 0; i < 5; ++i)
+		if (method == allowedMethods[i])
+			return true;
+	return false;
+}
+
+bool	Location::parameterCheck(int &lineCount) const
+{
+	for (std::vector<std::string>::const_iterator it = this->_methods.begin(); it != this->_methods.end(); ++it)
+		if (checkAllowedMethods(*it) == false)
 			throw parseError("invalid method ", lineCount);
-	}
 	if (this->_root.empty() == true)
 		throw parseError("missing root ", lineCount);
-	return true;	
+	return true;
 }
 
 bool Location::getAuthMatch(const std::string& username, const std::string& password)
@@ -272,13 +305,15 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 	std::cout << std::setfill('.') << std::left;
 	os	<< std::setw(15) << std::left << "location:" << location.getMatch() << '\n'
 		<< std::setw(15) << "method:";
-	for (;!locationMethods.empty() && it_location_methods != locationMethods.end(); ++it_location_methods) {
+	for (;!locationMethods.empty() && it_location_methods != locationMethods.end(); ++it_location_methods)
+	{
 		os << *it_location_methods;
 	}
 	os	<< '\n'
 		<< std::setw(15) << std::left << "root:" << location.getRoot() << '\n'
 		<< std::setw(15) << std::left << "index:";
-	for (;!locationIndices.empty() && it_location_indices!= locationIndices.end(); ++it_location_indices) {
+	for (;!locationIndices.empty() && it_location_indices!= locationIndices.end(); ++it_location_indices)
+	{
 		os << *it_location_indices;
 	}
 	os	<< '\n'

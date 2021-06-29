@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ServerCluster.cpp                                  :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:46:53 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/29 17:16:11 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ ServerCluster::ServerCluster(ServerCluster const &src) {
 }
 
 ServerCluster::~ServerCluster() {
-	
+
 	std::vector<Server*>::iterator it = this->_allServers.begin();
 	for (; this->_allServers.empty() && it != this->_allServers.end(); ++it) {
 		delete(*it);
@@ -62,7 +62,7 @@ void			ServerCluster::checkDuplicatePorts() {
 	std::vector<Server*>::const_iterator it1 = this->_allServers.begin();
 	std::vector<Server*>::const_iterator it2;
 
-	if (this->_allServers.size() < 2) 
+	if (this->_allServers.size() < 2)
 		return;
 	for (; it1 != this->_allServers.end(); ++it1) {
 		it2 = it1;

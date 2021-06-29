@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   ConfigParser.hpp                                   :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:19:06 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/29 16:52:49 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define CONFIGPARSER_HPP
 
 #include "Webserver.hpp"
-#include "Libraries.hpp"
+#include "Error.hpp"
 #include "ParserUtils.hpp"
 #include "Server.hpp"
 #include "Location.hpp"
@@ -24,15 +24,18 @@ class ConfigParser
 {
 	private:
 
-		std::fstream _configFile;
-		int	_argc;
-		char **_argv;
-		int _lineCount;
+		std::fstream 						_configFile;
+		std::vector<std::string>			_configLines;
+		std::vector<std::string>::iterator	_it;
+
+		std::vector<int>					_configCount;
+		std::vector<int>::iterator			_count_it;
+		char								**_argv;
 		ConfigParser(void);
 
 	public:
 
-		ConfigParser(int argc, char **argv);
+		ConfigParser(char **argv);
 		ConfigParser(ConfigParser const &src);
 		~ConfigParser(void);
 
@@ -43,7 +46,21 @@ class ConfigParser
 		Location*		getLocation(std::string &startline);
 		void			openConfigFile();
 		std::fstream&	getConfigFile();
-		static int				getLineCount();
+		static int		getLineCount();
+
+		void			getServerBlock(ServerCluster *serverCluster, std::string configLine);
+		void			lookingForServer(ServerCluster *serverCluster);
+
+		void			createServer(ServerCluster *serverCluster);
+		void			setLocation(Server *newServer);
+
+		bool			receiveNextLine(std::string *line, size_t *count);
+		void			removeComments(std::string *line);
+		bool			createLine(std::string *line, size_t *count);
+		void			createArray();
+
+		void			printFile();
+		void			plusIterators();
 
 };
 

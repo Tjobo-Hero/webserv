@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Location.hpp                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:22:57 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/29 17:59:50 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ class Location
 		std::map<std::string, std::string>	_loginfo;
 
 		Location(void);
-		
+
 	public:
 
 		explicit Location(std::string &match);
@@ -77,11 +77,13 @@ class Location
 		const std::vector<std::string>&	getMethods() const;
 		const std::vector<std::string>&	getIndices() const;
 		const std::map<std::string, std::string>&	getLogInfo() const;
-		
+
 		bool				getAuthMatch(const std::string &username, const std::string &password);
-		
+
 		void				findKey(std::string &key, std::string line, int lineCount);
 		bool				parameterCheck(int &lineCount) const;
+		void				createParameter(std::string &key, std::string configLine);
+		bool				checkAllowedMethods(const std::string method) const;
 };
 
 std::ostream&	operator<<(std::ostream &os, const Location &location);

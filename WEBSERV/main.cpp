@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   main.cpp                                           :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:23:02 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/29 16:54:42 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,16 @@
 int main (int argc, char **argv)
 {
 	ServerCluster	serverCluster;
-	ConfigParser	configParser(argc, argv);
+	ConfigParser	configParser(argv);
 	if (argc == 2)
 	{
-		try 
+		try
 		{
 			configParser.openConfigFile();
 			configParser.parseTheConfigFile(&serverCluster);
-			serverCluster.checkDuplicatePorts();
-			serverCluster.startup();
-			serverCluster.startListening();
+			// serverCluster.checkDuplicatePorts();
+			// serverCluster.startup();
+			// serverCluster.startListening();
 		}
 		catch (std::exception &e)
 		{
