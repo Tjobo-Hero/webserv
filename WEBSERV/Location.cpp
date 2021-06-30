@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/29 17:58:22 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/06/30 16:14:07 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,16 +306,12 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 	os	<< std::setw(15) << std::left << "location:" << location.getMatch() << '\n'
 		<< std::setw(15) << "method:";
 	for (;!locationMethods.empty() && it_location_methods != locationMethods.end(); ++it_location_methods)
-	{
 		os << *it_location_methods;
-	}
 	os	<< '\n'
 		<< std::setw(15) << std::left << "root:" << location.getRoot() << '\n'
 		<< std::setw(15) << std::left << "index:";
 	for (;!locationIndices.empty() && it_location_indices!= locationIndices.end(); ++it_location_indices)
-	{
 		os << *it_location_indices;
-	}
 	os	<< '\n'
 		<< std::setw(15) << std::left << "auth_basic:" << location.getAuthBasic() << '\n'
 		<< std::setw(15) << std::left << "auth_basic_user_file:" << location.getHTPasswordPath() << '\n'
@@ -326,9 +322,7 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 		<< std::setw(15) << std::left << "error_page:" << location.getErrorPage() << '\n'
 		<< std::setw(15) << std::setfill(' ') << "Log info:" << '\n';
 	for (; !locationLogInfo.empty() && it_location_loginfo != locationLogInfo.end(); ++it_location_loginfo)
-	{
 		os << "User:" << it_location_loginfo->first << "Password:" << it_location_loginfo->second << '\n';
-	}
 	os << "----------------------------------\n";
 	return os;
 }

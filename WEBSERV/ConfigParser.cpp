@@ -6,45 +6,43 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/29 18:03:35 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/06/30 15:00:53 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ConfigParser.hpp"
 
-ConfigParser::ConfigParser(char **argv) :_argv(argv) {
-	return;
-}
+ConfigParser::ConfigParser(char **argv) :_argv(argv){}
 
-ConfigParser::ConfigParser(ConfigParser const &src) {
+ConfigParser::ConfigParser(ConfigParser const &src)
+{
 	if (this != &src)
 		*this = src;
 	return;
 }
 
-ConfigParser::~ConfigParser() {
-	return;
-}
+ConfigParser::~ConfigParser(){}
 
 ConfigParser&	ConfigParser::operator=(ConfigParser const &obj)
 {
-	if (this != &obj) {
+	if (this != &obj)
+	{
 		this->_argv = obj._argv;
+		this->_configLines = obj._configLines;
+		this->_it = obj._it;
+		this->_configCount = obj._configCount;
+		this->_configCount = obj._configCount;
+		this->_count_it = obj._count_it;
+
 	}
 	return *this;
-}
-
-std::fstream&	ConfigParser::getConfigFile()
-{
-	return this->_configFile;
 }
 
 void	ConfigParser::openConfigFile()
 {
 	this->_configFile.open(this->_argv[1]);
-	if (!this->_configFile)	{
+	if (!this->_configFile)
 		throw openFileError("Error: failed to open filepath: ", this->_argv[1]);
-	}
 }
 
 void	ConfigParser::removeComments(std::string *line)
@@ -98,7 +96,7 @@ void	ConfigParser::createServer(ServerCluster *serverCluster)
 	newServer->setAutoIndexOfLocations();
 	newServer->parameterCheck(*this->_count_it);
 	serverCluster->addServer(newServer);
-	std::cout << *newServer << std::endl;
+	// std::cout << *newServer << std::endl;
 }
 
 void	ConfigParser::plusIterators(void)
@@ -156,33 +154,13 @@ void	ConfigParser::createArray(void)
 		throw parseError("Brackets aren't closed ", count);
 }
 
-void	ConfigParser::printFile(void)
-{
-	std::cout << "Print file:" << std::endl;
-	this->_count_it = _configCount.begin();
-	for (this->_it = _configLines.begin(); this->_it != _configLines.end(); ++this->_it)
-	{
-		std::cout << "[" << *this->_count_it << "] " << *this->_it << std::endl;
-		++this->_count_it;
-	}
-}
-
 void	ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 {
 	this->createArray();
-	// this->printFile();
-
-	// _it = _configLines.begin();
-	// for (_count_it = _configCount.begin(); _count_it != _configCount.end(); ++_count_it)
-	// {
-	// 	std::cout << "[" << *_count_it << "] " << *_it << std::endl;
-	// 	++_it;
-	// }
 	this->lookingForServer(serverCluster);
 	if (serverCluster->clusterIsEmpty())
 		throw clusterError("Cluster seems to be empty", "check your input");
 	_configCount.clear();
 	_configLines.clear();
-	(void)serverCluster;
 }
 

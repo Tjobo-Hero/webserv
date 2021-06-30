@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/29 16:52:49 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/06/30 16:13:35 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,30 +38,20 @@ class ConfigParser
 		ConfigParser(char **argv);
 		ConfigParser(ConfigParser const &src);
 		~ConfigParser(void);
-
 		ConfigParser&		operator=(ConfigParser const &obj);
 
-
-		void			parseTheConfigFile(ServerCluster *serverCluster);
-		Location*		getLocation(std::string &startline);
 		void			openConfigFile();
-		std::fstream&	getConfigFile();
-		static int		getLineCount();
-
-		void			getServerBlock(ServerCluster *serverCluster, std::string configLine);
+		void			parseTheConfigFile(ServerCluster *serverCluster);
+		void			createArray();
+		bool			createLine(std::string *line, size_t *count);
+		
 		void			lookingForServer(ServerCluster *serverCluster);
-
 		void			createServer(ServerCluster *serverCluster);
 		void			setLocation(Server *newServer);
 
 		bool			receiveNextLine(std::string *line, size_t *count);
 		void			removeComments(std::string *line);
-		bool			createLine(std::string *line, size_t *count);
-		void			createArray();
-
-		void			printFile();
 		void			plusIterators();
-
 };
 
 #endif

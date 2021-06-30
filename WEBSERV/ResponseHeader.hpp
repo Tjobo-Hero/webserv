@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/22 10:35:27 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/22 11:21:11 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/30 15:24:07 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ class ResponseHeader {
 		std::string getHeader(int status);
 
 	private:
+
+		std::map<int, std::string> _errorStatus;
+		
 		void	setAllow(const int &status);
 		void	setContentLanguage();
 		void	setContentLength(int length);

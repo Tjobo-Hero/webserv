@@ -223,9 +223,7 @@ void	Server::setAutoIndexOfLocations()
 		if ((*it)->hasOwnAutoIndex() == false)
 		{
 			if (this->getAutoIndex() == true)
-			{
 				(*it)->setAutoIndex("on");
-			}
 			else
 				(*it)->setAutoIndex("off");
 		}
@@ -242,10 +240,8 @@ Location*		Server::findLocation(std::string &match)
 {
 	std::vector<Location*>::iterator it;
 	for (it = this->_locations.begin(); !this->_locations.empty() && it != this->_locations.end(); ++it)
-	{
 		if ((*it)->getMatch() == match)
 			return (*it);
-	}
 	return NULL;
 }
 
@@ -280,10 +276,8 @@ int			Server::acceptConnections()
 	int				i;
 
 	for (i = 0; i < NR_OF_CONNECTIONS; i++)
-	{
 		if (this->connections[i].getAcceptFD() == -1)
 			break;
-	}
 	if (i == NR_OF_CONNECTIONS)
 		return (0);
 	this->connections[i].setFD(accept(this->_socketFD, &connectingAddr, &addressLength));

@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:31:31 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/30 16:05:44 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,19 @@ Response::Response(Request &request, Server &server) :
 	return;
 }
 
-Response::Response() {
-	return;
-}
+Response::Response(){}
 
-Response::Response(Response const &src) {
+Response::Response(Response const &src)
+{
 	if (this != &src)
 		*this = src;
 	return;
 }
 
-Response::~Response() {
-	return;
-}
+Response::~Response(){}
 
-Response&	Response::operator=(Response const &obj) {
+Response&	Response::operator=(Response const &obj)
+{
 	if (this != &obj) {
 		this->_response = obj._response;
 		this->_content = obj._content;

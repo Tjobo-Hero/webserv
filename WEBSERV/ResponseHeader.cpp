@@ -6,14 +6,15 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/22 10:51:36 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 10:50:35 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/06/30 15:53:34 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ResponseHeader.hpp"
 #include <cstdlib>
 
-ResponseHeader::ResponseHeader(std::string &content, std::string &path, int status, std::string &contentType) {
+ResponseHeader::ResponseHeader(std::string &content, std::string &path, int status, std::string &contentType)
+{
 	setAllow(status);
 	setContentLanguage();
 	setContentLength(content.length());
@@ -26,10 +27,22 @@ ResponseHeader::ResponseHeader(std::string &content, std::string &path, int stat
 	setServer();
 	setTransferEncoding();
 	setWwwAuthenticate(status);
+	_errorStatus.insert(std::pair<int, std::string>(200, "Ok"));
+ 	_errorStatus.insert(std::pair<int, std::string>(201, "Created"));
+ 	_errorStatus.insert(std::pair<int, std::string>(204, "No content"));
+ 	_errorStatus.insert(std::pair<int, std::string>(400, "Bad Reguest Error"));
+ 	_errorStatus.insert(std::pair<int, std::string>(401, "Unauthorized"));
+ 	_errorStatus.insert(std::pair<int, std::string>(403, "Forbidden"));
+ 	_errorStatus.insert(std::pair<int, std::string>(404, "Not Found"));
+ 	_errorStatus.insert(std::pair<int, std::string>(405, "Method Not Allowed"));
+ 	_errorStatus.insert(std::pair<int, std::string>(413, "Payload too large"));
+ 	_errorStatus.insert(std::pair<int, std::string>(503, "Service unavalable"));
 }
 
-ResponseHeader::ResponseHeader(const ResponseHeader &src) {
-	if (this != &src) {
+ResponseHeader::ResponseHeader(const ResponseHeader &src)
+{
+	if (this != &src)
+	{
 		this->_acceptCharsets = src._acceptCharsets;
 		this->_acceptLanguage = src._acceptLanguage;
 		this->_allow = src._allow;
@@ -47,15 +60,16 @@ ResponseHeader::ResponseHeader(const ResponseHeader &src) {
 		this->_server = src._server;
 		this->_transferEncoding = src._transferEncoding;
 		this->_wwwAuthenticate = src._wwwAuthenticate;
+		this->_errorStatus = src._errorStatus;
 	}
 }
 
-ResponseHeader::~ResponseHeader() {
-	
-}
+ResponseHeader::~ResponseHeader(){}
 
-ResponseHeader	&ResponseHeader::operator=(const ResponseHeader &src) {
-	if (this != &src) {
+ResponseHeader	&ResponseHeader::operator=(const ResponseHeader &src)
+{
+	if (this != &src)
+	{
 		this->_acceptCharsets = src._acceptCharsets;
 		this->_acceptLanguage = src._acceptLanguage;
 		this->_allow = src._allow;
@@ -77,7 +91,8 @@ ResponseHeader	&ResponseHeader::operator=(const ResponseHeader &src) {
 	return *this;
 }
 
-std::string	ResponseHeader::getHeader(int status) {
+std::string	ResponseHeader::getHeader(int status)
+{
 	std::string header;
 	
 	header = "HTTP/1.1 " + std::to_string(status) + " " + createStatusMessage(status) + "\r\n";
@@ -85,34 +100,19 @@ std::string	ResponseHeader::getHeader(int status) {
 	return (header);
 }
 
-// CHANGE TO NICER CODE!!!!!!!!!!!!!!
-std::string	ResponseHeader::createStatusMessage(int status) {
-	if (status == 200)
-		return ("OK");
-	else if (status == 201)
-		return ("Created");
-	else if (status == 204)
-		return ("No content");
-	else if (status == 400)
-		return ("Bad Request Error");
-	else if (status == 401)
-		return ("Unauthorized");
-	else if (status == 403)
-		return ("Forbidden");
-	else if (status == 404)
-		return ("Not _found");
-	else if (status == 405)
-		return ("Method Not Allowed");
-	else if (status == 413)
-		return ("Payload too large");
-	else if (status == 503)
-		return ("Service unavalable");
-	else
-		return ("Unknown Error");
+std::string	ResponseHeader::createStatusMessage(int status)
+{
+	std::map<int, std::string>::iterator it;
+
+	it = this->_errorStatus.find(status);	
+	if (it != this->_errorStatus.end())
+		return it->second;
+	return "Unknown Error";
 }
 
 
-std::string	ResponseHeader::writeHeader() {
+std::string	ResponseHeader::writeHeader()
+{
 	std::string header;
 
 	if (this->_allow.empty() == false)
@@ -145,31 +145,37 @@ std::string	ResponseHeader::writeHeader() {
 	return (header);		
 }
 
-void	ResponseHeader::setAllow(const int &status) {
+void	ResponseHeader::setAllow(const int &status)
+{
 	if (status == 405)
 		this->_allow = "Get, Head, Post, Put";
 	else
 		this->_allow = "";
 }
 
-void	ResponseHeader::setContentLanguage() {
+void	ResponseHeader::setContentLanguage()
+{
 	this->_contentLanguage = "en-US";
 }
 
-void	ResponseHeader::setContentLength(int length) {
+void	ResponseHeader::setContentLength(int length)
+{
 	this->_contentLength = std::to_string(length);
 }
 
-void	ResponseHeader::setContentLocation(const std::string &path, int status) {
+void	ResponseHeader::setContentLocation(const std::string &path, int status)
+{
 	if (status != 404)
 		this->_contentLocation = path;
 }
 
-void	ResponseHeader::setContentType(const std::string &contentType) {
+void	ResponseHeader::setContentType(const std::string &contentType)
+{
 	this->_contentType = contentType;
 }
 
-void	ResponseHeader::setDate() {
+void	ResponseHeader::setDate()
+{
 	char buf[1000];
 	time_t now = time(0);
 	struct tm tm = *gmtime(&now);
@@ -177,33 +183,40 @@ void	ResponseHeader::setDate() {
 	this->_date = buf;
 }
 
-void	ResponseHeader::setLastModified(const std::string &path) {
+void	ResponseHeader::setLastModified(const std::string &path)
+{
 	struct stat stats;
 	struct tm *tm;
 	char buf[1000];
 
-	if (stat(path.c_str(), &stats) == 0) {
+	if (stat(path.c_str(), &stats) == 0)
+	{
 		tm = gmtime(&stats.st_mtime);
 		strftime(buf, sizeof buf, "%a, %d %b %Y %H:%M:%S %Z", tm);
 		this->_lastModified = buf;
 	}
 }
 
-void	ResponseHeader::setLocation(const std::string &path, int status) {
+void	ResponseHeader::setLocation(const std::string &path, int status)
+{
 	if (status == 201 || status / 100 == 3)
 		this->_location = path;
 }
 
-void	ResponseHeader::setServer() {
+void	ResponseHeader::setServer()
+{
 	this->_server = "WEBSERV project RRT";
 }
 
-void	ResponseHeader::setTransferEncoding() {
+void	ResponseHeader::setTransferEncoding()
+{
 	this->_transferEncoding = "Chunked";
 }
 
-void	ResponseHeader::setRetryAfter(int status, int number) {
-	if (status == 503) {
+void	ResponseHeader::setRetryAfter(int status, int number)
+{
+	if (status == 503)
+	{
 		char buf[1000];
 		time_t now = time(0);
 		struct tm tm = *gmtime(&now);
@@ -217,8 +230,8 @@ void	ResponseHeader::setRetryAfter(int status, int number) {
 		_retryAfter = "";
 }
 
-void	ResponseHeader::setWwwAuthenticate(int status) {
-	if (status == 401) {
+void	ResponseHeader::setWwwAuthenticate(int status)
+{
+	if (status == 401)
 		this->_wwwAuthenticate = "Basic realm=\"Access requires authentification\" charset=\"UTF-8\"";
-	}
 }

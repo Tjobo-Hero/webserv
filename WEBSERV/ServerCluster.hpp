@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:50:07 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/06/30 14:35:59 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,14 @@
 class ServerCluster
 {
 	public:
-
 		fd_set readFds;
 		fd_set writeFds;
 	
 	private:
-
-		std::vector<Server*>	_allServers;
-		std::map<int, std::map<int, int> > _doublePorts;
-		int _numberOfServers;
-		long	_highestFD;
+		std::vector<Server*>				_allServers;
+		std::map<int, std::map<int, int> >	_doublePorts;
+		int									_numberOfServers;
+		long								_highestFD;
 	
 	public:	
 

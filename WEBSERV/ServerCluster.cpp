@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/29 17:16:11 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/06/30 14:35:26 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ bool			ServerCluster::clusterIsEmpty() const {
 }
 
 //TODO checken wat dit doet en of het werkt met meerdere Severs die dezelfde port grebruiken
-void			ServerCluster::checkDuplicatePorts() {
+void			ServerCluster::checkDuplicatePorts(void)
+{
 	std::vector<Server*>::const_iterator it1 = this->_allServers.begin();
 	std::vector<Server*>::const_iterator it2;
 
@@ -78,7 +79,9 @@ void			ServerCluster::checkDuplicatePorts() {
 
 void	ServerCluster::startup() {
 	std::vector<Server*>::iterator it = this->_allServers.begin();
-	for (; !this->_allServers.empty() && it != this->_allServers.end(); ++it) {
+	
+	for (; !this->_allServers.empty() && it != this->_allServers.end(); ++it)
+	{
 		(*it)->startListening();
 		FD_SET((*it)->getSocketFD(), &this->readFds);
 		this->_highestFD = std::max(this->_highestFD, (*it)->getSocketFD());
@@ -86,13 +89,14 @@ void	ServerCluster::startup() {
 	}
 }
 
-void	ServerCluster::startListening() {
+void	ServerCluster::startListening()
+{
 	while (true)
 	{
 		fd_set	readSet;
 		fd_set	writeSet;
 		int		ret;
-		long	maxFD= this->_highestFD;
+		long	maxFD = this->_highestFD;
 		std::vector<Server*>::iterator it = this->_allServers.begin();
 		g_recentConnection = NULL;
 		signal(SIGPIPE, Utils::signalHandler); // if we're trying to read or write to a socket that's no longer valid
