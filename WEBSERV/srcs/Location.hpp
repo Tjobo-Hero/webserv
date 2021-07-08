@@ -3,24 +3,24 @@
 /*                                                        ::::::::            */
 /*   Location.hpp                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:22:57 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/07/08 16:56:25 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LOCATION_HPP
 # define LOCATION_HPP
 
-#include "ParserUtils.hpp"
+# include "ParserUtils.hpp"
+// # include "password.hpp"
 
 class Location
 {
-
 	public:
-
 		typedef void	(Location::*setter)(const std::string&);
+
 	private:
 
 		bool	_autoIndex;
@@ -42,7 +42,7 @@ class Location
 		std::map<std::string, std::string>	_loginfo;
 
 		Location(void);
-		
+
 	public:
 
 		explicit Location(std::string &match);
@@ -62,6 +62,8 @@ class Location
 		void	setAuthBasic(const std::string &authBasic);
 		void	setHTPasswordPath(const std::string &passwordpath);
 
+		void	setLogInfo(std::string user, std::string password);
+
 		const bool&		hasOwnAutoIndex() const;
 		const bool&		getAutoIndex() const;
 		const bool&		hasOwnBodySize() const;
@@ -77,11 +79,19 @@ class Location
 		const std::vector<std::string>&	getMethods() const;
 		const std::vector<std::string>&	getIndices() const;
 		const std::map<std::string, std::string>&	getLogInfo() const;
-		
+
 		bool				getAuthMatch(const std::string &username, const std::string &password);
-		
+
 		void				findKey(std::string &key, std::string line, int lineCount);
 		bool				parameterCheck(int &lineCount) const;
+
+
+		friend	void	printInfo2();
+
+		private :
+		bool	checkAllowedMethods(const std::string method) const;
+		void	createParameter(std::string &key, std::string configLine);
+
 };
 
 std::ostream&	operator<<(std::ostream &os, const Location &location);
