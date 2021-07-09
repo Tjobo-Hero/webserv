@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/08 16:56:25 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/09 17:10:29 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 # define LOCATION_HPP
 
 # include "ParserUtils.hpp"
-// # include "password.hpp"
+# include <vector>
+# include "password.hpp"
+
+class Password;
 
 class Location
 {
@@ -39,12 +42,14 @@ class Location
 		std::string	_authBasicUserFile;
 		std::string _cgiPath;
 		std::string	_htpasswd_path;
+
+		protected:
 		std::map<std::string, std::string>	_loginfo;
 
-		Location(void);
 
 	public:
 
+		Location(void);
 		explicit Location(std::string &match);
 		Location(Location const &src);
 		~Location(void);
@@ -61,8 +66,11 @@ class Location
 		void	setCgiPath(const std::string &cgiPath);
 		void	setAuthBasic(const std::string &authBasic);
 		void	setHTPasswordPath(const std::string &passwordpath);
+		void	setHtpPath(const std::string passwordpath);
 
-		void	setLogInfo(std::string user, std::string password);
+		std::vector<std::string>	getLinesFromFile(std::fstream *configFile);
+
+		void	setLogInfo(const Password &password);
 
 		const bool&		hasOwnAutoIndex() const;
 		const bool&		getAutoIndex() const;
@@ -85,10 +93,10 @@ class Location
 		void				findKey(std::string &key, std::string line, int lineCount);
 		bool				parameterCheck(int &lineCount) const;
 
-
-		friend	void	printInfo2();
+		std::map<std::string, std::string>&	getLog();
 
 		private :
+		void	openUserAndPasswordFile(std::fstream *configFile);
 		bool	checkAllowedMethods(const std::string method) const;
 		void	createParameter(std::string &key, std::string configLine);
 

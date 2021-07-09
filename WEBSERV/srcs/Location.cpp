@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/08 16:55:37 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/09 17:38:05 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "./Parser/ConfigParser.hpp"
 #include "Error.hpp"
 #include "password.hpp"
+
+Location::Location(void){}
 
 Location::Location(std::string &match) : _autoIndex(false), _ownAutoIndex(false), _ownBodySize(false), _isFileExtension(false), _maxBodySize(1000000)
 {
@@ -128,36 +130,60 @@ void	Location::setAuthBasic(const std::string &authBasic)
 	this->_authBasic = authBasic;
 }
 
-void	Location::setHTPasswordPath(const std::string &passwordpath) // check if done compiling
+void	Location::openUserAndPasswordFile(std::fstream *configFile)
+{
+	(*configFile).open(this->_htpasswd_path.c_str());
+	if (!*configFile)
+		throw openFileError("Error: failed to open filepath: ", this->_htpasswd_path);
+}
+
+void	Location::setHtpPath(const std::string passwordpath)
+{
+	this->_htpasswd_path = passwordpath;
+}
+
+std::vector<std::string>	Location::getLinesFromFile(std::fstream *configFile)
+{
+	std::vector<std::string> ret;
+	std::string	income;
+
+	while (std::getline(*configFile, income))
+		ret.push_back(income);
+	(*configFile).close();
+	return ret;
+
+}
+
+void	Location::setLogInfo(const Password &password)
+{
+	std::map<std::string, std::string> data = password.getUsersAndPasswords();
+	std::map<std::string, std::string>::iterator it = data.begin();
+	for(; it != data.end(); ++it)
+	{
+		this->_loginfo[it->first] = it->second;
+	}
+}
+
+void	Location::setHTPasswordPath(const std::string &passwordpath)
 {
 	struct stat statstruct = {};
 
 	std::fstream configFile;
-	std::string line;
+	std::vector<std::string> lines;
 
-	std::cout << "PASSWORD: " << passwordpath << std::endl;
 	if (stat(passwordpath.c_str(), &statstruct) == -1)
 		throw parseError("set password path error", "check input");
-	this->_htpasswd_path = passwordpath;
-
-	configFile.open(this->_htpasswd_path.c_str());
-	if (!configFile)
-		throw openFileError("Error: failed to open filepath: ", this->_htpasswd_path);
-
-	while (std::getline(configFile, line))
-	{
-		std::string user;
-		std::string pass;
-		Utils::getKeyValue(line, user, pass, ":", "\n\r#;");
-		this->_loginfo[user] = pass;
-	}
-	configFile.close();
-	Password::printInfo2();
+	setHtpPath(passwordpath);
+	openUserAndPasswordFile(&configFile);
+	lines = getLinesFromFile(&configFile);
+	Password A;
+	A.findUsersAndPasswords(lines);
+	setLogInfo(A);
 	std::map<std::string, std::string>::iterator it = _loginfo.begin();
 	for(; it != _loginfo.end(); ++it)
 	{
-		std::cout << it->first << std::endl;
-		std::cout << it->second << std::endl << std::endl;
+		std::cout << "[User] = " << it->first << std::endl;
+		std::cout << "[Pass] = " << it->second << std::endl << std::endl;
 	}
 }
 
@@ -332,7 +358,7 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 	return os;
 }
 
-void	Location::setLogInfo(std::string user, std::string password)
+std::map<std::string, std::string>&	Location::getLog(void)
 {
-	this->_loginfo[user] = password;
+	return this->_loginfo;
 }
