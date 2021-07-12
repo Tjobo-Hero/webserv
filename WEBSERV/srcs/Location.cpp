@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 14:23:16 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 15:07:46 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,9 +160,7 @@ void	Location::setLogInfo(const UsersAndPasswords &password)
 	std::map<std::string, std::string> data = password.getUsersAndPasswords();
 	std::map<std::string, std::string>::iterator it = data.begin();
 	for(; it != data.end(); ++it)
-	{
 		this->_loginfo[it->first] = it->second;
-	}
 }
 
 void	Location::setHTPasswordPath(const std::string &passwordpath)
@@ -181,7 +179,6 @@ void	Location::setHTPasswordPath(const std::string &passwordpath)
 	A.findUsersAndPasswords(lines);
 	setLogInfo(A);
 }
-
 
 const bool&	Location::hasOwnAutoIndex() const
 {
@@ -256,16 +253,6 @@ const bool&		Location::getIsFileExtension() const
 const std::map<std::string, std::string>&	Location::getLogInfo() const
 {
 	return this->_loginfo;
-}
-
-void	Location::createParameter(std::string &key, std::string configLine)
-{
-	std::string parameter;
-
-	configLine.resize(configLine.size() - 1);
-	parameter = configLine.substr(configLine.find_first_of(WHITESPACE) + 1);
-	Utils::removeSpacesBeforeAfter(&parameter);
-	(this->*(this->_typeFunctionMap.at(key)))(parameter);
 }
 
 void	Location::findKey(std::string &key, std::string configLine, int lineCount)

@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 14:47:46 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 15:16:54 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ void	ConfigParser::setLocation(Server *newServer)
 			throw parseError("location block isn't closed ", *this->_count_it);
 
 		std::string key = Utils::findFirstWord(*this->_it);
-		if (key.size() <= 0)
-			throw parseError("not found " + *this->_it, *this->_count_it);
 		newLocation->findKey(key, *this->_it, *this->_count_it);
 		this->plusIterators();
 	}
@@ -164,6 +162,6 @@ void	ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 		throw clusterError("Cluster seems to be empty", "check your input");
 	_configCount.clear();
 	_configLines.clear();
-	(void)serverCluster;
+	this->_configFile.close();
 }
 

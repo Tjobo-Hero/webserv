@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 14:50:10 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 15:10:41 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,6 @@ class Location
 		void	setHTPasswordPath(const std::string &passwordpath);
 		void	setHtpPath(const std::string passwordpath);
 
-		std::vector<std::string>	getLinesFromFile(std::fstream *configFile);
-
-		void	setLogInfo(const UsersAndPasswords &password);
-
 		const bool&		hasOwnAutoIndex() const;
 		const bool&		getAutoIndex() const;
 		const bool&		hasOwnBodySize() const;
@@ -87,17 +83,18 @@ class Location
 		const std::string&	getAuthUserFile () const;
 		const std::vector<std::string>&	getMethods() const;
 		const std::vector<std::string>&	getIndices() const;
+
 		const std::map<std::string, std::string>&	getLogInfo() const;
+		std::vector<std::string>	getLinesFromFile(std::fstream *configFile);
 
-		bool				getAuthMatch(const std::string &username, const std::string &password);
-
-		void				findKey(std::string &key, std::string line, int lineCount);
-		bool				parameterCheck(int &lineCount) const;
+		bool	parameterCheck(int &lineCount) const;
+		void	findKey(std::string &key, std::string line, int lineCount);
+		bool	getAuthMatch(const std::string &username, const std::string &password);
 
 		private :
-		void	openUserAndPasswordFile(std::fstream *configFile);
-		bool	checkAllowedMethods(const std::string method) const;
-		void	createParameter(std::string &key, std::string configLine);
+			void	openUserAndPasswordFile(std::fstream *configFile);
+			bool	checkAllowedMethods(const std::string method) const;
+			void	setLogInfo(const UsersAndPasswords &password);
 
 };
 
