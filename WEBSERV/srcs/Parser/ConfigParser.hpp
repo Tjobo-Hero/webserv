@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/07 10:43:44 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 13:20:55 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "../Webserver.hpp"
 #include "../Libraries.hpp"
-#include "../ParserUtils.hpp"
+#include "./Utils/ParserUtils.hpp"
 #include "../Server.hpp"
 #include "../Location.hpp"
 #include "../ServerCluster.hpp"
