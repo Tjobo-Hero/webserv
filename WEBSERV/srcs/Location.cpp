@@ -6,14 +6,14 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/09 17:38:05 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 11:26:21 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Location.hpp"
 #include "./Parser/ConfigParser.hpp"
 #include "Error.hpp"
-#include "password.hpp"
+#include "UsersAndPasswords.hpp"
 
 Location::Location(void){}
 
@@ -154,7 +154,7 @@ std::vector<std::string>	Location::getLinesFromFile(std::fstream *configFile)
 
 }
 
-void	Location::setLogInfo(const Password &password)
+void	Location::setLogInfo(const UsersAndPasswords &password)
 {
 	std::map<std::string, std::string> data = password.getUsersAndPasswords();
 	std::map<std::string, std::string>::iterator it = data.begin();
@@ -176,15 +176,9 @@ void	Location::setHTPasswordPath(const std::string &passwordpath)
 	setHtpPath(passwordpath);
 	openUserAndPasswordFile(&configFile);
 	lines = getLinesFromFile(&configFile);
-	Password A;
+	UsersAndPasswords A;
 	A.findUsersAndPasswords(lines);
 	setLogInfo(A);
-	std::map<std::string, std::string>::iterator it = _loginfo.begin();
-	for(; it != _loginfo.end(); ++it)
-	{
-		std::cout << "[User] = " << it->first << std::endl;
-		std::cout << "[Pass] = " << it->second << std::endl << std::endl;
-	}
 }
 
 
@@ -356,9 +350,4 @@ std::ostream&	operator<<(std::ostream &os, const Location &location)
 	}
 	os << "----------------------------------\n";
 	return os;
-}
-
-std::map<std::string, std::string>&	Location::getLog(void)
-{
-	return this->_loginfo;
 }

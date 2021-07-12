@@ -6,7 +6,7 @@
 #    By: renebraaksma <renebraaksma@student.42.f      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/07/06 14:47:26 by rbraaksm      #+#    #+#                  #
-#    Updated: 2021/07/08 16:44:36 by rbraaksm      ########   odam.nl          #
+#    Updated: 2021/07/12 11:09:19 by rbraaksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ FILES = ./srcs/main \
 		./srcs/Utils/freeArray \
 		./srcs/Utils/getTime \
 		./srcs/Utils/signalHandler \
-		./srcs/password \
+		./srcs/UsersAndPasswords \
 
 SRC = $(addsuffix .cpp, $(FILES))
 OBJ = $(SRC:%.cpp=$(OBJDIR)/%.o)

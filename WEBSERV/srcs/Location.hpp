@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/09 17:10:29 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 11:26:35 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 
 # include "ParserUtils.hpp"
 # include <vector>
-# include "password.hpp"
+# include "UsersAndPasswords.hpp"
 
-class Password;
+class UsersAndPasswords;
 
 class Location
 {
@@ -70,7 +70,7 @@ class Location
 
 		std::vector<std::string>	getLinesFromFile(std::fstream *configFile);
 
-		void	setLogInfo(const Password &password);
+		void	setLogInfo(const UsersAndPasswords &password);
 
 		const bool&		hasOwnAutoIndex() const;
 		const bool&		getAutoIndex() const;
@@ -92,8 +92,6 @@ class Location
 
 		void				findKey(std::string &key, std::string line, int lineCount);
 		bool				parameterCheck(int &lineCount) const;
-
-		std::map<std::string, std::string>&	getLog();
 
 		private :
 		void	openUserAndPasswordFile(std::fstream *configFile);
