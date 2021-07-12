@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Server.hpp                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:32:21 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/07/12 14:53:01 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,17 @@
 #include "Connection.hpp"
 #include <fstream>
 
+class Location;
+
 class Server
 {
-	public:	
+	public:
 
 		typedef void	(Server::*setter)(std::string&);
-		
+
 	private:
 
-		
+
 		int _portNumber;
 		size_t _maxBodySize;
 		bool _autoIndex;
@@ -39,10 +41,10 @@ class Server
 		std::vector<Location*> _locations;
 		std::vector<Server*> _alternativeServers;
 		std::map<std::string, setter> _typeFunctionMap;
-		
+
 		long _socketFD;
 		struct sockaddr_in _addr;
-		
+
 	public:
 
 		size_t _bodylen;

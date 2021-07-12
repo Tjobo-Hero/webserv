@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   CGI.hpp                                            :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:07:58 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/29 12:01:54 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/07/12 14:53:30 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include "Libraries.hpp"
 #include "Request.hpp"
 #include "Server.hpp"
+
+class Server;
 
 class CGI {
 	public:
@@ -41,7 +43,7 @@ class CGI {
 		void		checkExecveError(int ret);
 		std::string readOutput();
 		void		setupInFile();
-		
+
 	private:
 		void	_initializeEnvironment(Request &request, Server &server);
 		void	_convertEnvironmentMapToArray();
@@ -75,7 +77,7 @@ class CGI {
 		int	_fileIn;
 		int	_fileOut;
 		int	_fileRet;
-		
+
 		std::map<std::string, std::string>	_environment;
 		char								**_env;
 		std::string							_path; // what path?

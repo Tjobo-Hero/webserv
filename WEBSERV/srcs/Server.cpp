@@ -6,14 +6,14 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/07 11:41:44 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 14:21:41 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "./Parser/ConfigParser.hpp"
 #include "Location.hpp"
-#include "./Utils/ConnectionUtils.hpp"
+#include "./Utils/Utils.hpp"
 #include "Response.hpp"
 
 Server::Server() : _portNumber(0), _maxBodySize(1000000), _autoIndex(false), _errorPage(DEFAULT_ERROR_PAGE), _socketFD(-1) {
@@ -179,14 +179,12 @@ void		Server::findKey(std::string &key, std::string configLine, int lineCount) {
 	if (*(configLine.rbegin()) != ';')
 		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
 
-	std::string parameter;
 	std::map<std::string, setter>::iterator it;
-
 	if ((it = this->_typeFunctionMap.find(key)) == this->_typeFunctionMap.end())
 		throw parseError ("unknown key: " + configLine + " ", lineCount);
-	configLine.resize(configLine.size() - 1);
-	parameter = configLine.substr(configLine.find_first_of(WHITESPACE, 0));
-	Utils::removeSpacesBeforeAfter(&parameter);
+
+	std::string parameter;
+	parameter = Utils::createParameter(configLine);
 	(this->*(this->_typeFunctionMap.at(key)))(parameter);
 	return;
 }

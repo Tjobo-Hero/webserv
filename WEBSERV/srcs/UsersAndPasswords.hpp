@@ -4,6 +4,7 @@
 # include <iostream>
 # include "Location.hpp"
 # include <vector>
+# include <map>
 
 class UsersAndPasswords
 {

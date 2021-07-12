@@ -6,16 +6,17 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 13:20:36 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 14:50:10 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LOCATION_HPP
 # define LOCATION_HPP
 
-# include "./Parser/Utils/ParserUtils.hpp"
+# include "./Utils/Utils.hpp"
 # include <vector>
 # include "UsersAndPasswords.hpp"
+# include <map>
 
 class UsersAndPasswords;
 

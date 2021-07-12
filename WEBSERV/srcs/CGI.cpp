@@ -6,12 +6,12 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 13:12:22 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/07/07 11:48:23 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 14:16:07 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "CGI.hpp"
-#include "./Utils/ConnectionUtils.hpp"
+#include "./Utils/Utils.hpp"
 #include "Error.hpp"
 
 CGI::CGI(std::string &path, Request &request, Server &server) :

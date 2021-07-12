@@ -6,7 +6,7 @@
 #    By: renebraaksma <renebraaksma@student.42.f      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/07/06 14:47:26 by rbraaksm      #+#    #+#                  #
-#    Updated: 2021/07/12 13:34:20 by rbraaksm      ########   odam.nl          #
+#    Updated: 2021/07/12 14:45:11 by rbraaksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,11 +45,12 @@ FILES = ./srcs/main \
 		./srcs/Utils/getTime \
 		./srcs/Utils/signalHandler \
 		./srcs/UsersAndPasswords \
-		./srcs/Parser/Utils/getKeyValue \
-		./srcs/Parser/Utils/checkLocationPath \
-		./srcs/Parser/Utils/skipEmptyLine \
-		./srcs/Parser/Utils/removeSpacesBeforeAfter \
-		./srcs/Parser/Utils/findFirstWord \
+		./srcs/Utils/getKeyValue \
+		./srcs/Utils/checkLocationPath \
+		./srcs/Utils/skipEmptyLine \
+		./srcs/Utils/removeSpacesBeforeAfter \
+		./srcs/Utils/findFirstWord \
+		./srcs/Utils/createParameter \
 
 SRC = $(addsuffix .cpp, $(FILES))
 OBJ = $(SRC:%.cpp=$(OBJDIR)/%.o)

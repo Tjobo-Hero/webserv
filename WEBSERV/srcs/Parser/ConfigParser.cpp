@@ -6,10 +6,11 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/07 10:19:59 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 14:47:46 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../Utils/Utils.hpp"
 #include "ConfigParser.hpp"
 
 ConfigParser::ConfigParser(char **argv) : _argv(argv)
@@ -67,6 +68,7 @@ void	ConfigParser::setLocation(Server *newServer)
 	{
 		if (*this->_it == "server {" || Utils::findFirstWord(*this->_it) == "location")
 			throw parseError("location block isn't closed ", *this->_count_it);
+
 		std::string key = Utils::findFirstWord(*this->_it);
 		if (key.size() <= 0)
 			throw parseError("not found " + *this->_it, *this->_count_it);

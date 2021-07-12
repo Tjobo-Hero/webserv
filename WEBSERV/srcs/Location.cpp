@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 11:26:21 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 14:23:16 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "./Parser/ConfigParser.hpp"
 #include "Error.hpp"
 #include "UsersAndPasswords.hpp"
+#include "Utils/Utils.hpp"
 
 Location::Location(void){}
 
@@ -273,10 +274,12 @@ void	Location::findKey(std::string &key, std::string configLine, int lineCount)
 		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
 
 	std::map<std::string, setter>::iterator it;
-
 	if ((it = this->_typeFunctionMap.find(key)) == this->_typeFunctionMap.end())
 		throw parseError("key invalid, not found key: " + key + " ", lineCount);
-	createParameter(key, configLine);
+
+	std::string parameter;
+	parameter = Utils::createParameter(configLine);
+	(this->*(this->_typeFunctionMap.at(key)))(parameter);
 }
 
 bool	Location::checkAllowedMethods(const std::string method) const

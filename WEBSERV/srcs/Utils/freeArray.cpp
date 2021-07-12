@@ -6,11 +6,11 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:04 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/07 12:46:09 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/12 14:16:07 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ConnectionUtils.hpp"
+#include "Utils.hpp"
 
 namespace Utils
 {
