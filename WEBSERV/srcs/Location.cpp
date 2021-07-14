@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 15:07:46 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/14 23:03:06 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,16 @@ Location::Location(std::string &match) : _autoIndex(false), _ownAutoIndex(false)
 	this->_match = match;
 	if (match[0] == '*' && match[1] == '.')
 		this->_isFileExtension = true;
-	this->_typeFunctionMap.insert(std::make_pair("autoindex", &Location::setAutoIndex));
-	this->_typeFunctionMap.insert(std::make_pair("root", &Location::setRoot));
-	this->_typeFunctionMap.insert(std::make_pair("method", &Location::setMethod));
-	this->_typeFunctionMap.insert(std::make_pair("error_page", &Location::setErrorPage));
-	this->_typeFunctionMap.insert(std::make_pair("index", &Location::setIndices));
-	this->_typeFunctionMap.insert(std::make_pair("cgi_exec", &Location::setCgiPath));
-	this->_typeFunctionMap.insert(std::make_pair("auth_basic", &Location::setAuthBasic));
-	this->_typeFunctionMap.insert(std::make_pair("auth_basic_user_file", &Location::setHTPasswordPath));
-	this->_typeFunctionMap.insert(std::make_pair("client_max_body_size", &Location::setMaxBodySize));
+	setDirective();
+	this->pointerToSetFunction[0] = &Location::setAutoIndex;
+	this->pointerToSetFunction[1] = &Location::setMaxBodySize;
+	this->pointerToSetFunction[2] = &Location::setHTPasswordPath;
+	this->pointerToSetFunction[3] = &Location::setAuthBasic;
+	this->pointerToSetFunction[4] = &Location::setCgiPath;
+	this->pointerToSetFunction[5] = &Location::setIndices;
+	this->pointerToSetFunction[6] = &Location::setErrorPage;
+	this->pointerToSetFunction[7] = &Location::setMethod;
+	this->pointerToSetFunction[8] = &Location::setRoot;
 	return;
 }
 
@@ -54,13 +55,26 @@ Location&	Location::operator=(Location const &obj)
 		this->_methods = obj._methods;
 		this->_errorPage = obj._errorPage;
 		this->_indices = obj._indices;
-		this->_typeFunctionMap = obj._typeFunctionMap;
 		this->_authBasic = obj._authBasic;
 		this->_authBasicUserFile = obj._authBasicUserFile;
 		this->_cgiPath = obj._cgiPath;
 		this->_isFileExtension = obj._isFileExtension;
+		this->_directive = obj._directive;
 	}
 	return *this;
+}
+
+void	Location::setDirective(void)
+{
+	this->_directive.push_back("autoindex");
+	this->_directive.push_back("client_max_body_size");
+	this->_directive.push_back("auth_basic_user_file");
+	this->_directive.push_back("auth_basic");
+	this->_directive.push_back("cgi_exec");
+	this->_directive.push_back("index");
+	this->_directive.push_back("error_page");
+	this->_directive.push_back("method");
+	this->_directive.push_back("root");
 }
 
 void	Location::printLocation() const
@@ -76,8 +90,6 @@ void	Location::setAutoIndex(const std::string &autoIndex)
 		this->_autoIndex = true;
 		return;
 	}
-	// if (autoIndex != "off")
-	// {;}
 }
 
 void	Location::setMaxBodySize(const std::string &maxBodySize)
@@ -255,18 +267,32 @@ const std::map<std::string, std::string>&	Location::getLogInfo() const
 	return this->_loginfo;
 }
 
+bool	Location::foundKey(std::string key, int *i)
+{
+	std::vector<std::string>::iterator it = _directive.begin();
+	for (; it != _directive.end(); ++it)
+	{
+		if (*it == key)
+			return true;
+		++(*i);
+	}
+	return false;
+}
+
 void	Location::findKey(std::string &key, std::string configLine, int lineCount)
 {
 	if (*(configLine.rbegin()) != ';')
 		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
 
-	std::map<std::string, setter>::iterator it;
-	if ((it = this->_typeFunctionMap.find(key)) == this->_typeFunctionMap.end())
+	// std::map<std::string, setter>::iterator it;
+	// if ((it = this->directive.find(key)) == this->directive.end())
+	int i = 0;
+	if (foundKey(key, &i) == false)
 		throw parseError("key invalid, not found key: " + key + " ", lineCount);
-
 	std::string parameter;
 	parameter = Utils::createParameter(configLine);
-	(this->*(this->_typeFunctionMap.at(key)))(parameter);
+	(this->*pointerToSetFunction[i])(parameter);
+	// (this->*(this->directive.at(key)))(parameter);
 }
 
 bool	Location::checkAllowedMethods(const std::string method) const

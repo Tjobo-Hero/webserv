@@ -6,7 +6,7 @@
 #    By: renebraaksma <renebraaksma@student.42.f      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/07/06 14:47:26 by rbraaksm      #+#    #+#                  #
-#    Updated: 2021/07/12 14:45:11 by rbraaksm      ########   odam.nl          #
+#    Updated: 2021/07/14 22:59:47 by rbraaksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ PREFIX		= $(DARK_GREEN)$(NAME) $(END)\xc2\xbb
 NAME 		= webserv
 
 CXX 		= clang++
-CXXFLAGS 	+= -Wall -Werror -Wextra -std=c++98
+CXXFLAGS 	+= -Wall -Werror -Wextra
 LDFLAGS 	+=
 
 OBJDIR = obj
@@ -51,6 +51,7 @@ FILES = ./srcs/main \
 		./srcs/Utils/removeSpacesBeforeAfter \
 		./srcs/Utils/findFirstWord \
 		./srcs/Utils/createParameter \
+		# ./srcs/Utils/print \
 
 SRC = $(addsuffix .cpp, $(FILES))
 OBJ = $(SRC:%.cpp=$(OBJDIR)/%.o)
@@ -73,10 +74,13 @@ test: # OS test
 clean:
 	@echo $(ECHO) "$(PREFIX)$(GREEN) Removing obj directory $(END)$(OUT_DIR)"
 	@rm -rf $(OBJDIR)
+	@rm -f tests/html_pages/Downloads/Download_* tests/html_pages/Downloads/file_should_exist_after tests/html_pages/Downloads/multiple_same
 
 fclean: clean
 	@echo $(ECHO) "$(PREFIX)$(GREEN) Removing executable $(END)$(OUT_DIR)"
 	@rm -rf $(NAME)
+	@rm -rf ./tests/YoupiBanane
+	@rm -rf ./tests/Logs
 
 re: fclean all
 

@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 15:10:41 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/14 23:02:32 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,39 +23,42 @@ class UsersAndPasswords;
 class Location
 {
 	public:
-		typedef void	(Location::*setter)(const std::string&);
+		typedef void(Location::*pointerToFunction)(const std::string&);
 
 	private:
-
-		bool	_autoIndex;
+		bool	_autoIndex; 							// check
 		bool	_ownAutoIndex;
 		bool	_ownBodySize;
 		bool	_isFileExtension;
-		size_t	_maxBodySize;
+		size_t	_maxBodySize;							// check
 		std::string	_match;
-		std::string	_root;
-		std::string	_errorPage;
-		std::vector<std::string>	_methods;
-		std::vector<std::string>	_indices;
-		std::map<std::string, setter>	_typeFunctionMap;
+		std::string	_root;								// check
+		std::string	_errorPage;							// check
+		std::vector<std::string>	_methods;			// check
+		std::vector<std::string>	_indices;			// check
 
-		std::string	_authBasic;
+		std::string	_authBasic;							// check
 		std::string	_authBasicUserFile;
-		std::string _cgiPath;
-		std::string	_htpasswd_path;
+		std::string _cgiPath;							// check
+		std::string	_htpasswd_path;						// check
 
+		std::vector<std::string>	_directive;
+
+		pointerToFunction	pointerToSetFunction[9];
 		protected:
 		std::map<std::string, std::string>	_loginfo;
 
 
 	public:
 
-		Location(void);
-		explicit Location(std::string &match);
+		Location();
+		Location(std::string &match);
 		Location(Location const &src);
-		~Location(void);
+		~Location();
 
 		Location&		operator=(Location const &obj);
+
+		void	setDirective();
 		void			printLocation() const;
 
 		void	setAutoIndex(const std::string &autoIndex);
@@ -90,6 +93,7 @@ class Location
 		bool	parameterCheck(int &lineCount) const;
 		void	findKey(std::string &key, std::string line, int lineCount);
 		bool	getAuthMatch(const std::string &username, const std::string &password);
+		bool	foundKey(std::string key, int *i);
 
 		private :
 			void	openUserAndPasswordFile(std::fstream *configFile);

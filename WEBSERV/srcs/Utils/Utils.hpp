@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:01 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 14:34:51 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/14 22:59:41 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,12 @@
 
 #include "../Webserver.hpp"
 # include <iostream>
+
+template<typename T>
+void	print(T &x)
+{
+	std::cout << x << std::endl;
+}
 
 namespace Utils
 {
@@ -26,10 +32,9 @@ namespace Utils
 	bool		skipEmptyLine(std::string *line);
 	void		removeSpacesBeforeAfter(std::string *line);
 	std::string findFirstWord(std::string &line);
-
 	std::string checkLocationPath(std::string &startLine, int lineCount);
 
-void		getKeyValue(const std::string &line, std::string &user, std::string &password, const char* delimiter, const char* endOfLine);
+	void		getKeyValue(const std::string &line, std::string &user, std::string &password, const char* delimiter, const char* endOfLine);
 
 }
 #endif
