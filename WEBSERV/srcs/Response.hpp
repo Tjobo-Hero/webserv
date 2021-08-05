@@ -6,18 +6,21 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:31:35 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/05 14:17:08 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RESPONSE_HPP
 # define RESPONSE_HPP
 
-#include "ResponseHeader.hpp"
-#include "Server.hpp"
-#include "CGI.hpp"
-#include "Location.hpp"
-#include "Libraries.hpp"
+# include "ResponseHeader.hpp"
+# include "Server.hpp"
+# include "CGI.hpp"
+# include "Location.hpp"
+# include "Libraries.hpp"
+# include "UsersAndPasswords.hpp"
+
+class UsersAndPasswords;
 
 class Response
 {

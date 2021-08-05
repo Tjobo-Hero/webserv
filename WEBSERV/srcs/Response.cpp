@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 14:16:07 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/05 14:20:06 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,6 +356,13 @@ int			Response::authenticate(Request &request) {
 	std::string username, password, str;
 	std::string auth = request._defHeaders.at("AUTHORIZATION");
 	std::string type, credentials;
+	
+	std::vector<std::string> line;
+	line.push_back(request._defHeaders.at("AUTHORIZATION"));
+	UsersAndPasswords A;
+	A.findUsersAndPasswords(line);
+	
+	
 	Utils::getKeyValue(auth, type, credentials, " ", "\n\r#;");
 	credentials = Utils::base64_decode(credentials);
 	Utils::getKeyValue(credentials, username, password, ":", "\n\r#;");

@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/15 13:31:05 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/05 14:15:06 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ class Location
 		Location&		operator=(Location const &obj);
 
 		void	setDirective();
-		void			printLocation() const;
+		void	printLocation() const;
 
 		void	setAutoIndex(const std::string &autoIndex);
 		void	setMaxBodySize(const std::string &maxBodySize);
