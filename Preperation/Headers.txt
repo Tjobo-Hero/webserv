@@ -1,0 +1,30 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    Headers.txt                                        :+:    :+:             #
+#                                                      +:+                     #
+#    By: timvancitters <timvancitters@student.co      +#+                      #
+#                                                    +#+                       #
+#    Created: 2021/05/19 16:25:49 by timvancitte   #+#    #+#                  #
+#    Updated: 2021/05/19 16:26:31 by timvancitte   ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
+
+Accept-Charsets
+Accept-Language
+Allow
+Authorization
+Content-Language
+Content-Length
+Content-Location
+Content-Type
+Date
+Host
+Last-Modified
+Location
+Referer
+Retry-After
+Server
+Transfer-Encoding
+User-Agent
+WWW-Authenticate
