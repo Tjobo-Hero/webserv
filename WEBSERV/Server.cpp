@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 15:30:06 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/07/06 09:43:51 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -276,7 +276,7 @@ void		Server::createResponse(int index) {
 	Connection	*currentConnection = &this->connections[index];
 	std::cout << " Handling request nr" << requestNumber << std::endl;
 	
-#if PRINTLOG == 1
+#if PRINTLOG == 0
 
 	if (requestNumber >= MAXLOGS) {
 		std::stringstream oldName;
@@ -293,7 +293,7 @@ void		Server::createResponse(int index) {
 	reqLog.close();
 #endif
 
-#if PRINTOUT == 1
+#if PRINTOUT == 0
 	std::cout << "==REQUEST==" << std::endl;
 	int len = std::min(connections[index].getBuffer().length(), (size_t)500);
 	if (write(1, connections[index].getBuffer().c_str(), len) == -1) {;}
@@ -339,7 +339,7 @@ void	Server::setupResponseString(int index) {
 	this->_bodylen = currentConnection->myResponse->getBodySize();
 	currentConnection->setResponseString(currentConnection->myResponse->getResponse());
 
-#if PRINTLOG == 1
+#if PRINTLOG == 0
 	if (requestNumber >= MAXLOGS)
 	{
 		std::stringstream oldname;
