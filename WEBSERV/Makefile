@@ -6,7 +6,7 @@
 #    By: renebraaksma <renebraaksma@student.42.f      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/07/06 14:47:26 by rbraaksm      #+#    #+#                  #
-#    Updated: 2021/07/14 22:59:47 by rbraaksm      ########   odam.nl          #
+#    Updated: 2021/08/05 13:57:43 by rbraaksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,12 +45,12 @@ FILES = ./srcs/main \
 		./srcs/Utils/getTime \
 		./srcs/Utils/signalHandler \
 		./srcs/UsersAndPasswords \
-		./srcs/Utils/getKeyValue \
 		./srcs/Utils/checkLocationPath \
 		./srcs/Utils/skipEmptyLine \
 		./srcs/Utils/removeSpacesBeforeAfter \
 		./srcs/Utils/findFirstWord \
 		./srcs/Utils/createParameter \
+		./srcs/Utils/getKeyValue \
 		# ./srcs/Utils/print \
 
 SRC = $(addsuffix .cpp, $(FILES))

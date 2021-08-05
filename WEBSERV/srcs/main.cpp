@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/14 22:21:25 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/05 13:40:25 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,6 @@ int main (int argc, char **argv)
 {
 	ServerCluster	serverCluster;
 	ConfigParser	configParser(argv);
-
-	// std::string hoi = "HOI";
-	// Location newLocation;
-	// (void)newLocation;
-	// (void)argv;
 	if (argc == 2)
 	{
 		try
