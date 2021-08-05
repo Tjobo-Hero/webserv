@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/14 23:03:06 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/15 13:31:42 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,15 +284,12 @@ void	Location::findKey(std::string &key, std::string configLine, int lineCount)
 	if (*(configLine.rbegin()) != ';')
 		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
 
-	// std::map<std::string, setter>::iterator it;
-	// if ((it = this->directive.find(key)) == this->directive.end())
 	int i = 0;
 	if (foundKey(key, &i) == false)
 		throw parseError("key invalid, not found key: " + key + " ", lineCount);
 	std::string parameter;
 	parameter = Utils::createParameter(configLine);
 	(this->*pointerToSetFunction[i])(parameter);
-	// (this->*(this->directive.at(key)))(parameter);
 }
 
 bool	Location::checkAllowedMethods(const std::string method) const
@@ -308,8 +305,6 @@ bool	Location::parameterCheck(int &lineCount) const
 	for (std::vector<std::string>::const_iterator it = this->_methods.begin(); it != this->_methods.end(); ++it)
 		if (checkAllowedMethods(*it) == false)
 			throw parseError("invalid method ", lineCount);
-	// if (this->_root.empty() == true)
-	// 	throw parseError("missing root ", lineCount);
 	return true;
 }
 

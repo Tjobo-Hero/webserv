@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/14 23:02:32 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/07/15 13:31:05 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,21 @@ class Location
 		typedef void(Location::*pointerToFunction)(const std::string&);
 
 	private:
-		bool	_autoIndex; 							// check
+		bool	_autoIndex;
 		bool	_ownAutoIndex;
 		bool	_ownBodySize;
 		bool	_isFileExtension;
-		size_t	_maxBodySize;							// check
+		size_t	_maxBodySize;
 		std::string	_match;
-		std::string	_root;								// check
-		std::string	_errorPage;							// check
-		std::vector<std::string>	_methods;			// check
-		std::vector<std::string>	_indices;			// check
+		std::string	_root;
+		std::string	_errorPage;
+		std::vector<std::string>	_methods;
+		std::vector<std::string>	_indices;
 
-		std::string	_authBasic;							// check
+		std::string	_authBasic;
 		std::string	_authBasicUserFile;
-		std::string _cgiPath;							// check
-		std::string	_htpasswd_path;						// check
+		std::string _cgiPath;
+		std::string	_htpasswd_path;
 
 		std::vector<std::string>	_directive;
 
