@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/06 16:38:35 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/06 16:57:00 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	ConfigParser::lookingForServer(ServerCluster *serverCluster)
 	}
 }
 
-void	ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
+void	ConfigParser::getInfoFromConfigFile(void)
 {
 	Utils::openTextFile(this->_configFile, this->_argv[1]);
 	this->_configLines = Utils::getLinesFromTextFile(&this->_configFile);
@@ -97,6 +97,11 @@ void	ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 	Utils::deleteSpacesBeforeAndAfter(this->_configLines);
 	Utils::checkBrackets(this->_configLines);
 	Utils::closeTextFile(this->_configFile);
+}
+
+void	ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
+{
+	getInfoFromConfigFile();
 	this->lookingForServer(serverCluster);
 	if (serverCluster->clusterIsEmpty())
 		throw clusterError("Cluster seems to be empty", "check your input");

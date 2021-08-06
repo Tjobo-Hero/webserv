@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/06 16:50:27 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/06 16:55:45 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,19 @@ class ConfigParser
 		std::fstream 							_configFile;
 		std::map<int, std::string>				_configLines;
 		std::map<int, std::string>::iterator	_it;
-		ConfigParser(void);
+		ConfigParser();
 
 	public:
 		ConfigParser(char **argv);
 		ConfigParser(ConfigParser const &src);
 		~ConfigParser();
-		ConfigParser&		operator=(ConfigParser const &obj);
+		ConfigParser&	operator=(ConfigParser const &obj);
 
-		void			parseTheConfigFile(ServerCluster *serverCluster);
-		void			lookingForServer(ServerCluster *serverCluster);
-		void			createServer(ServerCluster *serverCluster);
-		void			setLocation(Server *newServer);
+		void	parseTheConfigFile(ServerCluster *serverCluster);
+		void	getInfoFromConfigFile();
+		void	lookingForServer(ServerCluster *serverCluster);
+		void	createServer(ServerCluster *serverCluster);
+		void	setLocation(Server *newServer);
 };
 
 #endif
