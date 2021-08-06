@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/05 13:45:52 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/06 16:38:35 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,136 +32,73 @@ ConfigParser::~ConfigParser()
 
 ConfigParser&	ConfigParser::operator=(ConfigParser const &obj)
 {
-	if (this != &obj) {
+	if (this != &obj)
 		this->_argv = obj._argv;
-	}
 	return *this;
-}
-
-void	ConfigParser::openConfigFile()
-{
-	this->_configFile.open(this->_argv[1]);
-	if (!this->_configFile)	{
-		throw openFileError("Error: failed to open filepath: ", this->_argv[1]);
-	}
-}
-
-void	ConfigParser::removeComments(std::string *line)
-{
-	line->erase(std::find(line->begin(), line->end(), '#'), line->end());
-}
-
-bool	ConfigParser::receiveNextLine(std::string *line, size_t *count)
-{
-	++(*count);
-	std::getline(this->_configFile, (*line));
-	return true;
 }
 
 void	ConfigParser::setLocation(Server *newServer)
 {
-	std::string locationPath = Utils::checkLocationPath(*this->_it, *this->_count_it);
+	std::string locationPath = Utils::checkLocationPath(this->_it->second, this->_it->first);
 	Location *newLocation = new Location(locationPath);
 
-	this->plusIterators();
-	while (*this->_it != "}")
+	++this->_it;
+	while (this->_it->second != "}")
 	{
-		if (*this->_it == "server {" || Utils::findFirstWord(*this->_it) == "location")
-			throw parseError("location block isn't closed ", *this->_count_it);
+		if (this->_it->second == "server {" || Utils::findFirstWord(this->_it->second) == "location")
+			throw parseError("location block isn't closed ", this->_it->first);
 
-		std::string key = Utils::findFirstWord(*this->_it);
-		newLocation->findKey(key, *this->_it, *this->_count_it);
-		this->plusIterators();
+		std::string key = Utils::findFirstWord(this->_it->second);
+		newLocation->findKey(key, this->_it->second, this->_it->first);
+		++this->_it;
 	}
-	this->plusIterators();
-	newLocation->parameterCheck(*this->_count_it);
+	++this->_it;
+	newLocation->parameterCheck(this->_it->first);
 	newServer->addLocation(newLocation);
 }
 
 void	ConfigParser::createServer(ServerCluster *serverCluster)
 {
 	Server	*newServer = new Server;
-	this->plusIterators();
-	while(*this->_it != "}")
+	++this->_it;
+	while(_it->second != "}")
 	{
-		if (Utils::findFirstWord(*_it) == "location")
+		if (Utils::findFirstWord(_it->second) == "location")
 			this->setLocation(newServer);
 		else
 		{
-			std::string key = Utils::findFirstWord(*this->_it);
-			newServer->findKey(key, *this->_it, *this->_count_it);
-			this->plusIterators();
+			std::string key = Utils::findFirstWord(this->_it->second);
+			newServer->findKey(key, this->_it->second, this->_it->first);
+			++this->_it;
 		}
 	}
 	newServer->setAutoIndexOfLocations();
-	newServer->parameterCheck(*this->_count_it);
+	newServer->parameterCheck(this->_it->first);
 	serverCluster->addServer(newServer);
 	// std::cout << *newServer << std::endl;
 }
 
-void	ConfigParser::plusIterators(void)
-{
-	++this->_count_it;
-	++this->_it;
-}
-
 void	ConfigParser::lookingForServer(ServerCluster *serverCluster)
 {
-	this->_count_it = _configCount.begin();
-	for(this->_it = this->_configLines.begin(); this->_it != this->_configLines.end(); ++this->_it)
+	this->_it = this->_configLines.begin();
+	for(; this->_it != this->_configLines.end(); ++this->_it)
 	{
-		if (*this->_it != "server {")
-			throw parseError("no Server block detected", *this->_count_it);
+		if (this->_it->second != "server {")
+			throw parseError("no Server block detected", this->_it->first);
 		this->createServer(serverCluster);
-		++this->_count_it;
 	}
-}
-
-bool	ConfigParser::createLine(std::string *line, size_t *count)
-{
-	int i = 0;
-	while (receiveNextLine(line, count))
-	{
-		if (i > 0)
-			return false;
-		if (this->_configFile.eof())
-			++i;
-		this->removeComments(line);
-		if (Utils::skipEmptyLine(line) == true)
-			continue;
-		Utils::removeSpacesBeforeAfter(line);
-		break ;
-	}
-	return true;
-}
-
-void	ConfigParser::createArray(void)
-{
-	size_t open = 0;
-	size_t closed = 0;
-	size_t count = 0;
-	std::string	line;
-	while (this->createLine(&line, &count))
-	{
-		this->_configLines.push_back(line);
-		this->_configCount.push_back(count);
-		open += std::count(line.begin(), line.end(), '{');
-		closed += std::count(line.begin(), line.end(), '}');
-		if (open < closed)
-			throw parseError("Brackets aren't open ", count);
-	}
-	if (open > closed)
-		throw parseError("Brackets aren't closed ", count);
 }
 
 void	ConfigParser::parseTheConfigFile(ServerCluster *serverCluster)
 {
-	this->createArray();
+	Utils::openTextFile(this->_configFile, this->_argv[1]);
+	this->_configLines = Utils::getLinesFromTextFile(&this->_configFile);
+	Utils::deleteEmptyLines(this->_configLines);
+	Utils::deleteSpacesBeforeAndAfter(this->_configLines);
+	Utils::checkBrackets(this->_configLines);
+	Utils::closeTextFile(this->_configFile);
 	this->lookingForServer(serverCluster);
 	if (serverCluster->clusterIsEmpty())
 		throw clusterError("Cluster seems to be empty", "check your input");
-	_configCount.clear();
 	_configLines.clear();
-	this->_configFile.close();
 }
-

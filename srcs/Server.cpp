@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/14 22:23:50 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/06 16:18:56 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void	Server::findKey(std::string &key, std::string configLine, int lineCount)
 	(this->*(this->_typeFunctionMap.at(key)))(parameter);
 }
 
-bool	Server::parameterCheck(int &lineCount) const
+bool	Server::parameterCheck(int lineCount) const
 {
 	if (this->_portNumber <= 0)
 		throw parseError("invalid port number ", lineCount);

@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/14 22:23:41 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/06 16:19:06 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ class Server
 		const struct sockaddr_in		&getSocketAddress() const;
 
 		void							findKey(std::string &key, std::string configLine, int lineCount);
-		bool							parameterCheck(int &lineCount) const;
+		bool							parameterCheck(int lineCount) const;
 		void							addLocation(Location *newLocation);
 		void							setAutoIndexOfLocations();
 		void							startListening();

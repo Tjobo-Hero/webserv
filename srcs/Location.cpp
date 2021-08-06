@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/15 13:31:42 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/06 16:19:44 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void	Location::setHtpPath(const std::string passwordpath)
 	this->_htpasswd_path = passwordpath;
 }
 
-std::vector<std::string>	Location::getLinesFromFile(std::fstream *configFile)
+std::vector<std::string>	Location::getLinesFromUserAndPasswordFile(std::fstream *configFile)
 {
 	std::vector<std::string> ret;
 	std::string	income;
@@ -186,7 +186,7 @@ void	Location::setHTPasswordPath(const std::string &passwordpath)
 		throw parseError("set password path error", "check input");
 	setHtpPath(passwordpath);
 	openUserAndPasswordFile(&configFile);
-	lines = getLinesFromFile(&configFile);
+	lines = getLinesFromUserAndPasswordFile(&configFile);
 	UsersAndPasswords A;
 	A.findUsersAndPasswords(lines);
 	setLogInfo(A);
@@ -300,7 +300,7 @@ bool	Location::checkAllowedMethods(const std::string method) const
 	return false;
 }
 
-bool	Location::parameterCheck(int &lineCount) const
+bool	Location::parameterCheck(int lineCount) const
 {
 	for (std::vector<std::string>::const_iterator it = this->_methods.begin(); it != this->_methods.end(); ++it)
 		if (checkAllowedMethods(*it) == false)

@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/15 13:31:05 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/06 16:20:00 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,9 @@ class Location
 		const std::vector<std::string>&	getIndices() const;
 
 		const std::map<std::string, std::string>&	getLogInfo() const;
-		std::vector<std::string>	getLinesFromFile(std::fstream *configFile);
+		std::vector<std::string>	getLinesFromUserAndPasswordFile(std::fstream *configFile);
 
-		bool	parameterCheck(int &lineCount) const;
+		bool	parameterCheck(int lineCount) const;
 		void	findKey(std::string &key, std::string line, int lineCount);
 		bool	getAuthMatch(const std::string &username, const std::string &password);
 		bool	foundKey(std::string key, int *i);

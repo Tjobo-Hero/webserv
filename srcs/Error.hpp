@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Error.hpp                                          :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:13:43 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:21:08 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/06 15:55:18 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 
 class parseError : public std::exception {
 		public:
-			parseError(std::string line, size_t lineCount) 
+			parseError(std::string line, size_t lineCount)
 				: _error("Error: " + line + ": syntax error line " + std::to_string(lineCount)) {
 			}
-			parseError(std::string line, const char *message) 
+			parseError(std::string line, const char *message)
 				: _error("Error: line:" + line + ": " + message) {
 			}
 			const char *what() const throw() {
@@ -34,10 +34,10 @@ class parseError : public std::exception {
 class openFileError : public std::exception
 {
 		public:
-			openFileError(const char *message, const char *configPath) 
+			openFileError(const char *message, const char *configPath)
 				: _error(message + std::string(configPath)) {
 			}
-			openFileError(const char *message, std::string configPath) 
+			openFileError(const char *message, std::string configPath)
 				: _error(message + configPath) {
 			}
 			const char *what() const throw() {
@@ -48,10 +48,10 @@ class openFileError : public std::exception
 			std::string _error;
 };
 
-class startupError : public std::exception 
+class startupError : public std::exception
 {
 		public:
-			startupError(std::string message, std::string host) 
+			startupError(std::string message, std::string host)
 				: _error("Error: startup failed: " + message + host) {
 			}
 			const char *what() const throw() {
@@ -62,10 +62,10 @@ class startupError : public std::exception
 			std::string _error;
 };
 
-class clusterError : public std::exception 
+class clusterError : public std::exception
 {
 		public:
-			clusterError(const char *message, const char *configPath) 
+			clusterError(const char *message, const char *configPath)
 				: _error(message + std::string(configPath)) {
 			}
 			const char *what() const throw() {
@@ -76,10 +76,10 @@ class clusterError : public std::exception
 			std::string _error;
 };
 
-class runtimeError : public std::exception 
+class runtimeError : public std::exception
 {
 		public:
-			runtimeError(std::string message) 
+			runtimeError(std::string message)
 				: _error(message) {
 			}
 			const char *what() const throw() {

@@ -1,0 +1,655 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         ::::::::             #
+#    functions_allowed_by_subject.txt                   :+:    :+:             #
+#                                                      +:+                     #
+#    By: timvancitters <timvancitters@student.co      +#+                      #
+#                                                    +#+                       #
+#    Created: 2021/05/18 15:24:18 by timvancitte   #+#    #+#                  #
+#    Updated: 2021/05/19 16:23:22 by timvancitte   ########   odam.nl          #
+#                                                                              #
+# **************************************************************************** #
+
+FUNCTION MANUAL
+
+#### EXTERNAL FUNCTIONS ####
+
+* malloc *
+void *malloc(size_t size);
+
+“malloc” or “memory allocation” method in C is used to dynamically allocate
+a single large block of memory with the specified size. It returns a 
+pointer of type void which can be cast into a pointer of any form. 
+It initializes each block with default garbage value.
+
+* free *
+void free(void *ptr);
+
+The free() function shall cause the space pointed to 
+by ptr to be deallocated; that is, made available for 
+further allocation. If ptr is a null pointer, no action 
+shall occur. Otherwise, if the argument does not match a 
+pointer earlier returned by the calloc(), malloc(), [ADV] 
+[Option Start] posix_memalign(), [Option End] realloc(), 
+or [XSI] [Option Start] strdup() [Option End] function, or 
+if the space has been deallocated by a call to free() or realloc(), 
+the behavior is undefined.
+
+* write *
+ssize_t write(int fildes, const void *buf, size_t nbyte);
+
+The write() function shall attempt to write nbyte bytes from the buffer 
+pointed to by buf to the file associated with the open file descriptor, fildes.
+
+* open *
+int open(const char *path, int oflag, ... );
+
+The open() function shall establish the connection 
+between a file and a file descriptor. It shall create 
+an open file description that refers to a file and a file 
+descriptor that refers to that open file description. 
+The file descriptor is used by other I/O functions to refer to that file. 
+The path argument points to a pathname naming the file.
+
+* read *
+ssize_t read(int fildes, void *buf, size_t nbyte);
+
+The read() function reads data previously written to a file. 
+If any portion of a regular file prior to the end-of-file has 
+not been written, read() shall return bytes with value 0.
+
+* close *
+int close(int fildes);
+
+The close() function shall deallocate the file descriptor 
+indicated by fildes. To deallocate means to make the file 
+descriptor available for return by subsequent calls to open() 
+or other functions that allocate file descriptors. 
+All outstanding record locks owned by the process on the file 
+associated with the file descriptor shall be removed (that is, unlocked).
+
+* mkdir *
+int mkdir(const char *path, mode_t mode);
+
+The mkdir() function shall create a new directory with name path. 
+The file permission bits of the new directory shall be initialized from mode. 
+These file permission bits of the mode argument shall be modified by the process' 
+file creation mask.
+
+* rmdir *
+int rmdir( const char* path );
+
+The rmdir() function removes (deletes) the specified directory. 
+The directory must not contain any files or directories.
+
+--- Return values ---
+Return 0 == success
+Return -1 == An error occurred (errno is set).
+
+
+* unlink *
+int unlink(const char *path);
+
+The unlink() function shall remove a link to a file. 
+If path names a symbolic link, unlink() shall remove the 
+symbolic link named by path and shall not affect any file 
+or directory named by the contents of the symbolic link. 
+Otherwise, unlink() shall remove the link named by the pathname 
+pointed to by path and shall decrement the link count of the file 
+referenced by the link.
+
+--- Return values ---
+Upon successful completion, these functions shall return 0. 
+Otherwise, these functions shall return -1 and set errno to 
+indicate the error. If -1 is returned, the named file shall 
+not be changed.
+
+* fork *
+int fork();
+
+Fork system call is used for creating a new process, which is 
+called child process, which runs concurrently with the process 
+that makes the fork() call (parent process). After a new child 
+process is created, both processes will execute the next instruction 
+following the fork() system call. A child process uses the same 
+pc(program counter), same CPU registers, same open files which 
+use in the parent process.
+
+--- Return values ---
+Negative Value == creation of a child process was unsuccessful.
+Zero == Returned to the newly created child process.
+Positive value == Returned to parent or caller. 
+The value contains process ID of newly created child process.
+
+* wait *
+pid_t wait(int *stat_loc);
+
+A call to wait() blocks the calling process until 
+one of its child processes exits or a signal is received. 
+After child process terminates, parent continues its 
+execution after wait system call instruction. 
+Child process may terminate due to any of these:
+
+* wait_pid *
+pid_t waitpid(pid_t pid, int *status, int options);
+
+The waitpid() function shall be equivalent to wait() 
+if the pid argument is (pid_t)-1 and the options argument 
+is 0. Otherwise, its behavior shall be modified by the 
+values of the pid and options arguments.
+
+< -1: Wait for any child process whose process group ID is equal to the absolute value of pid.
+-1: Wait for any child process.
+0: Wait for any child process whose process group ID is equal to that of the calling process.
+> 0: Wait for the child whose process ID is equal to the value of pid.
+
+* wait3 & wait4 *
+pid_t wait3(int *status, int options, struct rusage *rusage);
+pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage);
+
+The wait3() and wait4() system calls are similar to waitpid(2), but additionally 
+return resource usage information about the child in the structure pointed to by rusage.
+
+In other words, wait3() waits of any child, while wait4() can be used to select a 
+specific child, or children, on which to wait. See wait(2) for further details.
+
+* signal *
+void (*signal(int sig, void (*func)(int)))(int);
+
+The signal() function chooses one of three ways in 
+which receipt of the signal number sig is to be subsequently handled. 
+If the value of func is SIG_DFL, default handling for that signal shall occur. 
+If the value of func is SIG_IGN, the signal shall be ignored. Otherwise, 
+the application shall ensure that func points to a function to be called 
+when that signal occurs. An invocation of such a function because of 
+a signal, or (recursively) of any further functions called by that 
+invocation (other than functions in the standard library), 
+is called a "signal handler".
+
+* kill *
+int kill(pid_t pid, int sig);
+
+The kill() function shall send a signal to a process or a group 
+of processes specified by pid. The signal to be sent is specified 
+by sig and is either one from the list given in <signal.h> or 0. 
+If sig is 0 (the null signal), error checking is performed but no 
+signal is actually sent. The null signal can be used to check the validity of pid.
+
+--- Return values ---
+Upon successful completion, 0 shall be returned. 
+Otherwise, -1 shall be returned and errno set to indicate the error.
+
+* exit *
+void exit(int status);
+
+In the C Programming Language, the exit function calls all functions 
+registered with atexit and terminates the program. File buffers are flushed, 
+streams are closed, and temporary files are deleted.
+
+* htons *
+uint16_t htons(uint16_t hostshort);
+
+The htons() function converts the unsigned 
+short integer hostshort from host byte order 
+to network byte order.
+Convert values between host and network byte order.
+
+* htonl *
+uint32_t htonl(uint32_t hostlong);
+
+The htonl() function converts the unsigned integer 
+hostlong from host byte order to network byte order.
+Convert values between host and network byte order.
+
+* ntohl *
+uint32_t ntohl(uint32_t netlong);
+
+The ntohl() function converts the unsigned integer 
+netlong from network byte order to host byte order.
+Convert values between host and network byte order.
+
+* ntohs *
+uint16_t ntohs(uint16_t netshort);
+
+The ntohs() function converts the unsigned short integer 
+netshort from network byte order to host byte order.
+Convert values between host and network byte order.
+
+* getcwd *
+char *getcwd(char *buf, size_t size);
+
+The getcwd() function shall place an absolute pathname 
+of the current working directory in the array pointed 
+to by buf, and return buf. The pathname copied to the 
+array shall contain no components that are symbolic links. 
+The size argument is the size in bytes of the character 
+array pointed to by the buf argument. If buf is a null pointer, 
+the behavior of getcwd() is unspecified.
+
+--- Return values ---
+Upon successful completion, getcwd() shall return the buf argument. 
+Otherwise, getcwd() shall return a null pointer and set errno to 
+indicate the error. The contents of the array pointed to by buf are then undefined.
+
+* chdir * 
+int chdir(const char *path);
+
+The chdir() function shall cause the directory named by the 
+pathname pointed to by the path argument to become the current 
+working directory; that is, the starting point for path searches 
+for pathnames not beginning with '/'.
+
+--- Return values ---
+Upon successful completion, 0 shall be returned. 
+Otherwise, -1 shall be returned, the current working 
+directory shall remain unchanged, and errno shall be set to indicate the error.
+
+* stat *
+int stat(const char *restrict path, struct stat *restrict buf);
+
+The stat() function shall obtain information about the named file 
+and write it to the area pointed to by the buf argument. 
+The path argument points to a pathname naming a file. 
+Read, write, or execute permission of the named file is not required. 
+An implementation that provides additional or alternate file access 
+control mechanisms may, under implementation-defined conditions, 
+cause stat() to fail. In particular, the system may deny the existence of the file specified by path.
+
+--- Return values ---
+Upon successful completion, 0 shall be returned. 
+Otherwise, -1 shall be returned and errno set to indicate the error.
+
+* lstat *
+int lstat(const char *restrict path, struct stat *restrict buf);
+
+The lstat() function shall be equivalent to stat(), 
+except when path refers to a symbolic link. In that case lstat() 
+shall return information about the link, while stat() shall 
+return information about the file the link references.
+
+--- Return values ---
+Upon successful completion, lstat() shall return 0. 
+Otherwise, it shall return -1 and set errno to indicate the error.
+
+* fstat *
+int fstat(int fildes, struct stat *buf);
+
+The fstat() function shall obtain information about an 
+open file associated with the file descriptor fildes, 
+and shall write it to the area pointed to by buf.
+
+--- Return values ---
+Upon successful completion, 0 shall be returned. 
+Otherwise, -1 shall be returned and errno set to indicate the error.
+
+* lseek *
+off_t lseek(int fildes, off_t offset, int whence);
+
+The lseek() function shall set the file offset for the open file description 
+associated with the file descriptor fildes, as follows:
+If whence is SEEK_SET, the file offset shall be set to offset bytes.
+If whence is SEEK_CUR, the file offset shall be set to its current location plus offset.
+If whence is SEEK_END, the file offset shall be set to the size of the file plus offset.
+
+--- Return values ---
+Upon successful completion, the resulting offset, 
+as measured in bytes from the beginning of the file, 
+shall be returned. Otherwise, (off_t)-1 shall be returned, 
+errno shall be set to indicate the error, and the file offset 
+shall remain unchanged.
+
+* opendir *
+DIR *opendir(const char *dirname);
+
+The opendir() function opens a directory so that it 
+can be read with the readdir() function. The variable 
+dirname is a string giving the name of the directory to open. 
+If the last component of dirname is a symbolic link, opendir() 
+follows the symbolic link. As a result, the directory that the 
+symbolic link refers to is opened. 
+
+--- Return values ---
+Upon successful completion, opendir() returns a pointer 
+to an object of type DIR. Otherwise, a null pointer is 
+returned and errno is set to indicate the error.
+
+* readdir *
+struct dirent *readdir(DIR *dirp);
+
+The type DIR, which is defined in the header <dirent.h>, represents 
+a directory stream, which is an ordered sequence of all the directory 
+entries in a particular directory. Directory entries represent files; 
+files may be removed from a directory or added to a directory asynchronously 
+to the operation of readdir().
+
+The readdir() function returns a pointer to a structure representing 
+the directory entry at the current position in the directory stream 
+specified by the argument dirp, and positions the directory stream at 
+the next entry. It returns a null pointer upon reaching the end of the 
+directory stream. The structure dirent defined by the <dirent.h> 
+header describes a directory entry.
+
+--- Return values ---
+Upon successful completion, readdir() returns a pointer 
+to an object of type struct dirent. When an error is encountered, 
+a null pointer is returned and errno is set to indicate the error. 
+When the end of the directory is encountered, a null pointer is 
+returned and errno is not changed.
+
+* closedir *
+int closedir(DIR *dirp);
+
+The closedir() function shall close the directory stream 
+referred to by the argument dirp. Upon return, the value of 
+dirp may no longer point to an accessible object of the type DIR. 
+If a file descriptor is used to implement type DIR, 
+that file descriptor shall be closed.
+
+--- Return values ---
+Upon successful completion, closedir() shall return 0; 
+otherwise, -1 shall be returned and errno set to indicate the error.
+
+* execve *
+int execve(const char *pathname, char *const argv[], char *const envp[]);
+
+execve() executes the program referred to by pathname.  This
+causes the program that is currently being run by the calling
+process to be replaced with a new program, with newly initialized
+stack, heap, and (initialized and uninitialized) data segments.
+
+* dup *
+int dup(int fildes);
+
+The dup() function duplicates an open file descriptor. 
+Specifically, it provides an alternate interface to the service 
+provided by the fcntl() function using the F_DUPFD constant command 
+value, with 0 for its third argument. The duplicated file descriptor 
+shares any locks with the original.
+
+On success, dup() returns a new file descriptor 
+that has the following in common with the original:
+
+Same open file (or pipe)
+Same file pointer (both file descriptors share one file pointer)
+Same access mode (read, write, or read/write)
+The new file descriptor is set to remain open across exec() functions.
+
+--- Return values ---
+If successful, dup() returns a nonnegative integer; namely, 
+the duplicated file descriptor, which is the lowest available descriptor. 
+If failed, it returns a -1 and sets errno to the corresponding value.
+
+* dup2 *
+int dup(int fildes, int fildes2);
+
+The dup2() function duplicates an open file descriptor. 
+Specifically, it provides an alternate interface to the service 
+provided by the fcntl() function using the F_DUPFD constant command value, with fildes2 for its third argument. 
+The duplicated file descriptor shares any locks with the original.
+
+--- Return values ---
+On success, dup2() returns a new file descriptor that has the following in common with the original:
+
+Same open file (or pipe)
+Same file pointer (both file descriptors share one file pointer)
+Same access mode (read, write, or read/write)
+The new file descriptor is set to remain open across exec() functions.
+
+The call:
+
+fid = dup2(fildes, fildes2);
+is equivalent to:
+
+close(fildes2);
+fid = fcntl(fildes, F_DUPFD, fildes2);
+with the following exceptions:
+
+If fildes2 is negative or greater than or equal to OPEN_MAX, the dup2() function returns a value of -1 and sets errno to EBADF.
+If fildes is a valid file descriptor and is equal to fildes2, the dup2() function returns fildes2 without closing it.
+If fildes is not a valid file descriptor, dup2() fails and does not close fildes2.
+If successful, dup2() returns a value that is equal to the value of fildes2. If a failure occurs, it returns a value of -1.
+
+* pipe *
+int pipe(int pipefd[2]);
+
+Here, the pipe() function creates a unidirectional data 
+channel for inter-process communication. You pass in an int 
+(Integer) type array pipefd consisting of 2 array element to 
+the function pipe(). Then the pipe() function creates two file 
+descriptors in the pipefd array.
+
+The first element of the pipefd array, pipefd[0] is used 
+for reading data from the pipe.
+
+The second element of the pipefd array, pipefd[1] is used 
+for writing data to the pipe.
+
+--- Return values ---
+On success, the pipe() function returns 0. 
+If an error occurs during pipe initialization, 
+then the pipe() function returns -1.
+
+* strerror *
+char * strerror ( int errnum );
+
+Interprets the value of errnum, generating a string 
+with a message that describes the error condition as 
+if set to errno by a function of the library.
+
+--- Return values ---
+A pointer to the error string describing error errnum.
+
+* errno *
+The <errno.h> header file defines the integer variable errno,
+which is set by system calls and some library functions in the
+event of an error to indicate what went wrong.
+
+* gettimeofday *
+int gettimeofday ( struct timeval *tp ,  struct timezone *tz );
+
+The gettimeofday() function set the time in timeval (current_time) 
+structure member. tv_sec is the integral number of seconds elapsed 
+since the start of the UNIX epoch, on midnight UTC on January 1, 
+1970 and tv_usec is additional number of microseconds elapsed from 
+tv_sec. If you run the program you should see the output. 
+Each time you run the program the output will change.
+
+--- Return values ---
+On success, the gettimeofday() return 0, for failure the function returns -1.
+
+* strptime *
+char *strptime(const char *restrict buf, const char *restrict format, struct tm *restrict tm);
+
+The strptime() function shall convert the character string pointed to by buf 
+to values which are stored in the tm structure pointed to by tm, 
+using the format specified by format.
+
+--- Return values ---
+Upon successful completion, strptime() shall return a pointer 
+to the character following the last character parsed. 
+Otherwise, a null pointer shall be returned.
+
+* strftime *
+size_t strftime(char *str, size_t maxsize, const char *format, const struct tm *timeptr);
+
+The C library function size_t strftime(char *str, size_t maxsize, const char *format, const struct tm *timeptr) 
+formats the time represented in the structure timeptr according to the formatting 
+rules defined in format and stored into str.
+
+str − This is the pointer to the destination array where the resulting C string is copied.
+
+maxsize − This is the maximum number of characters to be copied to str.
+
+format − This is the C string containing any combination of regular 
+characters and special format specifiers. These format specifiers are 
+replaced by the function to the corresponding values to represent the 
+time specified in tm. The format specifiers are − (see manual)
+
+* usleep *
+int usleep(useconds_t useconds);
+
+The usleep() function shall cause the calling thread to be suspended from 
+execution until either the number of realtime microseconds specified by the 
+argument useconds has elapsed or a signal is delivered to the calling thread 
+and its action is to invoke a signal-catching function or to terminate the process. 
+The suspension time may be longer than requested due to the scheduling of other activity by the system.
+
+The useconds argument shall be less than one million. 
+If the value of useconds is 0, then the call has no effect.
+
+--- Return values ---
+Upon successful completion, usleep() shall return 0; otherwise, 
+it shall return -1 and set errno to indicate the error.
+
+* select *
+int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct timeval *timeout);
+
+The select() function indicates which of the specified file descriptors 
+is ready for reading, ready for writing, or has an error condition pending. 
+If the specified condition is false for all of the specified file descriptors, 
+select() blocks, up to the specified timeout interval, until the specified 
+condition is true for at least one of the specified file descriptors.
+
+--- Return values ---
+On successful completion, select() returns the total number of bits set in the bit masks. 
+Otherwise, -1 is returned, and errno is set to indicate the error.
+
+* socket *
+int socket(int domain, int type, int protocol);
+
+The socket() function shall create an unbound socket in a 
+communications domain, and return a file descriptor that 
+can be used in later function calls that operate on sockets.
+
+--- Return values ---
+Upon successful completion, socket() shall return a non-negative integer, 
+the socket file descriptor. Otherwise, a value of -1 shall be 
+returned and errno set to indicate the error.
+
+* accept *
+int accept(int socket, struct sockaddr *restrict address, socklen_t *restrict address_len);
+
+The accept() function shall extract the first connection on the queue of 
+pending connections, create a new socket with the same socket type protocol 
+and address family as the specified socket, and allocate a new 
+file descriptor for that socket.
+
+--- Return values ---
+Upon successful completion, accept() shall return the non-negative 
+file descriptor of the accepted socket. Otherwise, -1 shall be 
+returned and errno set to indicate the error.
+
+* listen *
+int listen(int socket, int backlog);
+
+The listen() function shall mark a connection-mode socket, 
+specified by the socket argument, as accepting connections.
+
+The backlog argument provides a hint to the implementation 
+which the implementation shall use to limit the number of outstanding 
+connections in the socket's listen queue. Implementations may impose 
+a limit on backlog and silently reduce the specified value. Normally, 
+a larger backlog argument value shall result in a larger or equal 
+length of the listen queue. Implementations shall support values 
+of backlog up to SOMAXCONN, defined in <sys/socket.h>.
+
+--- Return values ---
+Upon successful completions, listen() shall return 0; otherwise, 
+-1 shall be returned and errno set to indicate the error.
+
+* send *
+ssize_t send(int socket, const void *buffer, size_t length, int flags);
+
+The send() function shall initiate transmission of a message from the 
+specified socket to its peer. The send() function shall send a message 
+only when the socket is connected (including when the peer of a 
+connectionless socket has been set via connect()).
+
+--- Return values ---
+Upon successful completion, send() shall return the number 
+of bytes sent. Otherwise, -1 shall be returned and errno 
+set to indicate the error.
+
+* recv *
+ssize_t recv(int socket, void *buffer, size_t length, int flags);
+
+The recv() function shall receive a message from a connection-mode 
+or connectionless-mode socket. It is normally used with connected 
+sockets because it does not permit the application to retrieve the 
+source address of received data.
+
+--- Return values ---
+Upon successful completion, recv() shall return the length of 
+the message in bytes. If no messages are available to be received 
+and the peer has performed an orderly shutdown, recv() shall 
+return 0. Otherwise, -1 shall be returned and errno set to 
+indicate the error.
+
+* bind *
+int bind(int socket, const struct sockaddr *address, socklen_t address_len);
+
+The bind() function shall assign a local socket address address 
+to a socket identified by descriptor socket that has no local 
+socket address assigned. Sockets created with the socket()
+function are initially unnamed; they are identified only by their address family.
+
+--- Return values ---
+Upon successful completion, bind() shall return 0; otherwise, 
+-1 shall be returned and errno set to indicate the error.
+
+* connect *
+int connect(int socket, const struct sockaddr *address, socklen_t address_len);
+
+The connect() function shall attempt to make a connection on a socket. 
+The function takes the following arguments:
+
+--- Return values ---
+Upon successful completion, connect() shall return 0; otherwise, 
+-1 shall be returned and errno set to indicate the error.
+
+* inet_addr *
+in_addr_t inet_addr(const char *cp);
+
+The inet_addr() function shall convert the string pointed to by cp, 
+in the standard IPv4 dotted decimal notation, to an integer value suitable 
+for use as an Internet address.
+
+--- Return values ---
+Upon successful completion, inet_addr() shall return 
+the Internet address. Otherwise, it shall return ( in_addr_t)(-1).
+
+* setsockopt * 
+int setsockopt(int socket, int level, int option_name, const void *option_value, socklen_t option_len);
+
+The setsockopt() function shall set the option specified by the option_name argument, 
+at the protocol level specified by the level argument, to the value pointed to 
+by the option_value argument for the socket associated with the file descriptor 
+specified by the socket argument.
+
+--- Return values ---
+Upon successful completion, setsockopt() shall return 0. Otherwise, 
+-1 shall be returned and errno set to indicate the error.
+
+* getsockname *
+int getsockname(int socket, struct sockaddr *restrict address, socklen_t *restrict address_len);
+
+The getsockname() function shall retrieve the locally-bound name of the specified socket, 
+store this address in the sockaddr structure pointed to by the address argument, 
+and store the length of this address in the object pointed to 
+by the address_len argument.
+
+--- Return values ---
+Upon successful completion, 0 shall be returned, the address argument shall point to 
+the address of the socket, and the address_len argument shall point to the length of the address. 
+Otherwise, -1 shall be returned and errno set to indicate the error.
+
+* fcntl *
+int fcntl(int fildes, int cmd, ...);
+
+The fcntl() function shall perform the operations described below 
+on open files. The fildes argument is a file descriptor.
+
+The available values for cmd are defined in <fcntl.h> and are as follows:
+
+--- Return values ---
+Upon successful completion, the value returned shall depend on cmd as follows:
