@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 15:10:54 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/07 14:48:49 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/07 15:29:22 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ void	ConfigParser::getInfoFromConfigFile(void)
 {
 	Utils::openTextFile(this->_configFile, this->_argv[1]);
 	this->_configLines = Utils::getLinesFromTextFile(&this->_configFile);
-	Utils::deleteSpacesBeforeAndAfter(this->_configLines);
 	Utils::checkBrackets(this->_configLines);
+	Utils::deleteSpacesBeforeAndAfter(this->_configLines);
 	Utils::closeTextFile(this->_configFile);
 }
 
