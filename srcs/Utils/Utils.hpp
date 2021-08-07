@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:01 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/06 16:35:14 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/07 15:31:48 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ namespace Utils
 	void	freeArray(char **array);
 	std::string base64_decode(std::string const& encoded_string);
 	std::string createParameter(std::string configLine);
-	bool		skipEmptyLine(std::string *line);
+	bool		skipEmptyLine(std::string &line);
 	void		removeSpacesBeforeAfter(std::string *line);
 	std::string findFirstWord(std::string &line);
 	std::string checkLocationPath(std::string &startLine, int lineCount);

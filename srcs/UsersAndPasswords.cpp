@@ -44,7 +44,7 @@ bool	UsersAndPasswords::checkCharacters(std::string line, size_t *placeOfChar)
 
 bool	UsersAndPasswords::checkLine(std::string line, size_t *placeOfChar)
 {
-	if (Utils::skipEmptyLine(&line))
+	if (Utils::skipEmptyLine(line))
 		return (false);
 	(*placeOfChar) = line.find(':');
 	if (*placeOfChar == std::string::npos)

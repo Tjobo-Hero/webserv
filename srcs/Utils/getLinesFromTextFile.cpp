@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/06 12:40:59 by rbraaksm      #+#    #+#                 */
-/*   Updated: 2021/08/06 16:34:03 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/07 15:31:44 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ namespace Utils
 		int i = 1;
 		while (std::getline(*configFile, income))
 		{
-			tmp.insert(std::pair<int, std::string>(i, income));
+			removeComments(income);
+			if (skipEmptyLine(income) == false)
+				tmp.insert(std::pair<int, std::string>(i, income));
 			++i;
 		}
 		return tmp;
