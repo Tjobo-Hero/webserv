@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/06 16:20:00 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 17:07:51 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ class Location
 		void	setCgiPath(const std::string &cgiPath);
 		void	setAuthBasic(const std::string &authBasic);
 		void	setHTPasswordPath(const std::string &passwordpath);
-		void	setHtpPath(const std::string passwordpath);
+		void	setHTPPath(const std::string passwordpath);
 
 		const bool&		hasOwnAutoIndex() const;
 		const bool&		getAutoIndex() const;
@@ -95,6 +95,7 @@ class Location
 		bool	getAuthMatch(const std::string &username, const std::string &password);
 		bool	foundKey(std::string key, int *i);
 
+		void	addParameter(std::string parameter, int i);
 		private :
 			void	openUserAndPasswordFile(std::fstream *configFile);
 			bool	checkAllowedMethods(const std::string method) const;

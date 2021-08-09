@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/07 14:49:33 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 17:26:54 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,8 @@ int main (int argc, char **argv)
 		try
 		{
 			configParser.parseTheConfigFile(&serverCluster);
-			serverCluster.checkDuplicatePorts();
-			serverCluster.startup();
-			serverCluster.startListening();
+			serverCluster.setReady();
+			// serverCluster.startListening();
 		}
 		catch (std::exception &e)
 		{

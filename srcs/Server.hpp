@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/06 16:19:06 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 16:49:18 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ class Server
 		typedef void	(Server::*setter)(std::string&);
 
 	private:
-
-
 		int _portNumber;
 		size_t _maxBodySize;
 		bool _autoIndex;
@@ -90,6 +88,9 @@ class Server
 		Location*						findLocation(std::string &match);
 
 		void							createResponse(int index);
+		void	addParameter(std::string &key, std::string parameter);
+		void	printAlternativeServers();
+		int	getAlternative();
 
 };
 

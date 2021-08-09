@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 14:16:07 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 18:08:31 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,27 +58,27 @@ bool			ServerCluster::clusterIsEmpty() const {
 }
 
 //TODO checken wat dit doet en of het werkt met meerdere Severs die dezelfde port grebruiken
-void			ServerCluster::checkDuplicatePorts() {
-	std::vector<Server*>::const_iterator it1 = this->_allServers.begin();
-	std::vector<Server*>::const_iterator it2;
+void	ServerCluster::checkForDuplicatePorts() {
+	std::vector<Server*>::iterator it1 = this->_allServers.begin();
+	std::vector<Server*>::iterator it2;
 
-	if (this->_allServers.size() < 2)
-		return;
-	for (; it1 != this->_allServers.end(); ++it1) {
+	for (; it1 != this->_allServers.end(); ++it1)
+	{
 		it2 = it1;
-		it2++;
-		while (it2 != this->_allServers.end()) {
-			if ((*it1)->getPortNumber() == (*it2)->getPortNumber()) {
+		++it2;
+		for (; it2 != this->_allServers.end(); ++it2)
+			if ((*it1)->getPortNumber() == (*it2)->getPortNumber())
 				(*it1)->setAlternativeServers(*it2);
-			}
-			++it2;
-		}
 	}
 }
 
-void	ServerCluster::startup() {
+void	ServerCluster::setReady()
+{
+	if (_allServers.size() > 1)
+		checkForDuplicatePorts();
 	std::vector<Server*>::iterator it = this->_allServers.begin();
-	for (; !this->_allServers.empty() && it != this->_allServers.end(); ++it) {
+	for (; !this->_allServers.empty() && it != this->_allServers.end(); ++it)
+	{
 		(*it)->startListening();
 		FD_SET((*it)->getSocketFD(), &this->readFds);
 		this->_highestFD = std::max(this->_highestFD, (*it)->getSocketFD());

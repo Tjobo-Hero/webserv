@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/06 16:18:56 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 18:09:10 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,18 +188,16 @@ void	Server::addLocation(Location *newLocation)
 	this->_locations.push_back(newLocation);
 }
 
+void	Server::addParameter(std::string &key, std::string parameter)
+{
+	(this->*(this->_typeFunctionMap.at(key)))(parameter);
+}
+
 void	Server::findKey(std::string &key, std::string configLine, int lineCount)
 {
-	if (*(configLine.rbegin()) != ';')
-		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
-
 	std::map<std::string, setter>::iterator it;
 	if ((it = this->_typeFunctionMap.find(key)) == this->_typeFunctionMap.end())
 		throw parseError ("unknown key: " + configLine + " ", lineCount);
-
-	std::string parameter;
-	parameter = Utils::createParameter(configLine);
-	(this->*(this->_typeFunctionMap.at(key)))(parameter);
 }
 
 bool	Server::parameterCheck(int lineCount) const
@@ -428,4 +426,18 @@ std::ostream&	operator<<(std::ostream &os, const Server &server)
 	}
 	++serverCount;
 	return os;
+}
+
+int		Server::getAlternative()
+{
+	return _portNumber;
+}
+
+void	Server::printAlternativeServers()
+{
+	std::cout << "Alternative\n";
+	std::vector<Server*>::iterator it = _alternativeServers.begin();
+	for (; it != _alternativeServers.end(); ++it)
+		std::cout << "Alternative server: " << (*it)->getAlternative() << std::endl;
+	std::cout << std::endl;
 }

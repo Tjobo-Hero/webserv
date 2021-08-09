@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 14:51:02 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 17:34:20 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ class ServerCluster
 		void	addServer(Server *newServer);
 		bool	clusterIsEmpty() const;
 
-		void	checkDuplicatePorts();
-		void	startup();
+		void	checkForDuplicatePorts();
+		void	setReady();
 
 		void	startListening();
 };
