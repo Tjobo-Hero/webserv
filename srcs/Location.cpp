@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 12:38:18 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 17:07:28 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void	Location::openUserAndPasswordFile(std::fstream *configFile)
 		throw openFileError("Error: failed to open filepath: ", this->_htpasswd_path);
 }
 
-void	Location::setHtpPath(const std::string passwordpath)
+void	Location::setHTPPath(const std::string passwordpath)
 {
 	this->_htpasswd_path = passwordpath;
 }
@@ -184,7 +184,7 @@ void	Location::setHTPasswordPath(const std::string &passwordpath)
 
 	if (stat(passwordpath.c_str(), &statstruct) == -1)
 		throw parseError("set password path error", "check input");
-	setHtpPath(passwordpath);
+	setHTPPath(passwordpath);
 	openUserAndPasswordFile(&configFile);
 	lines = getLinesFromUserAndPasswordFile(&configFile);
 	UsersAndPasswords A;
@@ -284,15 +284,15 @@ void	Location::addParameter(std::string parameter, int i)
 	(this->*pointerToSetFunction[i])(parameter);
 }
 
-void	Location::findKey(std::string &key, std::string configLine, int lineCount)
-{
-	int i = 0;
-	if (foundKey(key, &i) == false)
-		throw parseError("key invalid, not found key: " + key + " ", lineCount);
-	std::string parameter;
-	parameter = Utils::createParameter(configLine);
-	(this->*pointerToSetFunction[i])(parameter);
-}
+// void	Location::findKey(std::string &key, std::string configLine, int lineCount)
+// {
+// 	int i = 0;
+// 	if (foundKey(key, &i) == false)
+// 		throw parseError("key invalid, not found key: " + key + " ", lineCount);
+// 	std::string parameter;
+// 	parameter = Utils::createParameter(configLine);
+// 	(this->*pointerToSetFunction[i])(parameter);
+// }
 
 bool	Location::checkAllowedMethods(const std::string method) const
 {

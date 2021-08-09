@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 12:37:36 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 18:09:10 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,4 +426,18 @@ std::ostream&	operator<<(std::ostream &os, const Server &server)
 	}
 	++serverCount;
 	return os;
+}
+
+int		Server::getAlternative()
+{
+	return _portNumber;
+}
+
+void	Server::printAlternativeServers()
+{
+	std::cout << "Alternative\n";
+	std::vector<Server*>::iterator it = _alternativeServers.begin();
+	for (; it != _alternativeServers.end(); ++it)
+		std::cout << "Alternative server: " << (*it)->getAlternative() << std::endl;
+	std::cout << std::endl;
 }

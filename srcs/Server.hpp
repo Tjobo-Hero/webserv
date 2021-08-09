@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 12:37:55 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 16:49:18 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ class Server
 
 		void							createResponse(int index);
 		void	addParameter(std::string &key, std::string parameter);
+		void	printAlternativeServers();
+		int	getAlternative();
 
 };
 
