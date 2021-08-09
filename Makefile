@@ -6,7 +6,7 @@
 #    By: renebraaksma <renebraaksma@student.42.f      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/07/06 14:47:26 by rbraaksm      #+#    #+#                  #
-#    Updated: 2021/08/06 16:35:39 by rbraaksm      ########   odam.nl          #
+#    Updated: 2021/08/09 11:04:23 by rbraaksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ FILES = ./srcs/main \
 		./srcs/Utils/deleteSpacesBeforeAndAfter \
 		./srcs/Utils/checkBrackets \
 		./srcs/Utils/textFile \
+		./srcs/Utils/checkEndOfLineForSemicolon \
 		# ./srcs/Utils/print \
 
 SRC = $(addsuffix .cpp, $(FILES))

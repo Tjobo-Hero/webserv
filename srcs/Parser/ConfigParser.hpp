@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/06 16:55:45 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 12:27:48 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ class ConfigParser
 		void	lookingForServer(ServerCluster *serverCluster);
 		void	createServer(ServerCluster *serverCluster);
 		void	setLocation(Server *newServer);
+
+		void	configNewServer(Server *newServer);
+		void	createKey(bool server, Server *newServer, Location *newLocation);
+		void	findServer(std::string key, Server *newServer);
+		void	findLocation(std::string key, Location *newLocation);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:01 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/07 15:31:48 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 10:58:25 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ namespace Utils
 	void	deleteEmptyLines(std::map<int, std::string> &lines);
 	void	removeComments(std::string &lines);
 	void	deleteSpacesBeforeAndAfter(std::map<int, std::string> &lines);
-	void	setLineCount(std::vector<int> &count, std::vector<std::string> &lines);
 	void	checkBrackets(std::map<int, std::string> lines);
+	void	checkEndOfLineForSemicolon(std::map<int, std::string> lines);
 	void	openTextFile(std::fstream &file, std::string income);
 	void	closeTextFile(std::fstream &file);
 }

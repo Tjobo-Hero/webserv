@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/06 16:19:44 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/09 12:38:18 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,11 +279,13 @@ bool	Location::foundKey(std::string key, int *i)
 	return false;
 }
 
+void	Location::addParameter(std::string parameter, int i)
+{
+	(this->*pointerToSetFunction[i])(parameter);
+}
+
 void	Location::findKey(std::string &key, std::string configLine, int lineCount)
 {
-	if (*(configLine.rbegin()) != ';')
-		throw parseError("syntax error, line doesn't end with ';' ", lineCount);
-
 	int i = 0;
 	if (foundKey(key, &i) == false)
 		throw parseError("key invalid, not found key: " + key + " ", lineCount);
