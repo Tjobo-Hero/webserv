@@ -6,7 +6,7 @@
 #    By: renebraaksma <renebraaksma@student.42.f      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/07/06 14:47:26 by rbraaksm      #+#    #+#                  #
-#    Updated: 2021/08/09 11:04:23 by rbraaksm      ########   odam.nl          #
+#    Updated: 2021/08/10 10:43:05 by rbraaksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,11 @@ FILES = ./srcs/main \
 		./srcs/Utils/checkBrackets \
 		./srcs/Utils/textFile \
 		./srcs/Utils/checkEndOfLineForSemicolon \
+		./srcs/Utils/createSocket \
+		./srcs/Utils/setDataStructureToZero \
+		./srcs/Utils/setSocketOption \
+		./srcs/Utils/bindSocket \
+		./srcs/Utils/listenSocket \
 		# ./srcs/Utils/print \
 
 SRC = $(addsuffix .cpp, $(FILES))

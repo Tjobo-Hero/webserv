@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:54:38 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 18:09:10 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/10 10:42:27 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,28 +241,14 @@ Location*	Server::findLocation(std::string &match)
 	return NULL;
 }
 
-void	Server::startListening()
+void	Server::setServer()
 {
-	this->_socketFD = socket(PF_INET, SOCK_STREAM, 0);
-	if (this->_socketFD < 0 )
-		throw startupError("to create socket for server with host: ", this->_host);
-	bzero(&this->_addr, sizeof(this->_addr));
-	this->_addr.sin_family = AF_INET;
-	this->_addr.sin_port = htons(this->_portNumber);
-	this->_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-
-	int ret;
-	int options = 1;
-	ret = setsockopt(this->_socketFD, SOL_SOCKET, SO_REUSEPORT, &options, sizeof(options));
-	if (ret < 0)
-		throw startupError("to setsockopt for server with host: ", this->_host);
-	ret = bind(this->_socketFD, (sockaddr*)&(this->_addr), sizeof(this->_addr));
-	if (ret < 0)
-		throw startupError("to bind for server with host: ", this->_host);
-	ret = listen(this->_socketFD, NR_OF_CONNECTIONS);
-	if (ret < 0)
-		throw startupError("to listen for server host: ", this->_host);
-	std::cout << "Startup was succesfull" << std::endl;
+	Utils::createSocket(this->_socketFD, this->_host);
+	Utils::setDataStructureToZero(this->_addr, this->_portNumber);
+	Utils::setSocketOption(this->_socketFD, this->_host);
+	Utils::bindSocket(this->_socketFD, this->_addr, this->_host);
+	Utils::listenSocket(this->_socketFD, this->_host);
+	std::cout << "Server startup is succesfull" << std::endl;
 }
 
 int		Server::acceptConnections()
