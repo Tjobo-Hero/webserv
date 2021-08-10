@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 18:08:31 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/10 10:38:13 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,18 +72,23 @@ void	ServerCluster::checkForDuplicatePorts() {
 	}
 }
 
-void	ServerCluster::setReady()
+void	ServerCluster::setupEveryServerInCluster()
 {
-	if (_allServers.size() > 1)
-		checkForDuplicatePorts();
 	std::vector<Server*>::iterator it = this->_allServers.begin();
 	for (; !this->_allServers.empty() && it != this->_allServers.end(); ++it)
 	{
-		(*it)->startListening();
+		(*it)->setServer();
 		FD_SET((*it)->getSocketFD(), &this->readFds);
 		this->_highestFD = std::max(this->_highestFD, (*it)->getSocketFD());
 		this->_numberOfServers += 1;
 	}
+}
+
+void	ServerCluster::setReady()
+{
+	if (_allServers.size() > 1)
+		checkForDuplicatePorts();
+	setupEveryServerInCluster();
 }
 
 void	ServerCluster::startListening() {

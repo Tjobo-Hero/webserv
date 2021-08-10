@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:01 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 10:58:25 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/10 10:33:53 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,10 @@ namespace Utils
 	void	checkEndOfLineForSemicolon(std::map<int, std::string> lines);
 	void	openTextFile(std::fstream &file, std::string income);
 	void	closeTextFile(std::fstream &file);
+	void	createSocket(long &socketFD, const std::string host);
+	void	setDataStructureToZero(struct sockaddr_in &addr, const int portNumber);
+	void	setSocketOption(long &socketFD, const std::string host);
+	void	bindSocket(long &socketFD, struct sockaddr_in &addr, const std::string host);
+	void	listenSocket(long &socketFD, const std::string host);
 }
 #endif

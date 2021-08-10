@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 17:26:54 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/10 09:46:16 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int main (int argc, char **argv)
 		{
 			configParser.parseTheConfigFile(&serverCluster);
 			serverCluster.setReady();
-			// serverCluster.startListening();
+			serverCluster.startListening();
 		}
 		catch (std::exception &e)
 		{
