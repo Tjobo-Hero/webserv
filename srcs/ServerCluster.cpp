@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/10 12:50:51 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/11 14:42:50 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,44 +16,50 @@
 
 Connection	*g_recentConnection;
 
-ServerCluster::ServerCluster() : _numberOfServers(0), _highestFD(0) {
+ServerCluster::ServerCluster() : _highestFD(0)
+{
 	FD_ZERO(&this->readFds);
 	FD_ZERO(&this->writeFds);
 	return;
 }
 
-ServerCluster::ServerCluster(ServerCluster const &src) {
+ServerCluster::ServerCluster(ServerCluster const &src)
+{
 	if (this != &src)
 		*this = src;
 	return;
 }
 
-ServerCluster::~ServerCluster() {
+ServerCluster::~ServerCluster()
+{
 
 	std::vector<Server*>::iterator it = this->_allServers.begin();
-	for (; this->_allServers.empty() && it != this->_allServers.end(); ++it) {
+	for (; this->_allServers.empty() && it != this->_allServers.end(); ++it)
 		delete(*it);
-	}
 	return;
 }
 
-ServerCluster&		ServerCluster::operator=(ServerCluster const &obj) {
-	if (this != &obj) {
-		this->_numberOfServers = obj._numberOfServers;
+ServerCluster&		ServerCluster::operator=(ServerCluster const &obj)
+{
+	if (this != &obj)
+	{
 		this->_allServers = obj._allServers;
 		this->_doublePorts = obj._doublePorts;
 		this->_highestFD = obj._highestFD;
 		this->readFds = obj.readFds;
 		this->writeFds = obj.writeFds;
+		this->_maxFD = obj._maxFD;
 	}
 	return *this;
 }
 
-void			ServerCluster::addServer(Server *newServer) {
+void			ServerCluster::addServer(Server *newServer)
+{
 	this->_allServers.push_back(newServer);
 }
 
-bool			ServerCluster::clusterIsEmpty() const {
+bool			ServerCluster::clusterIsEmpty() const
+{
 	return this->_allServers.empty();
 }
 
@@ -70,11 +76,6 @@ void	ServerCluster::checkForDuplicatePorts() {
 			if ((*it1)->getPortNumber() == (*it2)->getPortNumber())
 				(*it1)->setAlternativeServers(*it2);
 	}
-}
-
-void	ServerCluster::plusNumberOfServers(void)
-{
-	this->_numberOfServers += 1;
 }
 
 void	ServerCluster::setHighestFD(Server *server)
@@ -95,7 +96,6 @@ void	ServerCluster::setupEveryServerInCluster()
 		(*it)->setServer();
 		setFD(*it, this->readFds);
 		setHighestFD(*it);
-		plusNumberOfServers();
 	}
 }
 
@@ -106,78 +106,159 @@ void	ServerCluster::setReady()
 	setupEveryServerInCluster();
 }
 
-void	ServerCluster::startListening() {
+void	ServerCluster::setMaxFD(void)
+{
+	this->_maxFD = this->_highestFD;
+}
+
+void	ServerCluster::makeReadyForListening(fd_set &readSet, fd_set &writeSet)
+{
+	setMaxFD();
+	signal(SIGPIPE, Utils::signalHandler); // if we're trying to read or write to a socket that's no longer valid
+	g_recentConnection = NULL;
+	FD_ZERO(&writeSet);
+	FD_ZERO(&readSet);
+	readSet = this->readFds;
+}
+
+int	ServerCluster::bufferExists(Connection &connection)
+{
+	return connection.getBuffer().empty();
+}
+
+void	ServerCluster::createResponseAndSendData(Server *server, int i)
+{
+	g_recentConnection = &(server->connections[i]);
+	server->createResponse(i);
+	server->connections[i].sendData(server->_bodylen);
+}
+
+void	ServerCluster::resetAndCloseConnections(Connection &connection)
+{
+	connection.resetConnection();
+	connection.closeConnection();
+}
+
+int		ServerCluster::checkServerConnection(Server *server, const int i)
+{
+	if (server->connections[i].getAcceptFD() == -1)
+		return 0;
+	unsigned long realTime = Utils::getTime();
+	unsigned long lastReadTime = server->connections[i].getTimeLastRead();
+	if (CONNECTION_TIMEOUT > 0 && realTime - lastReadTime > CONNECTION_TIMEOUT)
+	{
+		if (bufferExists(server->connections[i]))
+			createResponseAndSendData(server, i);
+		resetAndCloseConnections(server->connections[i]);
+		return 0;
+	}
+	return 1;
+}
+
+void	ServerCluster::setFDForRightConnection(Server *server, int i, fd_set &readSet, fd_set &writeSet)
+{
+	this->_maxFD = std::max(this->_maxFD, server->connections[i].getAcceptFD());
+	if (!server->connections[i].hasFullRequst())
+		FD_SET(server->connections[i].getAcceptFD(), &readSet);
+	else
+	{
+		FD_SET(server->connections[i].getAcceptFD(), &writeSet);
+		if (!server->connections[i].myResponse)
+			server->createResponse(i);
+	}
+}
+
+void	ServerCluster::connections(Server *server, fd_set &readSet, fd_set &writeSet)
+{
+	for (int i = 0; i < NR_OF_CONNECTIONS; ++i)
+	{
+		if (checkServerConnection(server, i) == 1)
+			setFDForRightConnection(server, i, readSet, writeSet);
+	}
+}
+
+void	ServerCluster::connectToServers(fd_set &readSet, fd_set &writeSet)
+{
+	std::vector<Server*>::iterator it = this->_allServers.begin();
+
+	for (; it != this->_allServers.end(); ++it)
+		connections(*it, readSet, writeSet);
+}
+
+int	ServerCluster::readyFD(fd_set &readSet, fd_set &writeSet)
+{
+	struct timeval timeout;
+	int ret;
+
+	timeout.tv_sec = SELECT_TIMEOUT;
+	timeout.tv_usec = 0;
+	ret = select(this->_maxFD + 1, &readSet, &writeSet, NULL, &timeout);
+	if (ret == -1)
+		exit(1);
+	return ret;
+}
+
+bool	ServerCluster::fdIsReady(Server *server, fd_set &readSet)
+{
+	long	socketFD;
+
+	socketFD = server->getSocketFD();
+	if (FD_ISSET(socketFD, &readSet))
+		if (server->acceptConnections() == 1)
+			return false;
+	return true;
+}
+
+void	ServerCluster::numberOfConnectionsInServer(Server *server, fd_set &readSet, fd_set &writeSet)
+{
+	long fd;
+	static int connectionCounter = 0;
+	for (int i = 0; i < NR_OF_CONNECTIONS; i++)
+	{
+		if ((server)->connections[connectionCounter].getAcceptFD() != -1)
+		{
+			fd = (server)->connections[connectionCounter].getAcceptFD();
+			if (FD_ISSET(fd, &readSet))
+			{
+				g_recentConnection = &((server)->connections[connectionCounter]);
+				(server)->connections[connectionCounter].startReading();
+				break;
+			}
+			if (FD_ISSET(fd, &writeSet))
+			{
+				g_recentConnection = &((server)->connections[connectionCounter]);
+				if ((server)->connections[connectionCounter].getResponseString().empty())
+					(server)->setupResponseString(connectionCounter);
+				(server)->connections[connectionCounter].sendData((server)->_bodylen);
+				break;
+			}
+		}
+		connectionCounter++;
+		connectionCounter %= NR_OF_CONNECTIONS;
+	}
+}
+
+void	ServerCluster::acceptConnectionsInServers(fd_set &readSet, fd_set &writeSet)
+{
+	std::vector<Server*>::iterator it = this->_allServers.begin();
+
+	for (; it != this->_allServers.end(); it++)
+	{
+		if (fdIsReady(*it, readSet) == false)
+			break ;
+		numberOfConnectionsInServer(*it, readSet, writeSet);
+	}
+}
+
+void	ServerCluster::listening()
+{
 	while (true)
 	{
 		fd_set	readSet;
 		fd_set	writeSet;
-		int		ret;
-		long	maxFD= this->_highestFD;
-		std::vector<Server*>::iterator it = this->_allServers.begin();
-		g_recentConnection = NULL;
-		signal(SIGPIPE, Utils::signalHandler); // if we're trying to read or write to a socket that's no longer valid
-		FD_ZERO(&writeSet);
-		FD_ZERO(&readSet);
-		readSet = this->readFds;
-		while (it != this->_allServers.end()) {
-			for (int i = 0; i < NR_OF_CONNECTIONS; ++i) {
-				if ((*it)->connections[i].getAcceptFD() != -1) {
-					unsigned long a = Utils::getTime();
-					unsigned long b = (*it)->connections[i].getTimeLastRead();
-					if (CONNECTION_TIMEOUT > 0 && a - b > CONNECTION_TIMEOUT) {
-						if (!(*it)->connections[i].getBuffer().empty()) {
-							g_recentConnection = &((*it)->connections[i]);
-							(*it)->createResponse(i);
-							(*it)->connections[i].sendData((*it)->_bodylen);
-						}
-						(*it)->connections[i].resetConnection();
-						(*it)->connections[i].closeConnection();
-						continue;
-					}
-					maxFD = std::max(maxFD, (*it)->connections[i].getAcceptFD());
-					if (!(*it)->connections[i].hasFullRequst())
-						FD_SET((*it)->connections[i].getAcceptFD(), &readSet);
-					else {
-						FD_SET((*it)->connections[i].getAcceptFD(), &writeSet);
-						if (!(*it)->connections[i].myResponse)
-							(*it)->createResponse(i);
-					}
-				}
-			}
-			it++;
-		}
-		struct timeval timeout;
-		timeout.tv_sec = SELECT_TIMEOUT;
-		timeout.tv_usec = 0;
-		if ((ret = select(maxFD + 1, &readSet, &writeSet, NULL, &timeout)) == -1)
-			exit(1); // check trhow
-		for (it = this->_allServers.begin(); it != this->_allServers.end() && ret; it++) {
-			long fd;
-			fd = (*it)->getSocketFD();
-			if (FD_ISSET(fd, &readSet)) {
-				if ((*it)->acceptConnections() == 1)
-					break;
-			}
-			static int connectionCounter = 0;
-			for (int i = 0; i < NR_OF_CONNECTIONS; i++) {
-				if ((*it)->connections[connectionCounter].getAcceptFD() != -1) {
-					fd = (*it)->connections[connectionCounter].getAcceptFD();
-					if (FD_ISSET(fd, &readSet)) {
-						g_recentConnection = &((*it)->connections[connectionCounter]);
-						(*it)->connections[connectionCounter].startReading();
-						break;
-					}
-					if (FD_ISSET(fd, &writeSet)) {
-						g_recentConnection = &((*it)->connections[connectionCounter]);
-						if ((*it)->connections[connectionCounter].getResponseString().empty())
-							(*it)->setupResponseString(connectionCounter);
-						(*it)->connections[connectionCounter].sendData((*it)->_bodylen);
-						break;
-					}
-				}
-				connectionCounter++;
-				connectionCounter %= NR_OF_CONNECTIONS;
-			}
-		}
+		makeReadyForListening(readSet, writeSet);
+		connectToServers(readSet, writeSet);
+		if (readyFD(readSet, writeSet) == 1)
+			acceptConnectionsInServers(readSet, writeSet);
 	}
 }
