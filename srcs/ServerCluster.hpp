@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:40 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/11 14:39:42 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/11 18:06:43 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 # define SELECT_TIMEOUT 2
 
 #include "Server.hpp"
+#include "Connection.hpp"
 #include "Libraries.hpp"
 #include "Webserver.hpp"
 
 class Server;
+class Connection;
 
 class ServerCluster
 {
@@ -60,10 +62,13 @@ class ServerCluster
 		void	createResponseAndSendData(Server *server, int i);
 		void	resetAndCloseConnections(Connection &connection);
 
-		int	readyFD(fd_set &readSet, fd_set &writeSet);
+		int		isFDReady(fd_set &readSet, fd_set &writeSet);
 		void	acceptConnectionsInServers(fd_set &readSet, fd_set &writeSet);
-		bool	fdIsReady(Server *server, fd_set &readSet);
-		void	numberOfConnectionsInServer(Server *server, fd_set &readSet, fd_set &writeSet);
+		bool	serverAcceptConnections(Server *server, fd_set &readSet);
+		void	serverConnections(Server *server, fd_set &readSet, fd_set &writeSet);
+		int		checkActiveServerConnection(const Connection &connection);
+		int		startReading(Connection &connection);
+		int		setupResponseAndSendData(Server *server, const int connectionCounter);
 
 };
 #endif
