@@ -6,12 +6,12 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/10 10:42:19 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/26 10:24:09 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./Parser/ConfigParser.hpp"
-#include "ServerCluster.hpp"
+#include "ServerCluster/ServerCluster.hpp"
 #include "Webserver.hpp"
 
 #include "Location.hpp"
@@ -31,7 +31,7 @@ int main (int argc, char **argv)
 		{
 			configParser.parseTheConfigFile(&serverCluster);
 			serverCluster.setReady();
-			serverCluster.startListening();
+			serverCluster.listening();
 		}
 		catch (std::exception &e)
 		{

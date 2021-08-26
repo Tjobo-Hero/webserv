@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/07/12 14:52:17 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/13 10:40:55 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define WEBSERVER_HPP
 
 # include <fstream>
-# include "ServerCluster.hpp"
+# include "ServerCluster/ServerCluster.hpp"
 # include "Request.hpp"
 # include "CGI.hpp"
 # include "Server.hpp"
