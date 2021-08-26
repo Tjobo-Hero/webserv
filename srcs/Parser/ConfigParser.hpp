@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 14:50:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 12:27:48 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/13 10:40:33 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "..//Utils/Utils.hpp"
 # include "../Server.hpp"
 # include "../Location.hpp"
-# include "../ServerCluster.hpp"
+# include "../ServerCluster/ServerCluster.hpp"
 
 class ConfigParser
 {
