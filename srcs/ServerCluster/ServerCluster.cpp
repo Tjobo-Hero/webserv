@@ -6,13 +6,14 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:57:45 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/13 12:39:27 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/26 12:33:05 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ServerCluster.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Request.hpp"
+#include "Utils/UtilsServerCluster.hpp"
 
 Connection	*g_recentConnection;
 

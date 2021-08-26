@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/21 15:07:56 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/21 16:08:35 by timvancitte   ########   odam.nl         */
+/*   Updated: 2021/08/26 13:44:54 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,34 @@ getPath::~getPath() {
 	return;
 }
 
+Location*	getPath::checkFileExtensionUriReturn(std::string extension, Location* it) {
+	if (extension == "error_image.png")
+		this->_uri = "/error_image.png";
+	else if (extension == "php")
+		this->_uri = "/cgi/bin/php-cgi";
+	return (it);
+}
+
+std::string	getPath::checkFileExtension(std::string extension) {
+	if (extension == "*.error_image.png")
+		extension.erase(0, 2);
+	else if (extension == "*.php") 
+		extension.erase(0, 2);
+	else
+		extension.erase(0, 1);
+	return extension;
+}
+
+
 Location*	getPath::findFileExtension() {
 	std::vector<Location*> locations = _server.getLocations();
 
 	for (std::vector<Location*>::iterator it = locations.begin(); it != locations.end(); ++it) {
 		if ((*it)->getIsFileExtension()) {
-			std::string extension = (*it)->getMatch();
-			if (extension == "*.error_image.png")
-				extension.erase(0, 2);
-			else if (extension == "*.php") 
-				extension.erase(0, 2);
-			else
-				extension.erase(0, 1);
+			std::string extension = checkFileExtension((*it)->getMatch());
 			size_t len = extension.length();
 			if (this->_uri.length() >= len && !this->_uri.compare(this->_uri.length() - len, len, extension)) {
-				if (extension == "error_image.png")
-					this->_uri = "/error_image.png";
-				else if (extension == "php")
-					this->_uri = "/cgi/bin/php-cgi";
-				return (*it);
+				return checkFileExtensionUriReturn(extension, *it);
 			}
 		}
 	}
@@ -127,25 +136,31 @@ void getPath::checkPut() {
 		this->_response.setStatus(404);
 }
 
-std::string getPath::createPath() {
-	this->_location = NULL;
-	this->_needIndex = false;
-	this->_uri = this->_request.getUri();
-	this->_location = findFileExtension();
-	
+bool	getPath::checkForLocation() {
 	if (!this->_location) {
 		noLocation();
 		this->_location = this->_server.findLocation(this->_locationMatch);
 	}
 	else
 		this->_uri.erase(0, 1);
+	if (checkForNoLocationPutRequest() == true)
+		return false;
+	checkForNoCGIPostRequest();
+	return true;
+}
+
+bool	getPath::checkForNoLocationPutRequest() {
 	if (!this->_location && this->_request.getMethod().compare("PUT") != 0) {
 		this->_response.setStatus(404);
 		this->_response.setCurrentLocation(this->_location);
-		return "";
+		return true;
 	}
-	if (this->_request.getMethod().compare("POST") == 0 && this->_location->getCGIPath().empty()) {
-		if (!this->_location->getRoot().empty()) // location has no own root, so we use server root
+	return false;
+}
+
+void	getPath::checkForNoCGIPostRequest() {
+	if (this->_request.getMethod().compare("POST") == 0 && this->_location->getCGIPath().empty()) { 
+		if (!this->_location->getRoot().empty()) // use server root
 			this->_rootDir = this->_location->getRoot();
 		else
 			this->_rootDir = this->_server.getRoot();
@@ -158,5 +173,19 @@ std::string getPath::createPath() {
 	else
 		locationExistst();
 	this->_response.setCurrentLocation(this->_location);
+}
+
+void	getPath::setVariables() {
+	this->_location = NULL;
+	this->_needIndex = false;
+	this->_uri = this->_request.getUri();
+	this->_location = findFileExtension();
+}
+
+std::string getPath::createPath() {
+	setVariables();
+	
+	if (checkForLocation() == false)
+		return ("");
 	return this->_filePath;
 }

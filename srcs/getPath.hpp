@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/21 15:08:02 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:21:26 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/26 13:42:59 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@ class getPath
 		void	checkPut();
 		void	checkFile();
 		Location*	findFileExtension();
+		Location*	checkFileExtensionUriReturn(std::string extension, Location* it);
+		std::string	checkFileExtension(std::string extension);
+		bool		checkForLocation();
+		bool		checkForNoLocationPutRequest();
+		void		checkForNoCGIPostRequest();
+		void		setVariables();
 		
 	public:
 
@@ -45,8 +51,8 @@ class getPath
 		getPath&	operator=(getPath const &obj);
 		std::string createPath();
 		
-		std::string getFilePath(); // need to be const?
-		std::string getRooDir(); // need to be const?
+		// std::string getFilePath(); // need to be const?
+		// std::string getRooDir(); // need to be const?
 		void	noLocation();
 };
 #endif
