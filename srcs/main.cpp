@@ -6,12 +6,12 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 12:00:58 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/10 13:09:12 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/13 10:42:18 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./Parser/ConfigParser.hpp"
-#include "ServerCluster.hpp"
+#include "ServerCluster/ServerCluster.hpp"
 #include "Webserver.hpp"
 
 #include "Location.hpp"

@@ -6,7 +6,7 @@
 #    By: renebraaksma <renebraaksma@student.42.f      +#+                      #
 #                                                    +#+                       #
 #    Created: 2021/07/06 14:47:26 by rbraaksm      #+#    #+#                  #
-#    Updated: 2021/08/10 10:35:36 by rbraaksm      ########   odam.nl          #
+#    Updated: 2021/08/13 11:45:03 by rbraaksm      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ FILES = ./srcs/main \
 		./srcs/Response \
 		./srcs/ResponseHeader \
 		./srcs/Server \
-		./srcs/ServerCluster \
+		./srcs/ServerCluster/ServerCluster\
 		./srcs/Utils/base64_decode \
 		./srcs/Utils/freeArray \
 		./srcs/Utils/getTime \
@@ -63,6 +63,7 @@ FILES = ./srcs/main \
 		./srcs/Utils/setSocketOption \
 		./srcs/Utils/bindSocket \
 		./srcs/Utils/listenSocket \
+		./srcs/ServerCluster/Utils/makeReadyForListening \
 		# ./srcs/Utils/print \
 
 SRC = $(addsuffix .cpp, $(FILES))
