@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   getPath.cpp                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/21 15:07:56 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/30 10:49:04 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 11:29:48 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,16 +114,22 @@ void	getPath::locationExistst() {
 	}
 }
 
-void getPath::checkPut() {
-	std::vector<std::string>	indices;
-	std::vector<std::string>::iterator it;
+std::vector<std::string>	getPath::setIndices() {
+	if (!this->_location->getIndices().empty())
+		return this->_location->getIndices();
+	else
+		return this->_server.getIndices();
+}
 
+void	getPath::checkIndices(std::vector<std::string>::iterator it, std::vector<std::string> indices) {
+	if (it == indices.end()) // all index pages don't exist at requested root
+		this->_response.setStatus(404);
+}
+
+void	getPath::getIndices(std::vector<std::string> indices) {
+	std::vector<std::string>::iterator it;
 	struct stat statBuf = {};
 
-	if (!this->_location->getIndices().empty())
-		indices = this->_location->getIndices();
-	else
-		indices = this->_server.getIndices();
 	for (it = indices.begin(); it != indices.end(); ++it) {
 		if (this->_uri != "/")
 			this->_filePath = this->_rootDir + this->_uri + (*it);
@@ -132,8 +138,30 @@ void getPath::checkPut() {
 		if (stat(this->_filePath.c_str(), &statBuf) == 0)
 			break;
 	}
-	if (it == indices.end()) // all index pages don't exist at requested root
-		this->_response.setStatus(404);
+}
+
+void	getPath::checkPut() {
+	std::vector<std::string>	indices;
+	// std::vector<std::string>::iterator it;
+
+	// struct stat statBuf = {};
+
+	indices = setIndices();
+	getIndices(indices);
+	// if (!this->_location->getIndices().empty())
+	// 	indices = this->_location->getIndices();
+	// else
+	// 	indices = this->_server.getIndices();
+	// for (it = indices.begin(); it != indices.end(); ++it) {
+	// 	if (this->_uri != "/")
+	// 		this->_filePath = this->_rootDir + this->_uri + (*it);
+	// 	else
+	// 		this->_filePath = this->_rootDir + (*it);
+	// 	if (stat(this->_filePath.c_str(), &statBuf) == 0)
+	// 		break;
+	// }
+	// if (it == indices.end()) // all index pages don't exist at requested root
+	// 	this->_response.setStatus(404);
 }
 
 bool	getPath::checkForLocation() {

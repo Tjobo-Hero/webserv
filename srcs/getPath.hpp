@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   getPath.hpp                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/21 15:08:02 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/26 13:42:59 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 11:29:58 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ class getPath
 		bool		checkForNoLocationPutRequest();
 		void		checkForNoCGIPostRequest();
 		void		setVariables();
+		std::vector<std::string>		setIndices();
+		void		getIndices(std::vector<std::string> indices);
+		void		checkIndices(std::vector<std::string>::iterator it, std::vector<std::string> indices);
 		
 	public:
 

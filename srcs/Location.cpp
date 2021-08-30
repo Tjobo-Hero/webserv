@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Location.cpp                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
+/*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/30 10:52:09 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 11:36:16 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,13 +304,13 @@ bool	Location::checkAllowedMethods(const std::string method) const
 
 bool	Location::parameterCheck(int lineCount) const
 {
-	for (std::vector<std::string>::const_iterator it = this->_methods.begin(); it != this->_methods.end(); ++it)
+	for (std::vector<std::string>::const_iterator it = this->_methods.begin(); it != this->_methods.end(); ++it) {
 		if (checkAllowedMethods(*it) == false)
 			throw parseError("invalid method ", lineCount);
 	}
 	// if (this->_root.empty() == true)
-		// throw parseError("missing root ", lineCount);
-	return true;	
+	// 	throw parseError("missing root ", lineCount);
+	return (true);
 }
 
 bool Location::getAuthMatch(const std::string& username, const std::string& password)
