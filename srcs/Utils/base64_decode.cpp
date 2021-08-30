@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/07/07 09:53:00 by rbraaksm      #+#    #+#                 */
-/*   Updated: 2021/07/12 14:16:07 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/30 10:42:59 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ namespace Utils
 		std::string ret;
 
 		std::cout << "test\n";
-		while (in_len-- && encoded_string[in_] != '=' && is_base64(encoded_string[in_])) {
+		while (in_len-- && encoded_string[in_] != '=' && is_base64(encoded_string[in_]))
+		{
 			char_array_4[i++] = encoded_string[in_]; in_++;
 			if (i ==4) {
 				for (i = 0; i <4; i++)

@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Server.hpp                                         :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
+/*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/10 13:57:16 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/26 09:44:50 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 11:52:33 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 

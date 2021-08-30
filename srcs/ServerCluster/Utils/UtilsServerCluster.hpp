@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   UtilsServerCluster.hpp                             :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
+/*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/13 10:43:09 by rbraaksm      #+#    #+#                 */
-/*   Updated: 2021/08/26 12:26:11 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 11:52:41 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // # include "../"
 
 class ServerCluster;
+class Server;
 
 class UtilsServerCluster
 {

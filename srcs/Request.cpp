@@ -6,31 +6,36 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 15:03:04 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 11:23:15 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-std::string methods[4] = {
-	"GET",
-	"HEAD",
-	"POST",
-	"PUT",
-};
+std::string methods[4] = {"GET", "HEAD", "POST", "PUT"};
 
-Request::Request() {}
+Request::Request()
+{
+	_allowedMethods.push_back("GET");
+	_allowedMethods.push_back("HEAD");
+	_allowedMethods.push_back("POST");
+	_allowedMethods.push_back("PUT");
+}
 
-Request::~Request() {}
+Request::~Request(){}
 
-Request::Request(const Request &src) {
+Request::Request(const Request &src)
+{
 	if (this != &src)
 		*this = src;
 }
 
-Request	&Request::operator=(const Request &src) {
-	if (this != &src) {
+Request	&Request::operator=(const Request &src)
+{
+	if (this != &src)
+	{
 		this->_request = src._request;
+		this->_allowedMethods = src._allowedMethods;
 		this->_method = src._method;
 		this->_uri = src._uri;
 		this->_version = src._version;
@@ -43,40 +48,55 @@ Request	&Request::operator=(const Request &src) {
 	return *this;
 }
 
-Request::Request(std::string request) : _request(request) {
+Request::Request(std::string request) : _request(request)
+{
 	_bodyLength = 0;
 	_contentLength = -1;
 	_status = 200;
 	parseRequest();
 }
 
-std::string	Request::getMethod() const {
-	for (int i = 0; i < 4; i++) {
-		if (_method == methods[i])
-			return methods[i];
-	}
-	std::string s;
-	return s;
+std::string	Request::getMethod()
+{
+	std::list<std::string>::iterator it = _allowedMethods.begin();
+	for (; it != _allowedMethods.end(); ++it)
+		if (_method == *it)
+			break;
+	return (*it);
+	// it = _allowedMethods.begin();
+	
+	// for (int i = 0; i < 4; i++)
+	// {
+	// 	if (_method == methods[i])
+	// 		return methods[i];
+	// }
+	// std::string s;
+	// return s;
 }
 
-std::string	Request::getUri() const {
+std::string	Request::getUri() const
+{
 	return _uri;
 }
 
-std::map<std::string, std::string>	Request::getDefHeaders() const {
+std::map<std::string, std::string>	Request::getDefHeaders() const
+{
 	return _defHeaders;
 }
 
-std::map<std::string, std::string>	Request::getCGIHeaders() const {
+std::map<std::string, std::string>	Request::getCGIHeaders() const
+{
 	return _CGIHeaders;
 }
 
-std::string	Request::getBody() const {
+std::string	Request::getBody() const
+{
 	return _body;
 }
 
-std::string	Request::getContentType() {
-	if (_defHeaders.begin() == _defHeaders.end()) // empty?
+std::string	Request::getContentType()
+{
+	if (_defHeaders.begin() == _defHeaders.end())
 		return ("NULL");
 	std::map<std::string, std::string>::iterator it = _defHeaders.find("CONTENT-TYPE");
 	if (it == _defHeaders.end())
@@ -84,13 +104,16 @@ std::string	Request::getContentType() {
 	return (it->second);
 }
 
-std::string Request::getHost() {
-	if (this->_defHeaders.begin() == this->_defHeaders.end()) {
+std::string Request::getHost()
+{
+	if (this->_defHeaders.begin() == this->_defHeaders.end())
+	{
 		this->_status = 400;
 		return "NULL";
 	}
 	std::map<std::string, std::string>::iterator it = this->_defHeaders.find("HOST");
-	if (it == this->_defHeaders.end()) {
+	if (it == this->_defHeaders.end())
+	{
 		this->_status = 400;
 		return "NULL";
 	}
@@ -101,11 +124,13 @@ std::string Request::getHost() {
 	return host;
 }
 
-std::string	Request::getCGIEnv() const {
+std::string	Request::getCGIEnv() const
+{
 	return _CGIEnv;
 }
 
-int	Request::getStatus() const {
+int	Request::getStatus() const
+{
 	return _status;
 }
 
@@ -114,12 +139,14 @@ filetype Request::getFileType() const
 	return _type;
 }
 
-void	Request::parseRequest() {
+void	Request::parseRequest()
+{
 	checkCGI();
 	parseRequestLine();
 	parseHeaders();
 	std::map<std::string, std::string>::iterator it = _defHeaders.find("TRANSFER-ENCODING");
-	if (it != _defHeaders.end()) {
+	if (it != _defHeaders.end())
+	{
 		if (it ->second == "chunked")
 			parseBody();
 	}
@@ -128,24 +155,30 @@ void	Request::parseRequest() {
 	_request.clear();
 }
 
-void	Request::checkCGI() {
-	if (_request.find(".py") != std::string::npos) {
+void	Request::checkCGI()
+{
+	if (_request.find(".py") != std::string::npos)
+	{
 		_CGI = true;
 		_type = PY;
 	}
-	else if (_request.find(".php") != std::string::npos) {
+	else if (_request.find(".php") != std::string::npos)
+	{
 		_CGI = true;
 		_type = PHP;
 	}
-	else if (_request.find(".bla") != std::string::npos) {
+	else if (_request.find(".bla") != std::string::npos)
+	{
 		_CGI = true;
 		_type = BLA;
 	}
-	else if (_request.find(".cgi") != std::string::npos) {
+	else if (_request.find(".cgi") != std::string::npos)
+	{
 		_CGI = true;
 		_type = CGIBIN;
 	}
-	else if (_request.find(".cgi-bin") != std::string::npos) {
+	else if (_request.find(".cgi-bin") != std::string::npos)
+	{
 		_CGI = true;
 		_type = CGIBIN;	
 	}
@@ -153,7 +186,8 @@ void	Request::checkCGI() {
 		_CGI = false;
 }
 
-void	Request::parseRequestLine() { // nog naar kijken want snap niet wat er precies gebeurd
+void	Request::parseRequestLine()
+{ // nog naar kijken want snap niet wat er precies gebeurd
 	size_t	pos1;
 	size_t	pos2;
 
@@ -166,7 +200,8 @@ void	Request::parseRequestLine() { // nog naar kijken want snap niet wat er prec
 	pos2 += 1;
 	pos1 = _request.find(' ', pos2);
 	size_t questionMarkLocation = _request.find('?', pos2);
-	if (questionMarkLocation <= pos1) {
+	if (questionMarkLocation <= pos1)
+	{
 		pos1 = _request.find('?');
 		_CGI = true;
 		_uri = _request.substr(pos2, pos1 - pos2);
@@ -183,7 +218,8 @@ void	Request::parseRequestLine() { // nog naar kijken want snap niet wat er prec
 	_request = _request.substr(pos1 + 2);
 }
 
-void Request::parseHeaders() {
+void Request::parseHeaders()
+{
 	size_t	position = 0;
 	size_t	length;
 	std::string header;
@@ -192,16 +228,19 @@ void Request::parseHeaders() {
 	std::map<std::string, std::string>::iterator it;
 	bool	loop = true;
 
-	while (loop == true) {
+	while (loop == true)
+	{
 		header.clear();
 		value.clear();
 		upperHeader.clear();
-		if (this->_request.find(":", position) == std::string::npos) {
+		if (this->_request.find(":", position) == std::string::npos)
+		{
 			this->_status = 400;
 			return;
 		}
 		length = this->_request.find(":", position);
-		if (std::isspace(this->_request[length -1])) {
+		if (std::isspace(this->_request[length -1]))
+		{
 			this->_status = 400;
 			return;
 		}
@@ -212,7 +251,8 @@ void Request::parseHeaders() {
 			position = length + 1;
 		length = this->_request.find(END_OF_LINE, position);
 		value = this->_request.substr(position, length - position);
-		if (header[0] ==  'X' && header[1] == '-') {
+		if (header[0] ==  'X' && header[1] == '-')
+		{
 			std::string insert("HTTP_");
 			std::replace(header.begin(), header.end(), '-', '_');
 			insert.append(header);
@@ -225,7 +265,8 @@ void Request::parseHeaders() {
 		for (int i = 0; header[i]; ++i)
 			upperHeader += std::toupper(header[i]);
 		it = this->_defHeaders.find(upperHeader);
-		if (it != this->_defHeaders.end()) {
+		if (it != this->_defHeaders.end())
+		{
 			this->_status = 400;
 			return;
 		}
@@ -234,12 +275,15 @@ void Request::parseHeaders() {
 		if (this->_request[position] == '\r' && this->_request[position + 1] == '\n')
 			loop = false;
 	}
-	if (this->_defHeaders.empty()) {
+	if (this->_defHeaders.empty())
+	{
 		this->_status = 400;
 		return;
 	}
-	for (it = this->_defHeaders.begin(); it != this->_defHeaders.end(); ++it) {
-		if (it->first.compare("CONTENT-LENGTH") == 0) {
+	for (it = this->_defHeaders.begin(); it != this->_defHeaders.end(); ++it)
+	{
+		if (it->first.compare("CONTENT-LENGTH") == 0)
+		{
 			std::stringstream ss;
 			ss << std::dec << it->second.c_str();
 			ss >> this->_contentLength;
@@ -249,7 +293,8 @@ void Request::parseHeaders() {
 	this->_request = this->_request.substr(position + 2);
 }
 
-void Request::parseBody() {
+void Request::parseBody()
+{
 	size_t begin = 0;
 	size_t end;
 	
@@ -258,7 +303,8 @@ void Request::parseBody() {
 	this->_body = "";
 	if (this->_request.compare("0\r\n\r\n") == 0)
 		return;
-	while (begin != last - 2) {
+	while (begin != last - 2)
+	{
 		end = this->_request.find(END_OF_LINE, begin);
 		hex = this->_request.substr(begin, end - begin);
 		std::stringstream ss;
@@ -277,6 +323,7 @@ void Request::parseBody() {
 		this->_status = 413;
 }
 
-bool Request::getCGI() const {
+bool Request::getCGI() const
+{
 	return _CGI;
 }
