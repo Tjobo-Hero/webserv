@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/09 11:58:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/13 10:40:55 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/30 10:52:57 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 
 class ServerCluster;
 class Connection;
+
+void	outputErrorMessageAndExitCode(const std::string &errorMessage, int exitCode);
 
 void	outputErrorMessageAndExitCode(const std::string &errorMessage, int exitCode);
 

@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/11 10:33:55 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/09 17:07:28 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/30 10:52:09 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,10 @@ bool	Location::parameterCheck(int lineCount) const
 	for (std::vector<std::string>::const_iterator it = this->_methods.begin(); it != this->_methods.end(); ++it)
 		if (checkAllowedMethods(*it) == false)
 			throw parseError("invalid method ", lineCount);
-	return true;
+	}
+	// if (this->_root.empty() == true)
+		// throw parseError("missing root ", lineCount);
+	return true;	
 }
 
 bool Location::getAuthMatch(const std::string& username, const std::string& password)
