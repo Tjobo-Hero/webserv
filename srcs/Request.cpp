@@ -6,30 +6,27 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/18 14:06:12 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 15:03:04 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 14:13:28 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
+#include "Utils/Utils.hpp"
 
-std::string methods[4] = {
-	"GET",
-	"HEAD",
-	"POST",
-	"PUT",
-};
+Request::Request(){}
 
-Request::Request() {}
+Request::~Request(){}
 
-Request::~Request() {}
-
-Request::Request(const Request &src) {
+Request::Request(const Request &src)
+{
 	if (this != &src)
 		*this = src;
 }
 
-Request	&Request::operator=(const Request &src) {
-	if (this != &src) {
+Request	&Request::operator=(const Request &src)
+{
+	if (this != &src)
+	{
 		this->_request = src._request;
 		this->_method = src._method;
 		this->_uri = src._uri;
@@ -43,40 +40,45 @@ Request	&Request::operator=(const Request &src) {
 	return *this;
 }
 
-Request::Request(std::string request) : _request(request) {
+Request::Request(std::string request) : _request(request)
+{
 	_bodyLength = 0;
 	_contentLength = -1;
 	_status = 200;
 	parseRequest();
 }
 
-std::string	Request::getMethod() const {
-	for (int i = 0; i < 4; i++) {
-		if (_method == methods[i])
-			return methods[i];
-	}
-	std::string s;
-	return s;
+std::string	Request::getMethod() const
+{
+	int i = 0;
+	while (_method != allowedMethods[i])
+		++i;
+	return allowedMethods[i];
 }
 
-std::string	Request::getUri() const {
+std::string	Request::getUri() const
+{
 	return _uri;
 }
 
-std::map<std::string, std::string>	Request::getDefHeaders() const {
+std::map<std::string, std::string>	Request::getDefHeaders() const
+{
 	return _defHeaders;
 }
 
-std::map<std::string, std::string>	Request::getCGIHeaders() const {
+std::map<std::string, std::string>	Request::getCGIHeaders() const
+{
 	return _CGIHeaders;
 }
 
-std::string	Request::getBody() const {
+std::string	Request::getBody() const
+{
 	return _body;
 }
 
-std::string	Request::getContentType() {
-	if (_defHeaders.begin() == _defHeaders.end()) // empty?
+std::string	Request::getContentType()
+{
+	if (_defHeaders.begin() == _defHeaders.end())
 		return ("NULL");
 	std::map<std::string, std::string>::iterator it = _defHeaders.find("CONTENT-TYPE");
 	if (it == _defHeaders.end())
@@ -114,7 +116,8 @@ filetype Request::getFileType() const
 	return _type;
 }
 
-void	Request::parseRequest() {
+void	Request::parseRequest()
+{
 	checkCGI();
 	parseRequestLine();
 	parseHeaders();
@@ -128,7 +131,11 @@ void	Request::parseRequest() {
 	_request.clear();
 }
 
-void	Request::checkCGI() {
+void	Request::checkCGI()
+{
+	filetype HOI = PY;
+	int i = Utils::findFileType(_request);
+		_type = extensions[i];
 	if (_request.find(".py") != std::string::npos) {
 		_CGI = true;
 		_type = PY;
@@ -249,7 +256,8 @@ void Request::parseHeaders() {
 	this->_request = this->_request.substr(position + 2);
 }
 
-void Request::parseBody() {
+void Request::parseBody()
+{
 	size_t begin = 0;
 	size_t end;
 	

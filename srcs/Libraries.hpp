@@ -6,7 +6,7 @@
 /*   By: robijnvanhouts <robijnvanhouts@student.      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/22 14:41:31 by robijnvanho   #+#    #+#                 */
-/*   Updated: 2021/06/23 15:29:29 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 14:12:29 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,12 @@
 # define CONNECTION_TIMEOUT 0 // 0 will make it never time out a connection
 # define MAXLOGS 25 // this is to prevent the Log of 100.000 connections, this way it only shows the most recent connections
 
-enum filetype { PY = 1, PHP = 2, BLA = 3, CGIBIN = 4};
+enum filetype { PY = 1, PHP = 2, BLA = 3, CGIBIN = 4, NONE = 0 };
 
 // Vars
 const std::string WHITESPACE = " \n\r\t\f\v";
 const std::string allowedMethods[5] = {"", "HEAD", "GET", "POST", "PUT"};
+const std::string extensions[5] = {".py", ".php", ".bla", ".cgi", ".cgi-bin"};
 const std::string HEAD_AND_CONTENT_SEPERATOR = "\r\n\r\n";
 const std::string END_OF_LINE = "\r\n";
 

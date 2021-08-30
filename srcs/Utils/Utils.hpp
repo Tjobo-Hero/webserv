@@ -6,7 +6,7 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 12:28:01 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/13 12:26:29 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/30 14:07:17 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ namespace Utils
 	void	setSocketOption(long &socketFD, const std::string host);
 	void	bindSocket(long &socketFD, struct sockaddr_in &addr, const std::string host);
 	void	listenSocket(long &socketFD, const std::string host);
+	int		findFileType(std::string request);
 }
 #endif
