@@ -6,7 +6,7 @@
 /*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/21 15:07:56 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/30 11:29:48 by rvan-hou      ########   odam.nl         */
+/*   Updated: 2021/08/30 12:56:47 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,28 +90,44 @@ void	getPath::noLocation() {
 	}
 }
 
-void	getPath::locationExistst() {
-	struct stat statBuf = {};
+void	getPath::checkLocationRoot() {
 	if (!this->_location->getRoot().empty()) // location has no own root, so we use the server root
 		this->_rootDir = this->_location->getRoot();
 	else
 		this->_rootDir = this->_server.getRoot();
+}
+
+bool	getPath::checkCGIPath() {
 	if (!_location->getCGIPath().empty()) {
 		this->_filePath = this->_rootDir + this->_location->getCGIPath();
 		this->_response.setCurrentLocation(this->_location);
-		return;
+		return false;
 	}
+	return true;
+}
+
+bool	getPath::checkIfMethodIsPut() {
+	struct stat statBuf = {};
 	if (this->_needIndex && this->_request.getMethod().compare("PUT") != 0 && this->_location->getAutoIndex())
 		checkPut();
 	else {
 		if (this->_request.getFileType() == PHP) {
 			this->_filePath = this->_rootDir;
-			return;
+			return false;
 		}
 		this->_filePath = this->_rootDir + this->_uri;
 		if (stat(this->_filePath.c_str(), &statBuf) != 0 && this->_request.getMethod().compare("PUT") != 0)
 			this->_response.setStatus(404);
 	}
+	return true;
+}
+
+void	getPath::locationExistst() {
+	checkLocationRoot();
+	if (checkCGIPath() == false)
+		return ;
+	if (checkIfMethodIsPut() == false)
+		return ;
 }
 
 std::vector<std::string>	getPath::setIndices() {
@@ -138,30 +154,14 @@ void	getPath::getIndices(std::vector<std::string> indices) {
 		if (stat(this->_filePath.c_str(), &statBuf) == 0)
 			break;
 	}
+	checkIndices(it, indices);
 }
 
 void	getPath::checkPut() {
 	std::vector<std::string>	indices;
-	// std::vector<std::string>::iterator it;
-
-	// struct stat statBuf = {};
 
 	indices = setIndices();
 	getIndices(indices);
-	// if (!this->_location->getIndices().empty())
-	// 	indices = this->_location->getIndices();
-	// else
-	// 	indices = this->_server.getIndices();
-	// for (it = indices.begin(); it != indices.end(); ++it) {
-	// 	if (this->_uri != "/")
-	// 		this->_filePath = this->_rootDir + this->_uri + (*it);
-	// 	else
-	// 		this->_filePath = this->_rootDir + (*it);
-	// 	if (stat(this->_filePath.c_str(), &statBuf) == 0)
-	// 		break;
-	// }
-	// if (it == indices.end()) // all index pages don't exist at requested root
-	// 	this->_response.setStatus(404);
 }
 
 bool	getPath::checkForLocation() {
@@ -186,17 +186,21 @@ bool	getPath::checkForNoLocationPutRequest() {
 	return false;
 }
 
+void	getPath::setDowloadPath() {
+	static int nr = 0;
+	std::stringstream ss;
+	ss << this->_rootDir << "Download_" << nr;
+	this->_filePath = ss.str();
+	nr++;
+}
+
 void	getPath::checkForNoCGIPostRequest() {
 	if (this->_request.getMethod().compare("POST") == 0 && this->_location->getCGIPath().empty()) { 
 		if (!this->_location->getRoot().empty()) // use server root
 			this->_rootDir = this->_location->getRoot();
 		else
 			this->_rootDir = this->_server.getRoot();
-		static int nr = 0;
-		std::stringstream ss;
-		ss << this->_rootDir << "Download_" << nr;
-		this->_filePath = ss.str();
-		nr++;
+		setDowloadPath();
 	}
 	else
 		locationExistst();

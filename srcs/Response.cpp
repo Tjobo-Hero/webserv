@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Response.cpp                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
+/*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/30 10:52:28 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 14:05:00 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@ Response::Response(Request &request, Server &server) :
 		this->_path = path.createPath();
 		CGI cgiTemp(this->_path, request, server);
 		this->_myCGI = cgiTemp;
-		this->_errorMessage[204] = "No Content"; //  can this be done before and make it const?
-		this->_errorMessage[400] = "Bad Request";
-		this->_errorMessage[403] = "Forbidden";
-		this->_errorMessage[404] = "Not Found";
-		this->_errorMessage[405] = "Method not allowed";
-		this->_errorMessage[413] = "Payload too large";
+		setErrorMessages();
+		// this->_errorMessage[204] = "No Content"; //  can this be done before and make it const?
+		// this->_errorMessage[400] = "Bad Request";
+		// this->_errorMessage[403] = "Forbidden";
+		// this->_errorMessage[404] = "Not Found";
+		// this->_errorMessage[405] = "Method not allowed";
+		// this->_errorMessage[413] = "Payload too large";
 	return;
 }
 
@@ -63,7 +64,16 @@ Response&	Response::operator=(Response const &obj) {
 	return *this;
 }
 
-bool	Response::checkIfMethodIsAllowd() {
+void	Response::setErrorMessages() {
+	this->_errorMessage[204] = "No Content"; //  can this be done before and make it const?
+	this->_errorMessage[400] = "Bad Request";
+	this->_errorMessage[403] = "Forbidden";
+	this->_errorMessage[404] = "Not Found";
+	this->_errorMessage[405] = "Method not allowed";
+	this->_errorMessage[413] = "Payload too large";
+}
+
+bool	Response::checkIfMethodIsAllowed() {
 	if (!this->_currentLocation)
 		return false;
 	std::vector<std::string>::iterator it;
@@ -76,30 +86,28 @@ bool	Response::checkIfMethodIsAllowd() {
 	return false;
 }
 
-void	Response::setupResponse(Request &request, Server &server) {
+void	Response::checkAuthentication(Request &request) {
 	if (this->authenticate(request)) {
 		std::cout << "Authentication failed" << std::endl;
 		return;
 	}
-	if (this->_method == "GET") {
-		if(this->checkIfMethodIsAllowd())
-			this->readContent();
-	}
-	else if (this->_method == "HEAD") {
-		if (this->checkIfMethodIsAllowd()) {
-			this->headMethod();
-		}
-	}
-	else if (this->_method == "POST") {
-		if (this->checkIfMethodIsAllowd()) {
-			this->postMethod(request.getBody());
-		}
-	}
-	else if (this->_method == "PUT") {
-		if (this->checkIfMethodIsAllowd()) {
-			putMethod(this->_body);
-		}
-	}
+}
+
+void	Response::redirectToCorrectMethod(Request &request) {
+	if (this->_method == "GET")
+		this->readContent();
+	else if (this->_method == "HEAD")
+		this->headMethod();
+	else if (this->_method == "POST")
+		this->postMethod(request.getBody());
+	else if (this->_method == "PUT")
+		putMethod(this->_body);
+}
+
+void	Response::setupResponse(Request &request, Server &server) {
+	checkAuthentication(request);
+	if (checkIfMethodIsAllowed())
+		redirectToCorrectMethod(request);
 	if (this->_status >= 299) {
 		this->errorPage(server);
 	}

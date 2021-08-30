@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Response.hpp                                       :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:31:35 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 14:04:49 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ class Response
 		const std::string&	getResponse() const;
 		size_t	getBodySize() const;
 		void	setCurrentLocation(Location *newLocation);
-		bool	checkIfMethodIsAllowd(); // Veranderd naar const
+		bool	checkIfMethodIsAllowed(); // Veranderd naar const
 		const std::string&	methodType() const; // moet dit getMethodType() zijn?
 		const int&	getStatus() const; // Status van wat?
 		const bool&	getUseCGI() const;
@@ -82,5 +82,8 @@ class Response
 		void	finishPost();
 		void	finishPut();
 		void	finishPostCGI();
+		void	setErrorMessages();
+		void	checkAuthentication(Request &request);
+		void	redirectToCorrectMethod(Request &request);
 };
 #endif

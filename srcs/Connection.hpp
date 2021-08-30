@@ -3,10 +3,10 @@
 /*                                                        ::::::::            */
 /*   Connection.hpp                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: timvancitters <timvancitters@student.co      +#+                     */
+/*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 10:44:17 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/06/23 11:31:13 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 13:42:04 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,16 @@ class Connection
 		const bool&				hasFullRequst() const;
 		const std::string&		getBuffer() const; // Which buffer?
 		const std::string&		getResponseString() const;
+		bool					isChunked(size_t position) const;
 		
 		void		resetConnection();
 		void		closeConnection();
 		void		sendData(const size_t bodylen);
+		void		sendNotChunked();
+		void		sendHeader(size_t ret, const size_t headerlen);
+		void		sendFilledChunks(size_t ret, const size_t bodylen, const size_t headerlen);
+		std::string	createChunk(const size_t headerlen, size_t bytesToSend);
+		void		sendEnd(size_t ret);
 		std::string	receive();
 		void		startReading();
 

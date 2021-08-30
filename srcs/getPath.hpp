@@ -6,7 +6,7 @@
 /*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/21 15:08:02 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/30 11:29:58 by rvan-hou      ########   odam.nl         */
+/*   Updated: 2021/08/30 12:57:30 by rvan-hou      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,11 @@ class getPath
 		std::vector<std::string>		setIndices();
 		void		getIndices(std::vector<std::string> indices);
 		void		checkIndices(std::vector<std::string>::iterator it, std::vector<std::string> indices);
-		
+		void		setDowloadPath();
+		void		checkLocationRoot();
+		bool		checkCGIPath();
+		bool		checkIfMethodIsPut();
+	
 	public:
 
 		getPath(Server &server, Request &request, Response &response);
@@ -53,9 +57,6 @@ class getPath
 		virtual ~getPath();
 		getPath&	operator=(getPath const &obj);
 		std::string createPath();
-		
-		// std::string getFilePath(); // need to be const?
-		// std::string getRooDir(); // need to be const?
 		void	noLocation();
 };
 #endif
