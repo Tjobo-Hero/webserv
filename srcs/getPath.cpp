@@ -6,7 +6,7 @@
 /*   By: timvancitters <timvancitters@student.co      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/21 15:07:56 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/30 10:17:35 by robijnvanho   ########   odam.nl         */
+/*   Updated: 2021/08/30 10:49:04 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,6 @@ void	getPath::locationExistst() {
 			this->_response.setStatus(404);
 	}
 }
-
-
 
 void getPath::checkPut() {
 	std::vector<std::string>	indices;
