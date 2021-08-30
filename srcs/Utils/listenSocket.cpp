@@ -6,11 +6,18 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/10 10:34:16 by rbraaksm      #+#    #+#                 */
-/*   Updated: 2021/08/10 10:36:15 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/30 13:06:25 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Utils.hpp"
+
+/*
+It puts the server socket in a passive mode, where it waits for the client to approach
+the server to make a connection. The backlog, defines the maximum length to which the queue
+of pending connections for sockfd may grow. If a connection request arrives when the queue
+is full, the client may receive an error with an indication of ECONNREFUSED.
+*/
 
 namespace Utils
 {

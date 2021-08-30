@@ -6,11 +6,17 @@
 /*   By: renebraaksma <renebraaksma@student.42.f      +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/08/10 10:20:32 by rbraaksm      #+#    #+#                 */
-/*   Updated: 2021/08/13 12:26:20 by rbraaksm      ########   odam.nl         */
+/*   Updated: 2021/08/30 13:05:41 by rbraaksm      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Utils.hpp"
+
+/*
+After creation of the socket, bind function binds the socket to the address and port
+number specified in addr(custom data structure). In the example code, we bind the server
+to the localhost, hence we use INADDR_ANY to specify the IP address.
+*/
 
 namespace Utils
 {
