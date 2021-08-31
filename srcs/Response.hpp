@@ -6,7 +6,7 @@
 /*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:18 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/30 14:04:49 by rvan-hou      ########   odam.nl         */
+/*   Updated: 2021/08/31 15:45:26 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,9 @@ class Response
 		void	setErrorMessages();
 		void	checkAuthentication(Request &request);
 		void	redirectToCorrectMethod(Request &request);
+		void	checkUseOfCGI();
+		void	checkIfPathExcists();
+		void	openContentForRead();
+		void	checkForErrorsWhileOpening();
 };
 #endif

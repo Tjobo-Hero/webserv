@@ -6,7 +6,7 @@
 /*   By: rvan-hou <rvan-hou@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/06/17 11:19:15 by timvancitte   #+#    #+#                 */
-/*   Updated: 2021/08/30 14:05:00 by rvan-hou      ########   odam.nl         */
+/*   Updated: 2021/08/31 15:45:50 by robijnvanho   ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,6 @@ Response::Response(Request &request, Server &server) :
 		CGI cgiTemp(this->_path, request, server);
 		this->_myCGI = cgiTemp;
 		setErrorMessages();
-		// this->_errorMessage[204] = "No Content"; //  can this be done before and make it const?
-		// this->_errorMessage[400] = "Bad Request";
-		// this->_errorMessage[403] = "Forbidden";
-		// this->_errorMessage[404] = "Not Found";
-		// this->_errorMessage[405] = "Method not allowed";
-		// this->_errorMessage[413] = "Payload too large";
 	return;
 }
 
@@ -119,20 +113,37 @@ void	Response::setCurrentLocation(Location *newLocation) {
 	return;
 }
 
-void	Response::readContent() {
-	struct stat statBuf;
-
+void	Response::checkUseOfCGI() {
 	if (this->_useCGI == true) {
 		this->_myCGI.setupInFile();
-		return;
 	}
+}
+
+void	Response::checkIfPathExcists() {
+	struct stat statBuf;
+
 	if (stat(this->_path.c_str(), &statBuf) != 0)
 		return this->setStatus(404);
-	this->_fileFD = open(this->_path.c_str(), O_RDONLY);
+}
+
+void	Response::checkForErrorsWhileOpening() {
+	struct stat statBuf;
+
 	if (this->_fileFD == -1 && this->_status == 200)
 		return this->setStatus(403);
 	if (stat(_path.c_str(), &statBuf) != 0 && this->_status == 200)
 		return this->setStatus(404);
+}
+
+void	Response::openContentForRead() {
+	this->_fileFD = open(this->_path.c_str(), O_RDONLY);
+	checkForErrorsWhileOpening();
+}
+
+void	Response::readContent() {
+	checkUseOfCGI();
+	checkIfPathExcists();
+	openContentForRead();
 	return;
 }
 
